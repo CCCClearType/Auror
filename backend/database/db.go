@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -19,9 +20,23 @@ func ConnectDB() {
 	name := getEnv("DB_NAME", "auror_vapor")
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=UTC", host, user, password, name, port)
-	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	var database *gorm.DB
+	var err error
+
+	for i := 0; i < 10; i++ {
+		database, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+		if err == nil {
+			sqlDB, err := database.DB()
+			if err == nil && sqlDB.Ping() == nil {
+				break
+			}
+		}
+		log.Printf("Database not ready, retrying in 3 seconds... (%d/10)\n", i+1)
+		time.Sleep(3 * time.Second)
+	}
+
 	if err != nil {
-		log.Fatal("Failed to connect to database:", err)
+		log.Fatal("Failed to connect to database after retries:", err)
 	}
 	DB = database
 
