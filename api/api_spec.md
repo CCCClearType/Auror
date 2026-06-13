@@ -630,3 +630,53 @@
 - **Headers**: `Authorization: Bearer <token>`
 - **Responses**:
   - `200 OK`: `{"message": "User removed from blacklist"}`
+
+---
+
+## 6. 系統狀態與監測 (System Status & iLearn Monitoring)
+
+### `[GET] /api/ilearn-status` (即時戳 iLearn 確認目前狀態與延遲)
+- **Go 對應模組**: `status_controller.go` (函式: `CheckIlearnStatus`)
+- **Headers**: 無 (公開 API)
+- **Description**: 後端會即時發起 HTTP GET 到 iLearn 伺服器，計算回應時間 (Latency)，並判斷狀態是 UP 或 DOWN。
+- **Responses**:
+  - `200 OK`:
+    ```json
+    {
+      "status": "UP",
+      "latency_ms": 145
+    }
+    ```
+    *(若伺服器逾時或發生錯誤，status 會回傳 `"DOWN"` 並且包含 `"error"` 欄位)*
+
+### `[POST] /api/ilearn-reports` (使用者回報 iLearn 異常)
+- **Go 對應模組**: `status_controller.go` (函式: `SubmitIlearnReport`)
+- **Headers**: 無 (公開 API)
+- **Description**: 讓使用者透過點擊按鈕回報伺服器異常。為了防止機器人洗版，前端應實作 30 秒的 Cookie 防護冷卻時間，但後端單純負責將每一筆回報寫入資料庫 (`ilearn_reports`) 供統計使用。
+- **Responses**:
+  - `200 OK`: `{"message": "Report submitted"}`
+
+### `[GET] /api/ilearn-history` (取得過去一段時間的連線紀錄與統計)
+- **Go 對應模組**: `status_controller.go` (函式: `GetIlearnHistory`)
+- **Headers**: 無 (公開 API)
+- **Query Params** (可選): 
+  - `?hours=24` (查詢區間，可選 6, 12, 24, 72, 168... 預設為 24)
+- **Description**: 取回該段時間內所有系統自動生成的 Pings (`ilearn_pings`) 以及使用者的主動回報 (`ilearn_reports`)，用於前端動態渲染高解析度狀態圖表。時間戳預設以 `UTC` 發送，前端應自行轉換為本地時區。
+- **Responses**:
+  - `200 OK`:
+    ```json
+    {
+      "pings": [
+        {
+          "checked_at": "2026-06-13T08:52:19Z",
+          "latency_ms": 312,
+          "status": "UP"
+        }
+      ],
+      "reports": [
+        {
+          "reported_at": "2026-06-13T08:50:11Z"
+        }
+      ]
+    }
+    ```

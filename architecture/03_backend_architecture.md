@@ -106,10 +106,10 @@ sequenceDiagram
     participant PostgreSQL
     participant iLearn Server
 
-    Note over BackgroundJob: 背景每 5 分鐘執行一次
-    loop 每 5 分鐘
+    Note over BackgroundJob: 背景每 30 秒執行一次
+    loop 每 30 秒
         BackgroundJob->>iLearn Server: HTTP GET (帶上瀏覽器 User-Agent)
-        iLearn Server-->>BackgroundJob: 回傳 200 OK 或 EOF
+        iLearn Server-->>BackgroundJob: 回傳 200 OK 或 EOF / Timeout
         BackgroundJob->>PostgreSQL: INSERT INTO ilearn_pings (紀錄延遲與狀態)
     end
 
@@ -121,5 +121,5 @@ sequenceDiagram
     Browser->>Backend (Gin): GET /api/ilearn-history?hours=24
     Backend (Gin)->>PostgreSQL: 撈取過去 24 小時的 Pings 與 Reports
     PostgreSQL-->>Backend (Gin): 回傳 Raw Data
-    Backend (Gin)-->>Browser: 回傳 JSON，前端將其以 15 分鐘為區間合併渲染
+    Backend (Gin)-->>Browser: 回傳 JSON，前端以高解析度動態區間 (2~5分鐘) 及 Now 節點渲染
 ```
