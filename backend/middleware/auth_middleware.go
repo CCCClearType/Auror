@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 	"strings"
-	"vapor_auror_backend/utils"
+	"auror_vapor_backend/utils"
 
 	"github.com/gin-gonic/gin"
 )

@@ -1,6 +1,6 @@
-# VaporAuror 前端架構與技術解析 (Frontend Architecture)
+# AurorVapor 前端架構與技術解析 (Frontend Architecture)
 
-本文件詳細解析 VaporAuror 專案的前端底層架構，採用純原生（Vanilla JS）的多頁面架構（MPA），職責切割清晰，確保前後端溝通順暢。
+本文件詳細解析 AurorVapor 專案的前端底層架構，採用純原生（Vanilla JS）的多頁面架構（MPA），職責切割清晰，確保前後端溝通順暢。
 
 ---
 

@@ -1,4 +1,4 @@
-module vapor_auror_backend
+module auror_vapor_backend
 
 go 1.26.2
 

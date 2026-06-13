@@ -7,7 +7,7 @@ TRUNCATE TABLE users, games, tags, game_tags, game_media, transactions, transact
 -- 1. 寫入 users 資料 (5筆)
 -- ==========================================
 INSERT INTO users (username, email, password_hash, last_visit_ip, role, status, permission) VALUES 
-('AdminMaster', 'admin@vaporauror.com', 'hashed_pwd_001', '192.168.1.1', 'ADMIN', 'ONLINE', 'ACTIVE'),
+('AdminMaster', 'admin@aurorvapor.com', 'hashed_pwd_001', '192.168.1.1', 'ADMIN', 'ONLINE', 'ACTIVE'),
 ('StudioAurora', 'dev@studioaurora.com', 'hashed_pwd_002', '10.0.0.15', 'DEVELOPER', 'OFFLINE', 'ACTIVE'),
 ('SupportAlice', 'alice@support.com', 'hashed_pwd_003', '172.16.0.25', 'CSR', 'ONLINE', 'ACTIVE'),
 ('PlayerOne', 'player1@gmail.com', 'hashed_pwd_004', '114.34.56.78', 'USERS', 'OFFLINE', 'DEACTIVE'),

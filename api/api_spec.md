@@ -1,4 +1,4 @@
-# VaporAuror 詳細 API 規格書 (API Specification)
+# AurorVapor 詳細 API 規格書 (API Specification)
 
 這份文件專為**前端開發人員**撰寫。詳細列出所有 API 的傳入參數 (Request Body)、必要的標頭 (Headers)、以及各種成功與失敗情境的回傳格式 (Response JSON)。
 

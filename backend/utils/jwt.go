@@ -7,7 +7,7 @@ import (
 )
 
 // Secret key used to sign the JWT tokens. In production, this should be in an environment variable.
-var jwtSecretKey = []byte("VaporAuror_Super_Secret_Key_2026")
+var jwtSecretKey = []byte("AurorVapor_Super_Secret_Key_2026")
 
 // GenerateToken creates a JWT token for a given user ID and role.
 func GenerateToken(userID uint, role string) (string, error) {

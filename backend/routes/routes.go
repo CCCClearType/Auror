@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"vapor_auror_backend/controllers"
-	"vapor_auror_backend/middleware"
+	"auror_vapor_backend/controllers"
+	"auror_vapor_backend/middleware"
 
 	"github.com/gin-gonic/gin"
 )

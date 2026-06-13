@@ -1,5 +1,5 @@
 // ============================================================
-// VaporAuror — main.js
+// AurorVapor — main.js
 // 全域狀態與共用元件
 // ============================================================
 
@@ -46,7 +46,7 @@ function renderHeader() {
         header.innerHTML = `
             <nav class="navbar va-navbar" role="navigation" aria-label="main navigation">
                 <div class="navbar-brand">
-                    <a href="/" class="navbar-item logo">VaporAuror</a>
+                    <a href="/" class="navbar-item logo">AurorVapor</a>
                 </div>
             </nav>`;
         return;
@@ -101,7 +101,7 @@ function renderHeader() {
     header.innerHTML = `
         <nav class="navbar va-navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
-                <a href="/" class="navbar-item logo">VaporAuror</a>
+                <a href="/" class="navbar-item logo">AurorVapor</a>
                 <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="global-navbar-menu">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>

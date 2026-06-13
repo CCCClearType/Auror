@@ -2,10 +2,10 @@ package main
 
 import (
 	"log"
-	"vapor_auror_backend/database"
-	"vapor_auror_backend/models"
-	"vapor_auror_backend/routes"
-	"vapor_auror_backend/utils"
+	"auror_vapor_backend/database"
+	"auror_vapor_backend/models"
+	"auror_vapor_backend/routes"
+	"auror_vapor_backend/utils"
 )
 
 func main() {

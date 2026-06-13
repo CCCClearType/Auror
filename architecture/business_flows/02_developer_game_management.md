@@ -1,6 +1,6 @@
 # 2. 開發者遊戲上架與管理 (Developer Game Management)
 
-這份文件描述了具有 `DEVELOPER` 權限的帳號，如何在 VaporAuror 平台上發布、管理與下架自己的遊戲。
+這份文件描述了具有 `DEVELOPER` 權限的帳號，如何在 AurorVapor 平台上發布、管理與下架自己的遊戲。
 
 ---
 

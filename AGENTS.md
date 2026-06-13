@@ -1,7 +1,7 @@
 # Repository Instructions
 
 ## Project Shape
-- VaporAuror is a small three-tier game-store app: static vanilla HTML/CSS/JS frontend, Go/Gin REST API, PostgreSQL database.
+- AurorVapor is a small three-tier game-store app: static vanilla HTML/CSS/JS frontend, Go/Gin REST API, PostgreSQL database.
 - Backend entrypoint is `backend/main.go`; route registration lives in `backend/routes/routes.go`.
 - Frontend entrypoint is `frontend/index.html`; Caddy config is `frontend/Caddyfile`; shared API calls must go through `frontend/assets/js/api.js`, which uses same-origin relative URLs (`API_BASE = ''`).
 - Frontend is static HTML/CSS/JS with Bulma loaded from `frontend/assets/css/style.css`; there is no frontend build step.
@@ -13,7 +13,7 @@
 
 ## Commands
 - Start the full stack from repo root: `docker compose up -d --build`; Caddy is the browser entrypoint at `http://localhost:3000`, Adminer is `:8080`, Postgres is `:5432`, and backend is internal as `backend:8000`.
-- Run backend locally from `backend`: `go run .`; it reads `DB_HOST/DB_PORT/DB_USER/DB_PASSWORD/DB_NAME` and defaults to `localhost:5432`, `admin/admin`, database `vapor_auror`.
+- Run backend locally from `backend`: `go run .`; it reads `DB_HOST/DB_PORT/DB_USER/DB_PASSWORD/DB_NAME` and defaults to `localhost:5432`, `admin/admin`, database `auror_vapor`.
 - Verify backend compile/tests from `backend`: `go test ./...`.
 - Frontend has no Node build step or npm scripts; use the Caddy service in Compose instead of `npm start`.
 

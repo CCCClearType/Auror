@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"vapor_auror_backend/database"
-	"vapor_auror_backend/models"
-	"vapor_auror_backend/utils"
+	"auror_vapor_backend/database"
+	"auror_vapor_backend/models"
+	"auror_vapor_backend/utils"
 
 	"github.com/gin-gonic/gin"
 )

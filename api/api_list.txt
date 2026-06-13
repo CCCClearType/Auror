@@ -1,4 +1,4 @@
-# VaporAuror RESTful API 設計清單
+# AurorVapor RESTful API 設計清單
 
 這份清單根據您的 Use Cases (UC-01 ~ UC-37) 規劃，遵循 RESTful API 的設計原則 (使用適當的 HTTP Methods: GET, POST, PUT, DELETE)。
 標籤說明：

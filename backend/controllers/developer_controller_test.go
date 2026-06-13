@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"vapor_auror_backend/controllers"
-	"vapor_auror_backend/database"
-	"vapor_auror_backend/models"
+	"auror_vapor_backend/controllers"
+	"auror_vapor_backend/database"
+	"auror_vapor_backend/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/glebarez/sqlite"

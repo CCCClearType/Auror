@@ -1,4 +1,4 @@
-# VaporAuror API 與後端程式碼對應表 (API Code Mapping)
+# AurorVapor API 與後端程式碼對應表 (API Code Mapping)
 
 這份文件詳細列出了本專案中所有 RESTful API 端點，以及它們在 Go 語言後端中對應的**路由註冊位置 (Router)** 與**負責處理邏輯的控制器函式 (Controller Function)**。
 

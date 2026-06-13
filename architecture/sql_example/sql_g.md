@@ -1,6 +1,6 @@
 # g. 修改資料表結構的操作 (DDL: Data Definition Language)
 
-本文件列出系統進行資料表建立、欄位修改或結構變更時所使用的 DDL 操作。在我們的 VaporAuror 專案中，實體資料表的定義主要由 `db/01_init_table.sql` 執行，同時 Go 的 GORM `AutoMigrate` 也會在啟動時自動檢查並補齊必要的綱要 (Schema)。
+本文件列出系統進行資料表建立、欄位修改或結構變更時所使用的 DDL 操作。在我們的 AurorVapor 專案中，實體資料表的定義主要由 `db/01_init_table.sql` 執行，同時 Go 的 GORM `AutoMigrate` 也會在啟動時自動檢查並補齊必要的綱要 (Schema)。
 
 ---
 

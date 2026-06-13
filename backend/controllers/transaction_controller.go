@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-	"vapor_auror_backend/database"
-	"vapor_auror_backend/models"
+	"auror_vapor_backend/database"
+	"auror_vapor_backend/models"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"

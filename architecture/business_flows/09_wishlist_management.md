@@ -1,13 +1,13 @@
 # 09. 願望清單管理 (Wishlist Management)
 
-本文件描述 VaporAuror 系統中「願望清單 (Wishlist)」的核心邏輯與業務流。
+本文件描述 AurorVapor 系統中「願望清單 (Wishlist)」的核心邏輯與業務流。
 有別於一般電商平台會將願望清單與購物車或庫存進行複雜連動，本系統的願望清單採用**「絕對解耦 (Fully Decoupled)」**的純標記設計。
 
 ---
 
 ## 1. 核心概念：純標記 (Simple Mark)
 
-在 VaporAuror 中，願望清單 (`wish_lists` 表) 僅代表 User 對 Game 的「關注 / 收藏」標記。
+在 AurorVapor 中，願望清單 (`wish_lists` 表) 僅代表 User 對 Game 的「關注 / 收藏」標記。
 對於任何一款遊戲，它在玩家的願望清單中只有兩種狀態：
 - **有 (In Wishlist)**
 - **沒有 (Not in Wishlist)**

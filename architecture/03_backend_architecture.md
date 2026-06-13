@@ -1,6 +1,6 @@
-# VaporAuror 後端架構與技術解析 (Backend Architecture)
+# AurorVapor 後端架構與技術解析 (Backend Architecture)
 
-本文件詳細解析 VaporAuror 專案的後端底層架構。後端採用 Golang 搭配 Gin 框架與 GORM 打造，遵循標準的 RESTful API 設計與 MVC 變體架構，具備極高的效能與嚴謹的權限防護網。
+本文件詳細解析 AurorVapor 專案的後端底層架構。後端採用 Golang 搭配 Gin 框架與 GORM 打造，遵循標準的 RESTful API 設計與 MVC 變體架構，具備極高的效能與嚴謹的權限防護網。
 
 ---
 

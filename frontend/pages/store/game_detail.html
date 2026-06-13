@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>遊戲詳情 — VaporAuror</title>
+    <title>遊戲詳情 — AurorVapor</title>
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 
@@ -81,7 +81,7 @@
                 const response = await apiGetGame(currentGameId);
                 const game = response.data || response;
 
-                document.title = `${game.game.title || game.title} — VaporAuror`;
+                document.title = `${game.game.title || game.title} — AurorVapor`;
                 document.getElementById('detail-title').textContent = game.game.title || game.title;
                 document.getElementById('detail-desc').innerHTML = renderMarkdown(game.game.description || game.game.desc || game.desc || '');
                 
