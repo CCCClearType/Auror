@@ -24,6 +24,7 @@ frontend/
 │       ├── api.js              # [API 溝通層] 集中封裝所有與後端的 RESTful API 呼叫
 │       └── main.js             # [共用邏輯層] 全域導覽列渲染、身分權限驗證、Toast 提示組件
 └── pages/                      # 功能畫面區 (依業務邏輯高度模組化)
+    ├── is_ilearn_down.html     # [系統監測] iLearn 狀態儀表板 (即時延遲、圖表、自動輪詢、物理時鐘)
     ├── auth/                   # [身分驗證模組]
     │   ├── login.html          # 登入畫面
     │   └── register.html       # 註冊畫面

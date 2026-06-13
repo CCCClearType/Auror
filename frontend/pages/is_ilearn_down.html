@@ -215,6 +215,12 @@
             text-align: center;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
             z-index: 100;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+        }
+        .cool-clock:active {
+            cursor: grabbing;
         }
         .cool-clock .time {
             font-size: 2.2rem;
@@ -304,6 +310,12 @@
             // Start clock
             updateClock();
             setInterval(updateClock, 1000);
+
+            // Auto-refresh data every 30 seconds
+            setInterval(() => {
+                checkStatus();
+                loadHistoryChart(currentHours);
+            }, 30000);
 
             document.getElementById('refresh-btn').addEventListener('click', () => {
                 checkStatus();
@@ -615,5 +627,125 @@
     </script>
     <script src="/assets/js/api.js"></script>
     <script src="/assets/js/main.js"></script>
+
+    <!-- Clock Drag & Physics Script -->
+    <script>
+        const clockObj = document.querySelector('.cool-clock');
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+        let velocityX = 0;
+        let velocityY = 0;
+        let lastX = 0;
+        let lastY = 0;
+        let animationFrameId;
+
+        // Ensure initial position is tracked properly
+        const rect = clockObj.getBoundingClientRect();
+        xOffset = rect.left;
+        yOffset = rect.top;
+
+        function dragStart(e) {
+            cancelAnimationFrame(animationFrameId);
+            initialX = e.type === "touchstart" ? e.touches[0].clientX - xOffset : e.clientX - xOffset;
+            initialY = e.type === "touchstart" ? e.touches[0].clientY - yOffset : e.clientY - yOffset;
+
+            if (e.target === clockObj || clockObj.contains(e.target)) {
+                isDragging = true;
+                lastX = e.type === "touchstart" ? e.touches[0].clientX : e.clientX;
+                lastY = e.type === "touchstart" ? e.touches[0].clientY : e.clientY;
+            }
+        }
+
+        function dragEnd(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            
+            // Start physics simulation
+            applyPhysics();
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+                
+                const clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
+                const clientY = e.type === "touchmove" ? e.touches[0].clientY : e.clientY;
+
+                currentX = clientX - initialX;
+                currentY = clientY - initialY;
+
+                // Calculate velocity based on movement
+                velocityX = clientX - lastX;
+                velocityY = clientY - lastY;
+                
+                lastX = clientX;
+                lastY = clientY;
+
+                xOffset = currentX;
+                yOffset = currentY;
+
+                setTranslate(currentX, currentY, clockObj);
+            }
+        }
+
+        function setTranslate(xPos, yPos, el) {
+            // override the CSS top/left to handle absolute positioning properly
+            el.style.left = xPos + "px";
+            el.style.top = yPos + "px";
+            el.style.transform = "none"; 
+            el.style.right = "auto";
+            el.style.bottom = "auto";
+        }
+
+        function applyPhysics() {
+            // Friction factor
+            velocityX *= 0.95;
+            velocityY *= 0.95;
+
+            xOffset += velocityX;
+            yOffset += velocityY;
+
+            // Bounce off edges
+            const rect = clockObj.getBoundingClientRect();
+            const maxX = window.innerWidth - rect.width;
+            const maxY = window.innerHeight - rect.height;
+
+            if (xOffset <= 0) {
+                xOffset = 0;
+                velocityX *= -0.8; // Bounce with some energy loss
+            } else if (xOffset >= maxX) {
+                xOffset = maxX;
+                velocityX *= -0.8;
+            }
+
+            if (yOffset <= 0) {
+                yOffset = 0;
+                velocityY *= -0.8;
+            } else if (yOffset >= maxY) {
+                yOffset = maxY;
+                velocityY *= -0.8;
+            }
+
+            setTranslate(xOffset, yOffset, clockObj);
+
+            // Stop animation if velocity is very low
+            if (Math.abs(velocityX) > 0.1 || Math.abs(velocityY) > 0.1) {
+                animationFrameId = requestAnimationFrame(applyPhysics);
+            }
+        }
+
+        document.addEventListener("touchstart", dragStart, { passive: false });
+        document.addEventListener("touchend", dragEnd, { passive: false });
+        document.addEventListener("touchmove", drag, { passive: false });
+
+        document.addEventListener("mousedown", dragStart);
+        document.addEventListener("mouseup", dragEnd);
+        document.addEventListener("mousemove", drag);
+    </script>
 </body>
 </html>

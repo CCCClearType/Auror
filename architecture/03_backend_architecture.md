@@ -106,11 +106,15 @@ sequenceDiagram
     participant PostgreSQL
     participant iLearn Server
 
-    Note over BackgroundJob: 背景每 30 秒執行一次
+    Note over BackgroundJob: 背景每 30 秒執行一次探測任務
     loop 每 30 秒
-        BackgroundJob->>iLearn Server: HTTP GET (帶上瀏覽器 User-Agent)
-        iLearn Server-->>BackgroundJob: 回傳 200 OK 或 EOF / Timeout
-        BackgroundJob->>PostgreSQL: INSERT INTO ilearn_pings (紀錄延遲與狀態)
+        Note over BackgroundJob: 連續發出 5 次探測，間隔 500ms
+        loop 探測 5 次
+            BackgroundJob->>iLearn Server: HTTP GET (Timeout 3s)
+            iLearn Server-->>BackgroundJob: 回傳 200 OK 或 Timeout
+        end
+        Note over BackgroundJob: 只要有 1 次成功即判定 UP，並取成功次數的平均延遲
+        BackgroundJob->>PostgreSQL: INSERT INTO ilearn_pings (紀錄平均延遲與綜合狀態)
     end
 
     Note over Browser: 使用者在網頁上查看與回報
