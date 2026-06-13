@@ -114,3 +114,8 @@ frontend/
 ### 5. 特權徽章動態渲染 (Privilege Badge Rendering)
 - 配合後端「無痕修改 Schema 的隱藏字首機制」，前端負責在呈現層將「隱藏資訊」轉化為精美的「視覺組件」。
 - **實作機制**：當透過 API 取得評論列表時，前端能直接讀取到乾淨的內文與獨立的 `posted_as_role` 屬性（這是後端解析 `[ROLE:XXX]` 字首後動態剝離產生的）。前端會根據此屬性，動態在評論者的名稱旁渲染專屬色系的特權徽章 (例如：`ADMIN` 為紅色，`AUTHOR` 為橘黃色，`CSR` 為藍色)，以凸顯官方留言的權威性，同時完美隱藏了底層字首的實作細節。
+
+### 6. iLearn 儀表板與進階動態效果 (Monitoring Dashboard & Physics)
+- 作為系統外的第三方監測面板 (`is_ilearn_down.html`)，前端採用了有別於常規商城的動態輪詢與物理特效，強化實時監測感。
+- **背景輪詢 (Background Polling)**：前端利用 `setInterval` 實作 30 秒自動觸發 `checkStatus()` 與圖表刷新，使報表能在不重整網頁的情況下，實時同步後端 Worker 的最新探測結果。
+- **物理時鐘組件 (Physical Draggable DOM)**：為了提升枯燥監測頁面的趣味性，前端以純 Vanilla JS 實作了包含「慣性、摩擦力、邊界反彈 (Bouncing)」的 2D 物理引擎，讓使用者可隨意抓取拋擲懸浮時鐘 (`requestAnimationFrame` 驅動)，展現純原生 JS 操作 DOM 的強大渲染彈性。
