@@ -13,6 +13,9 @@
 | `[GET] /api/notes/{id}` | `api.GET("/notes/:id")` | ✅ |
 | `[GET] /api/notes/{id}/reviews` | `api.GET("/notes/:id/reviews")` | ✅ |
 | `[GET] /api/tags` | `api.GET("/tags")` | ✅ |
+| `[GET] /api/ilearn-status` | `api.GET("/ilearn-status")` | ✅ |
+| `[POST] /api/ilearn-reports` | `api.POST("/ilearn-reports")` | ✅ |
+| `[GET] /api/ilearn-history` | `api.GET("/ilearn-history")` | ✅ |
 
 ### 2. 一般登入保護 (Protected Routes) - 僅需 JWT
 *這包含購物車、買家筆記庫、個人檔案，以及社群互動等。*
