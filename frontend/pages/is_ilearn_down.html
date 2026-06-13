@@ -198,16 +198,59 @@
         .report-btn:active {
             transform: scale(0.95);
         }
+
+        /* Cool Clock */
+        .cool-clock {
+            position: fixed;
+            top: 90px;
+            left: 20px;
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #58a6ff;
+            padding: 15px 25px;
+            border-radius: 12px;
+            color: #fff;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+        }
+        .cool-clock .time {
+            font-size: 2.2rem;
+            font-weight: 700;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 0 0 15px rgba(88, 166, 255, 0.6);
+            letter-spacing: 2px;
+            margin: 0;
+            line-height: 1;
+        }
+        .cool-clock .timezone {
+            font-size: 0.75rem;
+            color: #8f98a0;
+            margin-top: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-    <header id="global-header"></header>
+    <!-- Header will be loaded here -->
+    <div id="header-placeholder"></div>
 
-    <main class="status-container">
-        <div class="glow-circle" id="bg-glow"></div>
+    <main class="main-content section">
+        <!-- Cool Clock -->
+        <div class="cool-clock">
+            <div class="time" id="clock-time">00:00:00</div>
+            <div class="timezone">Taiwan Time (UTC+8)</div>
+        </div>
+
+        <div class="container is-flex is-justify-content-center is-align-items-center" style="min-height: calc(100vh - 60px);">
         
+        <div class="glow-circle" id="bg-glow"></div>
         <div class="status-card">
             <h1 class="status-title">Is iLearn Down?</h1>
             
@@ -246,9 +289,20 @@
     <script>
         let currentHours = 24;
 
+        function updateClock() {
+            const now = new Date();
+            // Force output to Taiwan Time (UTC+8)
+            const timeString = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Taipei', hour12: false });
+            document.getElementById('clock-time').innerText = timeString;
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             checkStatus();
             loadHistoryChart(currentHours);
+
+            // Start clock
+            updateClock();
+            setInterval(updateClock, 1000);
 
             document.getElementById('refresh-btn').addEventListener('click', () => {
                 checkStatus();
@@ -266,10 +320,10 @@
 
             const btn = document.getElementById('report-btn');
             
-            // Check if user already reported today via Cookie
+            // Check if user already reported recently via Cookie
             if (document.cookie.includes('ilearn_reported=true')) {
                 btn.disabled = true;
-                btn.innerText = 'You already reported today';
+                btn.innerText = 'You already reported (Wait 5m)';
                 btn.style.background = '#30363d';
                 btn.style.boxShadow = 'none';
             } else {
@@ -280,8 +334,8 @@
                         await fetch('/api/ilearn-reports', { method: 'POST' });
                         btn.innerText = 'Reported!';
                         btn.style.background = '#2ea043';
-                        // Set cookie to expire in 24 hours (86400 seconds)
-                        document.cookie = "ilearn_reported=true; max-age=86400; path=/";
+                        // Set cookie to expire in 5 minutes (300 seconds)
+                        document.cookie = "ilearn_reported=true; max-age=300; path=/";
                         loadHistoryChart(currentHours);
                     } catch(err) {
                         btn.innerText = 'Error';
@@ -302,14 +356,23 @@
                 const res = await fetch(`/api/ilearn-history?hours=${hours}`);
                 const data = await res.json();
                 
-                // Group data by 15-minute buckets
+                // Determine bucket size based on selected time range to prevent density issues
+                let bucketSizeMinutes = 15;
+                if (hours === 24) bucketSizeMinutes = 30;
+                else if (hours === 72) bucketSizeMinutes = 120; // 2 hours
+                else if (hours >= 168) bucketSizeMinutes = 240; // 4 hours
+                
+                // Group data by buckets aligned to exact boundaries
                 const buckets = [];
                 const now = new Date();
-                const startTime = new Date(now.getTime() - hours * 60 * 60 * 1000);
-                const bucketSize = 15 * 60 * 1000;
+                const bucketSize = bucketSizeMinutes * 60 * 1000;
+                
+                // Snap the current time down to the nearest bucket boundary
+                const roundedNow = new Date(Math.floor(now.getTime() / bucketSize) * bucketSize);
+                const startTime = new Date(roundedNow.getTime() - hours * 60 * 60 * 1000);
                 
                 // create buckets
-                for (let t = startTime.getTime(); t <= now.getTime(); t += bucketSize) {
+                for (let t = startTime.getTime(); t <= roundedNow.getTime(); t += bucketSize) {
                     buckets.push({
                         time: new Date(t),
                         reportCount: 0,
@@ -336,10 +399,14 @@
                 });
 
                 const labels = buckets.map(b => {
-                    if (hours > 24) {
-                        return b.time.toLocaleDateString([], {month: 'short', day: 'numeric'}) + ' ' + b.time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                    }
-                    return b.time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    const tzOpts = { timeZone: 'Asia/Taipei', hour12: false, hour: '2-digit', minute:'2-digit' };
+                    const dateOpts = { timeZone: 'Asia/Taipei', month: 'numeric', day: 'numeric' };
+                    
+                    const timeStr = b.time.toLocaleTimeString('en-US', tzOpts);
+                    const dateStr = b.time.toLocaleDateString('en-US', dateOpts); // Produces "6/13" format
+                    
+                    // Return array to render multi-line labels in Chart.js
+                    return [timeStr, dateStr];
                 });
                 const reportData = buckets.map(b => b.reportCount);
                 const pingData = buckets.map(b => b.pingCount > 0 ? (b.pingLatency / b.pingCount) : 0);

@@ -80,3 +80,10 @@
 [DELETE] /api/social/blacklist/{user_id}      - [JWT] 將買家移除黑名單 (UC-35)
 [POST]   /api/social/messages                 - [JWT] 傳輸文字通訊給對方 (UC-36)
 [GET]    /api/social/messages/{user_id}       - [JWT] 顯示與某使用者的對話紀錄 (並自動標記已讀) (UC-37)
+
+=========================================
+6. 系統狀態與監測 (System Status & iLearn Monitoring)
+=========================================
+[GET]    /api/ilearn-status                   - 即時戳 iLearn 確認目前狀態與延遲 (公開)
+[POST]   /api/ilearn-reports                  - 使用者回報 iLearn 異常 (公開，前端由 Cookie 防刷)
+[GET]    /api/ilearn-history                  - 取得過去一段時間的 iLearn 歷史連線紀錄與回報統計 (支援 ?hours= 參數，預設 24) (公開)

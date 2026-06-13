@@ -43,7 +43,8 @@ backend/
 │   ├── auth_middleware.go      # [第一道防線] 攔截請求，解密 JWT Token，並將 User ID 寫入 Context
 │   └── role_middleware.go      # [第二道防線] 檢查 Context 內的使用者 Role 是否具備特定操作權限
 └── utils/                      # [共用工具層]
-    └── jwt.go                  # 提供 JWT Token 的生成 (Generate) 與驗證 (Validate) 演算法
+    ├── jwt.go                  # 提供 JWT Token 的生成 (Generate) 與驗證 (Validate) 演算法
+    └── ilearn_jobs.go          # [背景任務] 定期向外發送 Ping 請求的 Background Goroutine
 ```
 
 ---
@@ -92,4 +93,33 @@ backend/
 8. [執行 SQL] 呼叫 database.DB.Create()，GORM 自動將這個 Struct 翻譯成 INSERT INTO notes... 的 SQL 語法。
 9. [底層通訊] pgx Driver 透過 TCP 連線，將 SQL 語法傳送到 PostgreSQL 資料庫執行。
 10. [回傳結果] 寫入成功後，Controller 透過 c.JSON 打包 HTTP Status 201 Created 與成功訊息，回傳給前端。
+```
+
+### 4.1 iLearn 狀態監測機制 (iLearn Monitoring Flow)
+這個機制展示了背景任務如何與公開 API 及外部系統互動：
+
+```mermaid
+sequenceDiagram
+    participant Browser
+    participant Backend (Gin)
+    participant BackgroundJob (Goroutine)
+    participant PostgreSQL
+    participant iLearn Server
+
+    Note over BackgroundJob: 背景每 5 分鐘執行一次
+    loop 每 5 分鐘
+        BackgroundJob->>iLearn Server: HTTP GET (帶上瀏覽器 User-Agent)
+        iLearn Server-->>BackgroundJob: 回傳 200 OK 或 EOF
+        BackgroundJob->>PostgreSQL: INSERT INTO ilearn_pings (紀錄延遲與狀態)
+    end
+
+    Note over Browser: 使用者在網頁上查看與回報
+    Browser->>Backend (Gin): POST /api/ilearn-reports (點擊回報)
+    Backend (Gin)->>PostgreSQL: INSERT INTO ilearn_reports
+    Backend (Gin)-->>Browser: 200 OK
+    
+    Browser->>Backend (Gin): GET /api/ilearn-history?hours=24
+    Backend (Gin)->>PostgreSQL: 撈取過去 24 小時的 Pings 與 Reports
+    PostgreSQL-->>Backend (Gin): 回傳 Raw Data
+    Backend (Gin)-->>Browser: 回傳 JSON，前端將其以 15 分鐘為區間合併渲染
 ```
