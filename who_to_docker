@@ -1,0 +1,43 @@
+# Azure Web App 部署指南 (Deployment Walkthrough)
+
+我已經按照計畫完成了所有專案檔案的改造，這份 `docker-compose.yml` 已經完全相容於 Azure Web App 的規範（無 `build:`、無動態 `volumes`、單一對外 `port`），並且自動填入了你的 Docker Hub 帳號 `snvfrgh`。
+
+請依照以下步驟在本機打包並推送到 Docker Hub，接著就可以無痛在 Azure 上運行了！
+
+## 1. 登入 Docker Hub
+請先確保你在電腦的終端機已經登入你的 Docker 帳號。
+```powershell
+docker login
+```
+
+## 2. 打包前端 Image 並推送
+進入 `frontend` 目錄，使用剛剛新建的 Dockerfile 將前端靜態檔案與 Caddy 伺服器打包。
+```powershell
+cd frontend
+docker build -t snvfrgh/auror_frontend:latest .
+docker push snvfrgh/auror_frontend:latest
+cd ..
+```
+
+## 3. 打包後端 Image 並推送
+進入 `backend` 目錄，將 Go 伺服器打包。
+```powershell
+cd backend
+docker build -t snvfrgh/auror_backend:latest .
+docker push snvfrgh/auror_backend:latest
+cd ..
+```
+
+## 4. 打包資料庫 Image 並推送
+進入 `db` 目錄，將 PostgreSQL 與 SQL 初始化腳本打包。
+```powershell
+cd db
+docker build -t snvfrgh/auror_db:latest .
+docker push snvfrgh/auror_db:latest
+cd ..
+```
+
+## 5. 上傳至 Azure Web App
+到 Azure Web App 的「部署中心 (Deployment Center)」，選擇 **Docker Compose (多個容器)**，並將你本地的 `docker-compose.yml` 內容貼上去。
+
+等待幾分鐘讓 Azure 拉取 Image 並啟動容器，你的系統就會在雲端順利運作了！

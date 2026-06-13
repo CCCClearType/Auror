@@ -1,6 +1,6 @@
 services:
   frontend:
-    image: ${DOCKER_USERNAME}/auror_frontend:latest
+    image: snvfrgh/auror_frontend:latest
     container_name: auror_frontend
     restart: always
     depends_on:
@@ -9,7 +9,7 @@ services:
       - 80:80
 
   backend:
-    image: ${DOCKER_USERNAME}/auror_backend:latest
+    image: snvfrgh/auror_backend:latest
     container_name: auror_backend
     restart: always
     depends_on:
@@ -23,7 +23,7 @@ services:
       DB_NAME: auror_vapor
 
   db:
-    image: ${DOCKER_USERNAME}/auror_db:latest
+    image: snvfrgh/auror_db:latest
     restart: always
     shm_size: 128mb
     container_name: auror_db
