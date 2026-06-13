@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>註冊帳號 — VaporAuror</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+    <header id="global-header"></header>
+
+    <main>
+        <div class="box auth-container" style="max-width:460px;">
+            <h1 class="title is-3 has-text-centered">建立帳號</h1>
+            <p class="subtitle is-6 auth-subtitle">加入 VaporAuror，開始你的遊戲旅程</p>
+
+            <div id="register-error" class="notification is-danger is-light alert-info" style="display:none;"></div>
+
+            <form id="register-form">
+                <div class="field form-group">
+                    <label class="label" for="reg-username">使用者名稱 (Username)</label>
+                    <div class="control"><input class="input" type="text" id="reg-username" placeholder="4~20 個字元" minlength="4" maxlength="20" required></div>
+                </div>
+                <div class="field form-group">
+                    <label class="label" for="reg-email">電子郵件 (Email)</label>
+                    <div class="control"><input class="input" type="email" id="reg-email" placeholder="your@email.com" required></div>
+                </div>
+                <div class="field form-group">
+                    <label class="label" for="reg-password">密碼 (Password)</label>
+                    <div class="control"><input class="input" type="password" id="reg-password" placeholder="至少 8 個字元" minlength="8" required></div>
+                </div>
+                <div class="field form-group">
+                    <label class="label" for="reg-confirm">確認密碼</label>
+                    <div class="control"><input class="input" type="password" id="reg-confirm" placeholder="再次輸入密碼" required></div>
+                </div>
+                <div class="field form-group" style="margin-top: 15px; margin-bottom: 20px;">
+                    <label class="checkbox" style="color: var(--text-light); font-size: 14px;">
+                        <input type="checkbox" id="reg-developer" style="margin-right: 8px;">
+                        我要註冊為遊戲開發者 (Developer)
+                    </label>
+                </div>
+                <button type="submit" class="button is-primary is-fullwidth" id="register-btn">建立帳號</button>
+            </form>
+
+            <div class="form-divider">或</div>
+
+            <p style="text-align:center; font-size:14px; color:var(--text-muted);">
+                已經有帳號了？
+                <a href="/pages/auth/login.html" class="has-text-info has-text-weight-bold">直接登入</a>
+            </p>
+        </div>
+    </main>
+
+    <script src="/assets/js/api.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const username = document.getElementById('reg-username').value.trim();
+            const email    = document.getElementById('reg-email').value.trim();
+            const password = document.getElementById('reg-password').value;
+            const confirm  = document.getElementById('reg-confirm').value;
+            const isDev    = document.getElementById('reg-developer').checked;
+            const errorEl  = document.getElementById('register-error');
+            const btn      = document.getElementById('register-btn');
+
+            // 前端驗證
+            if (password !== confirm) {
+                errorEl.textContent = '兩次輸入的密碼不一致，請重新確認。';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = '建立中...';
+            errorEl.style.display = 'none';
+
+            try {
+                const data = await apiRegister(username, email, password, isDev);
+                // 後端回傳 { token, user }
+                saveAuthState(data);
+                window.location.href = '/';
+            } catch (err) {
+                errorEl.textContent = err.message || '註冊失敗，請稍後再試。';
+                errorEl.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '建立帳號';
+            }
+        });
+    </script>
+</body>
+</html>

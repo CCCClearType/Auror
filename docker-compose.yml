@@ -1,0 +1,58 @@
+services:
+  frontend:
+    image: caddy:2-alpine
+    container_name: vapor_frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - 3000:80
+    volumes:
+      - ./frontend/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./frontend/index.html:/srv/index.html:ro
+      - ./frontend/assets:/srv/assets:ro
+      - ./frontend/pages:/srv/pages:ro
+
+  backend:
+    build:
+      context: ./backend
+    container_name: vapor_backend
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: admin
+      DB_PASSWORD: admin
+      DB_NAME: vapor_auror
+
+  db:
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    container_name: vapor_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: vapor_auror
+
+    ports:
+      - 5432:5432
+
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d vapor_auror"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  
+  adminer:
+    image: adminer
+    restart: always
+    container_name: adminer
+    ports:
+      - 8080:8080

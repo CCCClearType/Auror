@@ -1,0 +1,30 @@
+erDiagram
+    USERS {
+        INT user_id PK
+        VARCHAR username
+        VARCHAR email
+        VARCHAR password_hash
+        DATETIME registration_date
+        VARCHAR last_visit_ip
+        VARCHAR role "NULL | USERS | CSR | ADMIN | DEVELOPER"
+        VARCHAR status "ONLINE | OFFLINE"
+        VARCHAR permission "ACTIVE | DEACTIVE | DELETED"
+    }
+    GAMES {
+        INT game_id PK
+        INT developer_id FK
+        VARCHAR title
+        TEXT description
+        DECIMAL price
+        DECIMAL overall_rating
+        VARCHAR status "DRAFT | ACTIVE | TAKEN_DOWN"
+    }
+    WISH_LISTS {
+        INT wishlist_id PK
+        INT user_id FK
+        INT game_id FK
+        DATETIME added_at
+    }
+
+    USERS ||--o{ WISH_LISTS : collects
+    GAMES ||--o{ WISH_LISTS : appears_in

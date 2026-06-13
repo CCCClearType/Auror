@@ -1,0 +1,28 @@
+erDiagram
+    GAMES {
+        INT game_id PK
+        INT developer_id FK
+        VARCHAR title
+        TEXT description
+        DECIMAL price
+        DECIMAL overall_rating
+        VARCHAR status "DRAFT | ACTIVE | TAKEN_DOWN"
+    }
+    TAGS {
+        INT tag_id PK
+        VARCHAR tag_name
+    }
+    GAME_TAGS {
+        INT game_id PK, FK
+        INT tag_id PK, FK
+    }
+    GAME_MEDIA {
+        INT media_id PK
+        INT game_id FK
+        VARCHAR file_url
+        VARCHAR media_type "media | game_file"
+    }
+
+    GAMES ||--o{ GAME_MEDIA : has
+    GAMES ||--o{ GAME_TAGS : tagged_as
+    TAGS ||--o{ GAME_TAGS : used_by

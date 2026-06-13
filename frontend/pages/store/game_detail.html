@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遊戲詳情 — VaporAuror</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+
+<body>
+
+    <header id="global-header"></header>
+
+    <main>
+        <div class="game-detail-layout" id="game-detail-header">
+            <div class="game-media-left" id="game-cover">
+                <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);background:#1a1a2e;">
+                    [遊戲封面載入中...]
+                </div>
+            </div>
+            <div class="box game-info-right" style="display: flex; flex-direction: column; background: #0b0f19; padding: 24px; border-radius: 8px; border: none;">
+                <h1 id="detail-title" style="color: #ffffff; font-size: 26px; font-weight: bold; margin-bottom: 16px; line-height: 1.2;">載入中...</h1>
+                
+                <div id="detail-short-desc" style="color: #c6d4df; font-size: 14px; margin-bottom: 16px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5;"></div>
+
+                <div style="display: grid; grid-template-columns: 85px 1fr; row-gap: 6px; font-size: 12px; margin-bottom: 16px;">
+                    <span style="color: #556772;">玩家評價：</span>
+                    <span id="detail-rating-text" style="color: #66c0f4;">--</span>
+
+                    <span style="color: #556772;">開發人員：</span>
+                    <a id="detail-dev-name" style="color: #66c0f4; text-decoration: none;" href="#">--</a>
+                </div>
+
+                <div style="margin-bottom: auto;">
+                    <div id="detail-tags" class="game-list-tags" style="margin: 0; display: flex; flex-wrap: wrap; gap: 4px;"></div>
+                </div>
+
+                <div style="margin-top: 20px; background: rgba(0,0,0,0.3); padding: 16px; border-radius: 4px;">
+                    <div id="detail-price" style="font-size: 21px; color: #c6d4df; margin-bottom: 12px;"></div>
+                    <div id="action-area" style="position:relative; z-index:1;"></div>
+                </div>
+            </div>
+        </div>
+
+        <section class="box game-description-section">
+            <h2 class="title is-4">遊戲介紹</h2>
+            <div class="markdown-content" id="detail-desc"></div>
+        </section>
+
+        <div class="review-section">
+            <h2 class="title section-title">玩家評論</h2>
+            <div id="review-write-area"></div>
+            <div id="reviews-container">
+                <p style="color:var(--text-muted);padding:20px 0;">載入中...</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+    <script src="/assets/js/api.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script>
+        let currentGameId = null;
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const params = new URLSearchParams(window.location.search);
+            currentGameId = parseInt(params.get('id'));
+
+            if (!currentGameId) {
+                document.getElementById('detail-title').textContent = '找不到遊戲資料';
+                return;
+            }
+
+            const role = getCurrentRole();
+            const user = getCurrentUser();
+
+            try {
+                // GET /api/games/{id} — 公開端點
+                const response = await apiGetGame(currentGameId);
+                const game = response.data || response;
+
+                document.title = `${game.game.title || game.title} — VaporAuror`;
+                document.getElementById('detail-title').textContent = game.game.title || game.title;
+                document.getElementById('detail-desc').innerHTML = renderMarkdown(game.game.description || game.game.desc || game.desc || '');
+                
+                const rawDesc = game.game.description || game.game.desc || game.desc || '';
+                const plainDesc = rawDesc.replace(/<[^>]*>?/gm, '').replace(/[#*`_\[\]]/g, '').slice(0, 150);
+                const shortDescEl = document.getElementById('detail-short-desc');
+                if (shortDescEl) shortDescEl.textContent = plainDesc + (plainDesc.length >= 150 ? '...' : '');
+
+                const devName = game.developer_name || game.game.developer_name || game.game.developer || game.developer || '未知';
+                const devEl = document.getElementById('detail-dev-name');
+                if (devEl) devEl.textContent = devName;
+                
+                updateDetailRating(game.game || game);
+                
+                const price = Number(game.game.price || game.price || 0);
+                document.getElementById('detail-price').textContent =
+                    price === 0 ? '免費遊玩' : `NT$ ${price.toLocaleString()}`;
+
+                // 處理封面圖與多圖輪播 (Carousel)
+                const media = game.media || [];
+                const coverEl = document.getElementById('game-cover');
+                if (media.length > 0) {
+                    let displayMedia = media.filter(m => m.media_type === 'media' || m.media_type === 'thumbnail');
+                    if (displayMedia.length === 0) displayMedia = media;
+
+                    let carouselHtml = `<div style="width:100%; height:100%; position:relative;">`;
+                    displayMedia.forEach((m, idx) => {
+                        let content = m.file_url.endsWith('.mp4') 
+                            ? `<video src="${m.file_url}" controls style="width:100%;height:100%;object-fit:cover;"></video>`
+                            : `<img src="${m.file_url}" alt="Media" onerror="this.onerror=null; this.src='https://placehold.co/800x450/1a1a2e/00f0ff?text=No+Cover'" style="width:100%;height:100%;object-fit:cover;">`;
+                        let display = idx === 0 ? 'block' : 'none';
+                        carouselHtml += `<div class="carousel-slide" id="slide-${idx}" style="display:${display}; width:100%; height:100%;">${content}</div>`;
+                    });
+
+                    if (displayMedia.length > 1) {
+                        carouselHtml += `
+                            <div class="carousel-btn prev" onclick="changeSlide(-1, ${displayMedia.length})">‹</div>
+                            <div class="carousel-btn next" onclick="changeSlide(1, ${displayMedia.length})">›</div>
+                        `;
+                    }
+                    carouselHtml += `</div>`;
+                    coverEl.innerHTML = carouselHtml;
+                } else {
+                    coverEl.innerHTML = `<img src="https://placehold.co/800x450/1a1a2e/00f0ff?text=No+Cover" style="width:100%;height:100%;object-fit:cover;">`;
+                }
+
+                const tagsEl = document.getElementById('detail-tags');
+                const tags = game.tags || [];
+                tags.forEach(t => {
+                    const span = document.createElement('span');
+                    span.className = 'tag';
+                    span.style.borderRadius = '2px';
+                    span.style.background = 'rgba(103, 193, 245, 0.2)';
+                    span.style.color = '#66c0f4';
+                    span.style.border = 'none';
+                    span.style.padding = '0 7px';
+                    span.style.height = '22px';
+                    span.style.fontSize = '11px';
+                    span.style.lineHeight = '22px';
+                    span.textContent = typeof t === 'string' ? t : (t.tag_name || t.name || t);
+                    tagsEl.appendChild(span);
+                });
+
+                // 判斷是否已擁有、是否已在願望清單、是否已在購物車（需登入才呼叫）
+                let isOwned = false;
+                let isWishlisted = false;
+                let isCarted = false;
+                window._gameDevId = game.game ? game.game.developer_id : game.developer_id;
+                if (role !== 'GUEST') {
+                    try {
+                        const lib = await apiGetLibrary();
+                        const libArr = Array.isArray(lib) ? lib : (lib.data || lib.games || []);
+                        isOwned = libArr.some(item => {
+                            const g = item.game || item;
+                            const gid = g.game_id || g.id || item.game_id;
+                            return Number(gid) === Number(currentGameId) && (item.status === 'ACTIVE' || !item.status);
+                        });
+                    } catch (_) { }
+
+                    try {
+                        const wishlist = await apiGetWishlist();
+                        const wishlistArr = Array.isArray(wishlist) ? wishlist : (wishlist.data || wishlist.games || []);
+                        isWishlisted = wishlistArr.some(item => {
+                            const g = item.game || item;
+                            const gid = g.game_id || g.id || item.game_id;
+                            return Number(gid) === Number(currentGameId);
+                        });
+                    } catch (_) { }
+
+                    try {
+                        const cart = await apiGetCart();
+                        const cartArr = Array.isArray(cart) ? cart : (cart.data || cart.items || []);
+                        isCarted = cartArr.some(item => {
+                            const g = item.game || item;
+                            const gid = g.game_id || g.id || item.game_id;
+                            return Number(gid) === Number(currentGameId);
+                        });
+                    } catch (_) { }
+                }
+                window._gameIsOwned = isOwned;
+
+                renderActionArea(game, role, isOwned, isWishlisted, isCarted);
+                renderReviewWriteArea(game, role, user, isOwned);
+
+                // GET /api/games/{id}/reviews
+                try {
+                    const reviews = await apiGetReviews(currentGameId);
+                    renderReviews(Array.isArray(reviews) ? reviews : (reviews.data || reviews.reviews || []));
+                } catch (_) {
+                    renderReviews([]);
+                }
+
+            } catch (err) {
+                document.getElementById('detail-title').textContent = `載入失敗：${err.message}`;
+            }
+        });
+
+        // ─── Carousel Logic ────────────────────────────────────
+        let currentSlideIdx = 0;
+        window.changeSlide = function(direction, total) {
+            document.getElementById(`slide-${currentSlideIdx}`).style.display = 'none';
+            currentSlideIdx = (currentSlideIdx + direction + total) % total;
+            document.getElementById(`slide-${currentSlideIdx}`).style.display = 'block';
+        };
+
+        // ─── 動作按鈕區 ────────────────────────────────────────
+        function renderActionArea(game, role, isOwned, isWishlisted, isCarted) {
+            const area = document.getElementById('action-area');
+            let html = '';
+
+            const gameData = game.game || game;
+            const isTakenDown = gameData.status === 'TAKEN_DOWN';
+
+            if (isOwned) {
+                html += `<div class="game-owned-badge">已在你的遊戲庫</div><br>`;
+            }
+
+            html += `<div class="buttons" style="margin-top: 15px;">`;
+
+            if (role === 'GUEST') {
+                if (isTakenDown) {
+                    html += `<button class="button is-danger is-outlined" disabled style="background-color: transparent; border-color: var(--accent-red); color: var(--accent-red);">此遊戲已下架</button>`;
+                } else {
+                    html += `<a href="/pages/auth/login.html" class="button is-primary">登入後購買</a>`;
+                }
+                html += `<button class="button is-light" onclick="showToast('請先登入！', 'error')">加入願望清單</button>`;
+            } else {
+                if (isOwned) {
+                    html += `<button class="button is-primary" onclick="playGame(${gameData.game_id || gameData.id})">啟動</button>`;
+                    html += `<button class="button is-light" onclick="downloadGame(${gameData.game_id || gameData.id})">下載</button>`;
+                } else {
+                    if (isTakenDown) {
+                        html += `<button class="button is-danger is-outlined" disabled style="background-color: transparent; border-color: var(--accent-red); color: var(--accent-red);">此遊戲已下架</button>`;
+                    } else {
+                        if (isCarted) {
+                            html += `<button class="button is-primary" disabled style="background-color: var(--bg-darker); color: var(--text-muted); border: 1px solid var(--border-color);">已在購物車</button>`;
+                        } else {
+                            html += `<button class="button is-primary" onclick="addToCart(this)">加入購物車</button>`;
+                        }
+                    }
+                }
+                
+                // 願望清單獨立顯示：不論是否擁有或已下架
+                if (isWishlisted) {
+                    html += `<button class="button is-light" disabled>已在願望清單</button>`;
+                } else {
+                    html += `<button class="button is-light" onclick="addToWishlist(this)">加入願望清單</button>`;
+                }
+            }
+
+            if (role === 'ADMIN') {
+                if (isTakenDown) {
+                    html += `<button class="button is-light" disabled>已強制下架</button>`;
+                } else {
+                    html += `<button class="button is-danger is-light" onclick="adminTakeDown()">強制下架</button>`;
+                }
+            }
+
+            html += `</div>`;
+            area.innerHTML = html;
+        }
+
+        // ─── 評論撰寫框 ────────────────────────────────────────
+        function renderReviewWriteArea(game, role, user, isOwned) {
+            const area = document.getElementById('review-write-area');
+            if (!area) return;
+
+            let canReview = false;
+            let reasonMsg = '';
+            const devId = window._gameDevId;
+
+            if (role === 'GUEST') {
+                reasonMsg = `<p style="color:var(--text-muted);font-size:14px;">請 <a href="/pages/auth/login.html">登入</a> 後才能發表評論。</p>`;
+            } else {
+                canReview = isOwned || role === 'ADMIN' || role === 'CSR' || (role === 'DEVELOPER' && (user.id || user.user_id) == devId);
+                if (!canReview) reasonMsg = `<p style="color:var(--text-muted);font-size:14px;">購買此遊戲後即可發表評論。</p>`;
+            }
+
+            if (!canReview) {
+                area.innerHTML = reasonMsg ? `<div class="review-write-box">${reasonMsg}</div>` : '';
+                return;
+            }
+
+            let roleOptions = '';
+            if (isOwned) {
+                roleOptions += `<option value="USERS">玩家 (User)</option>`;
+            } else {
+                roleOptions += `<option value="USERS" disabled>玩家 (User) - 需購買遊戲</option>`;
+            }
+            if (role === 'ADMIN') roleOptions += `<option value="ADMIN" ${!isOwned ? 'selected' : ''}>管理員 (Admin)</option>`;
+            if (role === 'CSR') roleOptions += `<option value="CSR" ${!isOwned ? 'selected' : ''}>客服人員 (CSR)</option>`;
+            if (role === 'DEVELOPER' && user && (user.id || user.user_id) == devId) roleOptions += `<option value="AUTHOR" ${!isOwned ? 'selected' : ''}>開發者 (Author)</option>`;
+            
+            let roleSelectHtml = '';
+            if (role === 'ADMIN' || role === 'CSR' || (role === 'DEVELOPER' && user && (user.id || user.user_id) == devId)) {
+                roleSelectHtml = `
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <label style="font-size:12px;color:var(--text-muted);">發布身分：</label>
+                        <select id="review-post-role" class="input" style="height:32px; font-size:14px; width:auto; display:inline-block; padding: 0 10px;">
+                            ${roleOptions}
+                        </select>
+                    </div>
+                `;
+            }
+
+            area.innerHTML = `
+                <div class="review-write-box">
+                    <h3>發表評論</h3>
+                    ${roleSelectHtml}
+                    <div class="review-rating" id="rating-group">
+                        <label class="selected">
+                            <input type="radio" name="sentiment" value="positive" checked>
+                            推薦
+                        </label>
+                        <label>
+                            <input type="radio" name="sentiment" value="negative">
+                            不推薦
+                        </label>
+                    </div>
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <textarea class="textarea" id="review-text" placeholder="分享你對這款遊戲的看法..." style="min-height:90px;"></textarea>
+                    </div>
+                    <button class="button is-primary" id="submit-review-btn" onclick="submitReview()">送出評論</button>
+                </div>
+            `;
+
+            document.querySelectorAll('.review-rating label').forEach(label => {
+                label.addEventListener('click', () => {
+                    document.querySelectorAll('.review-rating label').forEach(l => l.classList.remove('selected'));
+                    label.classList.add('selected');
+                });
+            });
+        }
+
+        // ─── 渲染評論列表 ──────────────────────────────────────
+        function renderReviews(reviews) {
+            const container = document.getElementById('reviews-container');
+
+            if (!reviews || reviews.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="padding:40px;">
+                        <p>還沒有人留下評論，成為第一個吧！</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            reviews.forEach(r => {
+                const div = document.createElement('div');
+                const sentiment = (r.attitude || r.sentiment || r.rating || 'positive').toLowerCase();
+                div.className = `review-item ${sentiment}`;
+                let badge = sentiment === 'positive'
+                    ? `<span class="review-sentiment sentiment-positive">推薦</span>`
+                    : `<span class="review-sentiment sentiment-negative">不推薦</span>`;
+
+                if (r.posted_as_role === 'ADMIN') {
+                    badge += ` <span style="color:#ff7b93; border: 1px solid #7c2d3a; background-color: #2b1f24; border-radius: 12px; padding: 2px 10px; font-size: 11px; font-weight: bold; margin-left: 8px;">ADMIN</span>`;
+                } else if (r.posted_as_role === 'CSR') {
+                    badge += ` <span style="color:#f39c12; border: 1px solid #d68910; background-color: #2e2213; border-radius: 12px; padding: 2px 10px; font-size: 11px; font-weight: bold; margin-left: 8px;">CSR</span>`;
+                } else if (r.posted_as_role === 'AUTHOR') {
+                    badge += ` <span style="color:#66c0f4; border: 1px solid #234f6e; background-color: #1a2a36; border-radius: 12px; padding: 2px 10px; font-size: 11px; font-weight: bold; margin-left: 8px;">AUTHOR</span>`;
+                }
+
+                const author = escapeHtml(r.author_username || r.author || r.username || (r.user && r.user.username) || '玩家');
+                
+                let dateStr = r.date || r.created_at || '';
+                let date = '未知時間';
+                if (dateStr) {
+                    try {
+                        const d = new Date(dateStr);
+                        if (!isNaN(d.getTime())) {
+                            const yyyy = d.getFullYear();
+                            const mm = String(d.getMonth() + 1).padStart(2, '0');
+                            const dd = String(d.getDate()).padStart(2, '0');
+                            const hh = String(d.getHours()).padStart(2, '0');
+                            const min = String(d.getMinutes()).padStart(2, '0');
+                            const ss = String(d.getSeconds()).padStart(2, '0');
+                            date = `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
+                        } else {
+                            date = dateStr.slice(0, 19).replace('T', ' ');
+                        }
+                    } catch (e) {
+                        date = dateStr.slice(0, 19).replace('T', ' ');
+                    }
+                }
+                const text = escapeHtml(r.text || r.content || r.body || '');
+                const reviewId = r.id || r.review_id || r.ID;
+                const replies = r.replies || [];
+
+                let repliesHtml = '';
+                if (replies.length > 0) {
+                    repliesHtml += `<div class="reply-section">`;
+                    const currentUser = getCurrentUser();
+                    const currentUserId = currentUser ? (currentUser.user_id || currentUser.id) : null;
+                    replies.forEach(reply => {
+                        const rAuthor = escapeHtml(reply.author_username || reply.author || reply.username || (reply.user && reply.user.username) || '玩家');
+                        const rText = escapeHtml(reply.content || reply.text || '');
+                        const replyId = reply.id || reply.review_reply_id;
+                        const replyUserId = reply.user_id || (reply.User && reply.User.user_id);
+                        
+                        let rDateStr = reply.created_at || reply.date || '';
+                        let rDate = '';
+                        if (rDateStr) {
+                            try {
+                                const d = new Date(rDateStr);
+                                if (!isNaN(d.getTime())) {
+                                    const yyyy = d.getFullYear();
+                                    const mm = String(d.getMonth() + 1).padStart(2, '0');
+                                    const dd = String(d.getDate()).padStart(2, '0');
+                                    const hh = String(d.getHours()).padStart(2, '0');
+                                    const min = String(d.getMinutes()).padStart(2, '0');
+                                    const ss = String(d.getSeconds()).padStart(2, '0');
+                                    rDate = `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
+                                } else {
+                                    rDate = rDateStr.slice(0, 19).replace('T', ' ');
+                                }
+                            } catch (e) {
+                                rDate = rDateStr.slice(0, 19).replace('T', ' ');
+                            }
+                        }
+
+                        const canDelete = currentUserId && (replyUserId == currentUserId);
+                        const deleteBtn = canDelete
+                            ? `<button class="button is-text is-small" onclick="deleteReply(${replyId})" title="刪除此回覆">刪除</button>`
+                            : '';
+                        let replyBadge = '';
+                        if (reply.posted_as_role === 'ADMIN') {
+                            replyBadge = `<span style="color:#ff7b93; border: 1px solid #7c2d3a; background-color: #2b1f24; border-radius: 12px; padding: 2px 10px; font-size: 10px; font-weight: bold; margin-left: 8px; vertical-align: middle;">ADMIN</span>`;
+                        } else if (reply.posted_as_role === 'CSR') {
+                            replyBadge = `<span style="color:#f39c12; border: 1px solid #d68910; background-color: #2e2213; border-radius: 12px; padding: 2px 10px; font-size: 10px; font-weight: bold; margin-left: 8px; vertical-align: middle;">CSR</span>`;
+                        } else if (reply.posted_as_role === 'AUTHOR') {
+                            replyBadge = `<span style="color:#66c0f4; border: 1px solid #234f6e; background-color: #1a2a36; border-radius: 12px; padding: 2px 10px; font-size: 10px; font-weight: bold; margin-left: 8px; vertical-align: middle;">AUTHOR</span>`;
+                        }
+
+                        repliesHtml += `
+                            <div class="reply-item">
+                                <div class="reply-author">
+                                    <span style="font-weight: 600;">${rAuthor}</span>${replyBadge}
+                                    <span style="color: #8f98a0; font-size: 12px; margin-left: 8px;">${rDate}</span>
+                                    ${deleteBtn}
+                                </div>
+                                <div class="reply-text" style="white-space: pre-wrap;">${rText}</div>
+                            </div>
+                        `;
+                    });
+                    repliesHtml += `</div>`;
+                }
+
+                // Add Reply Input Area (Only if logged in)
+                const role = getCurrentRole();
+                if (role !== 'GUEST') {
+                    let replyRoleOptions = '';
+                    const isOwned = window._gameIsOwned || false;
+                    const devId = window._gameDevId || 0;
+                    if (isOwned) {
+                        replyRoleOptions += `<option value="USERS">玩家</option>`;
+                    } else {
+                        replyRoleOptions += `<option value="USERS" disabled>玩家</option>`;
+                    }
+                    if (role === 'ADMIN') replyRoleOptions += `<option value="ADMIN" ${!isOwned ? 'selected' : ''}>ADMIN</option>`;
+                    if (role === 'CSR') replyRoleOptions += `<option value="CSR" ${!isOwned ? 'selected' : ''}>CSR</option>`;
+                    const user = getCurrentUser();
+                    if (role === 'DEVELOPER' && user && (user.id || user.user_id) == devId) replyRoleOptions += `<option value="AUTHOR" ${!isOwned ? 'selected' : ''}>AUTHOR</option>`;
+                    
+                    let replySelectHtml = '';
+                    if (role === 'ADMIN' || role === 'CSR' || (role === 'DEVELOPER' && user && (user.id || user.user_id) == devId)) {
+                        replySelectHtml = `
+                            <select id="reply-role-${reviewId}" class="input" style="height:32px; width:90px; font-size:12px; padding:0 8px; margin-right:8px; border:none; background:rgba(255,255,255,0.1); color:white;">
+                                ${replyRoleOptions}
+                            </select>
+                        `;
+                    }
+
+                    repliesHtml += `
+                        <div class="reply-input-area" style="display:flex; align-items:center;">
+                            ${replySelectHtml}
+                            <input type="text" id="reply-input-${reviewId}" placeholder="留個言吧..." style="flex:1;">
+                            <button onclick="submitReply(${reviewId})" style="margin-left:8px;">回覆</button>
+                        </div>
+                    `;
+                }
+
+                div.innerHTML = `
+                    <div class="review-header">
+                        <span class="review-author">${author}</span>
+                        ${badge}
+                        <span class="review-meta">${date}</span>
+                    </div>
+                    <p style="color:var(--text-secondary);font-size:14px;line-height:1.7;word-break:break-all;overflow-wrap:break-word;white-space:pre-wrap;">${text}</p>
+                    ${repliesHtml}
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateDetailRating(game) {
+            const rating = Number(game.overall_rating || 0);
+            const count = Number(game.rating_count || 0);
+            
+            let sentiment = '尚無評價';
+            let color = '#8f98a0';
+            if (count > 0) {
+                if (rating >= 4.5) { sentiment = '壓倒性好評'; color = '#66c0f4'; }
+                else if (rating >= 4.0) { sentiment = '極度好評'; color = '#66c0f4'; }
+                else if (rating >= 3.0) { sentiment = '大多好評'; color = '#66c0f4'; }
+                else if (rating >= 2.0) { sentiment = '褒貶不一'; color = '#b9a074'; }
+                else { sentiment = '大多負評'; color = '#a34c25'; }
+            }
+
+            const countText = count > 0 ? `(${count.toLocaleString()} 篇評論)` : '';
+            
+            const ratingTextEl = document.getElementById('detail-rating-text');
+            if (ratingTextEl) {
+                ratingTextEl.innerHTML = `<span style="color:${color}; font-weight:bold;">${sentiment}</span> <span style="color:#8f98a0; font-size:12px; margin-left:4px;">${countText}</span>`;
+            }
+        }
+
+        async function submitReply(reviewId) {
+            const input = document.getElementById(`reply-input-${reviewId}`);
+            const content = input.value.trim();
+            if (!content) return;
+            const roleSelect = document.getElementById(`reply-role-${reviewId}`);
+            const postAsRole = roleSelect ? roleSelect.value : 'USERS';
+
+            try {
+                await apiPostReply(reviewId, content, postAsRole);
+                showToast('回覆成功！', 'success');
+                // 重新載入評論
+                const reviews = await apiGetReviews(currentGameId);
+                renderReviews(Array.isArray(reviews) ? reviews : (reviews.data || reviews.reviews || []));
+            } catch (err) {
+                showToast(`回覆失敗：${err.message}`, 'error');
+            }
+        }
+
+        async function deleteReply(replyId) {
+            if (!confirm('確定要刪除此回覆嗎？')) return;
+            try {
+                // DELETE /api/social/reviews/replies/{id}
+                await authFetch(`/api/social/reviews/replies/${replyId}`, { method: 'DELETE' });
+                showToast('回覆已刪除！', 'success');
+                // Reload reviews
+                const reviews = await apiGetReviews(currentGameId);
+                renderReviews(Array.isArray(reviews) ? reviews : (reviews.data || reviews.reviews || []));
+            } catch (err) {
+                showToast(`刪除失敗：${err.message}`, 'error');
+            }
+        }
+
+        // ─── 互動函式 ─────────────────────────────────────────
+        async function addToCart(btnElement) {
+            try {
+                await apiAddToCart(currentGameId);
+                showToast('已加入購物車！', 'success');
+                if (btnElement) {
+                    btnElement.disabled = true;
+                    btnElement.textContent = '已在購物車中';
+                    btnElement.style.background = 'var(--bg-lighter)';
+                    btnElement.style.color = 'var(--text-muted)';
+                    btnElement.style.cursor = 'not-allowed';
+                }
+            } catch (err) {
+                showToast(`加入購物車失敗：${err.message}`, 'error');
+            }
+        }
+
+        async function addToWishlist(btnElement) {
+            try {
+                const result = await apiAddWishlist(currentGameId);
+                if (btnElement) {
+                    btnElement.disabled = true;
+                    btnElement.textContent = '已在願望清單內';
+                }
+                showToast(result.already_exists ? '已在願望清單內。' : '已加入願望清單！', 'success');
+            } catch (err) {
+                showToast(`加入願望清單失敗：${err.message}`, 'error');
+            }
+        }
+
+        async function adminTakeDown() {
+            if (!confirm('確定要以官方身分強制下架此遊戲嗎？')) return;
+            try {
+                await apiAdminDeleteGame(currentGameId);
+                showToast('遊戲已成功下架。', 'success');
+                setTimeout(() => window.location.href = '/', 1500);
+            } catch (err) {
+                showToast(`下架失敗：${err.message}`, 'error');
+            }
+        }
+
+        async function playGame(gameId) {
+            try {
+                const result = await authFetch(`/api/protected/library/${gameId}/play`);
+                const data   = await result.json();
+                if (data && data.launch_url) {
+                    window.open(data.launch_url, '_blank');
+                } else {
+                    showToast('遊戲啟動中...', 'success');
+                }
+            } catch (err) {
+                showToast(`啟動失敗：${err.message}`, 'error');
+            }
+        }
+
+        async function downloadGame(gameId) {
+            try {
+                const result = await authFetch(`/api/protected/library/${gameId}/download`);
+                if (!result.ok) {
+                    await parseResponse(result);
+                }
+                const blob = await result.blob();
+                const disposition = result.headers.get('content-disposition') || '';
+                const match = disposition.match(/filename="?([^";]+)"?/i);
+                const filename = match ? match[1] : `game-${gameId}.download`;
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                URL.revokeObjectURL(url);
+                showToast('開始下載遊戲...', 'success');
+            } catch (err) {
+                showToast(`下載失敗：${err.message}`, 'error');
+            }
+        }
+
+        async function submitReview() {
+            const textEl = document.getElementById('review-text');
+            const text = textEl ? textEl.value.trim() : '';
+            if (!text) { showToast('請輸入評論內容！', 'error'); return; }
+
+            const radio = document.querySelector('input[name="sentiment"]:checked');
+            const sentiment = radio ? radio.value : 'positive';
+            const btn = document.getElementById('submit-review-btn');
+
+            btn.disabled = true;
+            btn.textContent = '送出中...';
+
+            const roleSelect = document.getElementById('review-post-role');
+            const postAsRole = roleSelect ? roleSelect.value : 'USERS';
+
+            try {
+                await apiPostReview(currentGameId, sentiment, text, postAsRole);
+                textEl.value = '';
+                showToast('評論已送出！', 'success');
+                const gameResponse = await apiGetGame(currentGameId);
+                const gameData = gameResponse.data || gameResponse;
+                updateDetailRating(gameData.game || gameData);
+                // 重新載入評論
+                const reviews = await apiGetReviews(currentGameId);
+                renderReviews(Array.isArray(reviews) ? reviews : (reviews.data || reviews.reviews || []));
+            } catch (err) {
+                showToast(`評論送出失敗：${err.message}`, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '送出評論';
+            }
+        }
+    </script>
+</body>
+
+</html>

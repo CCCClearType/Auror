@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人資料 — VaporAuror</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+    <header id="global-header"></header>
+
+    <main>
+        <div class="box profile-container">
+            <h1 class="title is-3 has-text-centered">個人資料管理</h1>
+            <p class="profile-subtitle">自訂您的 VaporAuror 身份</p>
+
+            <div id="profile-info" class="box profile-info-box">
+                <p style="margin-bottom:12px; font-size:1.1rem;">
+                    <strong style="color:var(--text-secondary);">帳號權限：</strong>
+                    <span id="display-role" style="color:var(--accent-pink);font-weight:700;"></span>
+                </p>
+                <p style="font-size:1.1rem;">
+                    <strong style="color:var(--text-secondary);">錢包餘額：</strong>
+                    <span style="color:var(--accent-cyan);font-weight:700;">無限</span>
+                </p>
+            </div>
+
+            <div id="profile-error" class="notification is-danger is-light alert-info" style="display:none;"></div>
+            <div id="profile-success" class="notification is-success is-light alert-info" style="display:none;"></div>
+
+            <form id="profile-form">
+                <div class="field form-group">
+                    <label class="label" for="prof-username">使用者名稱 (Username)</label>
+                    <div class="control"><input class="input" type="text" id="prof-username" required></div>
+                </div>
+                <div class="field form-group">
+                    <label class="label" for="prof-email">電子郵件 (Email)</label>
+                    <div class="control"><input class="input" type="email" id="prof-email" required></div>
+                </div>
+                <div class="field form-group">
+                    <label class="label" for="prof-password">新密碼（不修改請留空）</label>
+                    <div class="control"><input class="input" type="password" id="prof-password" placeholder="輸入新密碼" minlength="8"></div>
+                </div>
+                <button type="submit" class="button is-primary is-fullwidth" id="save-btn">儲存變更</button>
+            </form>
+        </div>
+    </main>
+
+    <script src="/assets/js/api.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!requireLogin()) return;
+
+            const userData = getCurrentUser();
+            const roleLabels = {
+                USER: '一般玩家 (User)',
+                DEVELOPER: '開發者 (Developer)',
+                CSR: '客服人員 (CSR)',
+                ADMIN: '管理員 (Admin)'
+            };
+
+            document.getElementById('display-role').textContent = roleLabels[userData.role] || userData.role;
+            document.getElementById('prof-username').value = userData.username;
+            document.getElementById('prof-email').value    = userData.email;
+
+            document.getElementById('profile-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const newUsername = document.getElementById('prof-username').value.trim();
+                const newEmail    = document.getElementById('prof-email').value.trim();
+                const newPassword = document.getElementById('prof-password').value;
+                const errorEl     = document.getElementById('profile-error');
+                const successEl   = document.getElementById('profile-success');
+                const btn         = document.getElementById('save-btn');
+
+                errorEl.style.display   = 'none';
+                successEl.style.display = 'none';
+                btn.disabled = true;
+                btn.textContent = '儲存中...';
+
+                const payload = { username: newUsername, email: newEmail };
+                if (newPassword) payload.password = newPassword;
+
+                try {
+                    // PUT /api/users/profile
+                    const updatedUser = await apiUpdateProfile(payload);
+
+                    // 更新本地 localStorage
+                    const merged = { ...userData, ...updatedUser, username: newUsername, email: newEmail };
+                    localStorage.setItem('currentUser', JSON.stringify(merged));
+
+                    successEl.textContent = '資料更新成功！';
+                    successEl.style.display = 'block';
+                    document.getElementById('prof-password').value = '';
+                } catch (err) {
+                    errorEl.textContent = `更新失敗：${err.message}`;
+                    errorEl.style.display = 'block';
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = '儲存變更';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

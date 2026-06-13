@@ -1,0 +1,45 @@
+erDiagram
+    USERS {
+        INT user_id PK
+        VARCHAR username
+        VARCHAR email
+        VARCHAR password_hash
+        DATETIME registration_date
+        VARCHAR last_visit_ip
+        VARCHAR role "NULL | USERS | CSR | ADMIN | DEVELOPER"
+        VARCHAR status "ONLINE | OFFLINE"
+        VARCHAR permission "ACTIVE | DEACTIVE | DELETED"
+    }
+    GAMES {
+        INT game_id PK
+        INT developer_id FK
+        VARCHAR title
+        TEXT description
+        DECIMAL price
+        DECIMAL overall_rating
+        VARCHAR status "DRAFT | ACTIVE | TAKEN_DOWN"
+    }
+    REVIEWS {
+        INT review_id PK
+        INT game_id FK
+        INT user_id FK
+        TEXT content
+        DATETIME created_at
+        VARCHAR attitude "POSITIVE | NEGATIVE"
+        VARCHAR status "VISIBLE | HIDDEN | DELETED"
+    }
+    REVIEW_REPLIES {
+        INT review_reply_id PK
+        INT review_id FK
+        INT user_id FK
+        INT parent_reply_id FK "nullable"
+        TEXT content    
+        DATETIME created_at
+        VARCHAR status "VISIBLE | HIDDEN | DELETED"
+    }
+
+    USERS ||--o{ REVIEWS : writes
+    GAMES ||--o{ REVIEWS : receives
+    REVIEWS ||--o{ REVIEW_REPLIES : has
+    USERS ||--o{ REVIEW_REPLIES : writes
+    REVIEW_REPLIES |o--o{ REVIEW_REPLIES : parent_of
