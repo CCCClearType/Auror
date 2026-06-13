@@ -399,8 +399,8 @@
                 let bucketSizeMinutes = 2;
                 if (hours === 12) bucketSizeMinutes = 5;
                 else if (hours === 24) bucketSizeMinutes = 15; 
-                else if (hours === 72) bucketSizeMinutes = 60; 
-                else if (hours >= 168) bucketSizeMinutes = 1440; 
+                else if (hours === 72) bucketSizeMinutes = 360; 
+                else if (hours >= 168) bucketSizeMinutes = 1440;
                 
                 const bucketSize = bucketSizeMinutes * 60 * 1000;
                 const roundedNow = new Date(Math.floor(now.getTime() / bucketSize) * bucketSize);
@@ -466,7 +466,7 @@
                 const reportData = buckets.map(b => b.reportCount);
                 const pingData = buckets.map(b => {
                     if (b.isDown) return 0;
-                    return b.pingCount > 0 ? (b.pingLatency / b.pingCount) : 0;
+                    return b.pingCount > 0 ? (b.pingLatency / b.pingCount) : null;
                 });
 
                 const ctx = document.getElementById('historyChart').getContext('2d');
@@ -476,49 +476,49 @@
                     type: 'line',
                     data: {
                         labels: labels,
-                        datasets: [
-                            {
-                                label: 'User Reports',
-                                data: reportData,
-                                borderColor: 'rgba(54, 162, 235, 1)',
-                                backgroundColor: 'rgba(54, 162, 235, 0.4)',
-                                fill: true,
-                                tension: 0.3,
-                                pointRadius: 0,
-                                pointHoverRadius: 5,
-                                pointHitRadius: 10,
-                                yAxisID: 'y'
-                            },
-                            {
-                                label: 'Server Latency (ms)',
-                                data: pingData,
-                                borderColor: 'rgba(255, 206, 86, 0.8)',
-                                borderDash: [5, 5],
-                                backgroundColor: 'transparent',
-                                tension: 0.3,
-                                pointBackgroundColor: ctx => buckets[ctx.dataIndex] && buckets[ctx.dataIndex].isDown ? 'rgba(255, 92, 117, 1)' : 'rgba(255, 206, 86, 0.8)',
-                                pointBorderColor: ctx => buckets[ctx.dataIndex] && buckets[ctx.dataIndex].isDown ? 'rgba(255, 92, 117, 1)' : 'rgba(255, 206, 86, 0.8)',
-                                pointRadius: ctx => buckets[ctx.dataIndex] && buckets[ctx.dataIndex].isDown ? 4 : 0,
-                                pointHoverRadius: 6,
-                                pointHitRadius: 10,
-                                yAxisID: 'y1',
-                                segment: {
-                                    borderColor: ctx => {
-                                        // If this segment connects to a DOWN point, make it red and solid
-                                        if (buckets[ctx.p1DataIndex] && buckets[ctx.p1DataIndex].isDown) {
-                                            return 'rgba(255, 92, 117, 1)';
-                                        }
-                                        return 'rgba(255, 206, 86, 0.8)';
-                                    },
-                                    borderDash: ctx => {
-                                        if (buckets[ctx.p1DataIndex] && buckets[ctx.p1DataIndex].isDown) {
-                                            return [];
-                                        }
-                                        return [5, 5];
-                                    }
+                        datasets: (() => {
+                            const ds = [
+                                {
+                                    label: 'User Reports',
+                                    data: reportData,
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    backgroundColor: 'rgba(54, 162, 235, 0.4)',
+                                    fill: true,
+                                    tension: 0.3,
+                                    pointRadius: 0,
+                                    pointHoverRadius: 5,
+                                    pointHitRadius: 10,
+                                    yAxisID: 'y'
                                 }
+                            ];
+                            if (hours < 72) {
+                                ds.push({
+                                    label: 'Server Latency (ms)',
+                                    data: pingData,
+                                    borderColor: 'rgba(255, 206, 86, 0.8)',
+                                    borderDash: [5, 5],
+                                    backgroundColor: 'transparent',
+                                    tension: 0.3,
+                                    pointBackgroundColor: ctx => buckets[ctx.dataIndex] && buckets[ctx.dataIndex].isDown ? 'rgba(255, 92, 117, 1)' : 'rgba(255, 206, 86, 0.8)',
+                                    pointBorderColor: ctx => buckets[ctx.dataIndex] && buckets[ctx.dataIndex].isDown ? 'rgba(255, 92, 117, 1)' : 'rgba(255, 206, 86, 0.8)',
+                                    pointRadius: ctx => buckets[ctx.dataIndex] && buckets[ctx.dataIndex].isDown ? 4 : 0,
+                                    pointHoverRadius: 6,
+                                    pointHitRadius: 10,
+                                    yAxisID: 'y1',
+                                    segment: {
+                                        borderColor: ctx => {
+                                            if (buckets[ctx.p1DataIndex] && buckets[ctx.p1DataIndex].isDown) return 'rgba(255, 92, 117, 1)';
+                                            return 'rgba(255, 206, 86, 0.8)';
+                                        },
+                                        borderDash: ctx => {
+                                            if (buckets[ctx.p1DataIndex] && buckets[ctx.p1DataIndex].isDown) return [];
+                                            return [5, 5];
+                                        }
+                                    }
+                                });
                             }
-                        ]
+                            return ds;
+                        })()
                     },
                     options: {
                         responsive: true,
@@ -553,12 +553,12 @@
                                 title: { display: true, text: 'Reports', color: '#8f98a0' }
                             },
                             y1: { 
-                                type: 'linear', display: true, position: 'right',
+                                type: 'linear', display: hours < 72, position: 'right',
                                 min: 0,
                                 suggestedMax: 500,
                                 grid: { drawOnChartArea: false }, 
                                 ticks: { color: '#8f98a0' },
-                                title: { display: true, text: 'Latency (ms)', color: '#8f98a0' }
+                                title: { display: hours < 72, text: 'Latency (ms)', color: '#8f98a0' }
                             }
                         }
                     }
