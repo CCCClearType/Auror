@@ -541,7 +541,6 @@
                                     label: 'Server Latency (ms)',
                                     data: pingData,
                                     borderColor: 'rgba(255, 206, 86, 0.8)',
-                                    borderDash: [5, 5],
                                     backgroundColor: 'transparent',
                                     tension: 0.3,
                                     spanGaps: true,
@@ -555,10 +554,6 @@
                                         borderColor: ctx => {
                                             if (buckets[ctx.p1DataIndex] && buckets[ctx.p1DataIndex].isDown) return 'rgba(255, 92, 117, 1)';
                                             return 'rgba(255, 206, 86, 0.8)';
-                                        },
-                                        borderDash: ctx => {
-                                            if (buckets[ctx.p1DataIndex] && buckets[ctx.p1DataIndex].isDown) return [];
-                                            return [5, 5];
                                         }
                                     }
                                 });
