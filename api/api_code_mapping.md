@@ -25,26 +25,26 @@
 
 ---
 
-## 2. 商店與筆記 (Store & Games)
+## 2. 商店與筆記 (Store & Notes)
 
 | HTTP 方法 | API 網址路徑 | 路由註冊 (Router) | 對應的控制器函式 (Controller) | 備註功能 |
 |---|---|---|---|---|
-| **GET** | `/api/games` | `api.GET("/games", ...)` | [game_controller.go:37](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/game_controller.go#L37) | 取得所有筆記 (含搜尋/篩選) |
-| **GET** | `/api/games/{id}` | `api.GET("/games/:id", ...)` | [game_controller.go:112](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/game_controller.go#L112) | 取得單一筆記詳情 |
-| **GET** | `/api/games/{id}/reviews` | `api.GET("/games/:id/reviews", ...)` | [social_controller.go:48](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/social_controller.go#L48) | 取得筆記評論 |
-| **GET** | `/api/developer/games` | `developer.GET("/games", ...)` | [developer_controller.go:29](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/developer_controller.go#L29) | 查看自己的筆記列表 (需 DEV) |
-| **POST** | `/api/developer/games` | `developer.POST("/games", ...)` | [developer_controller.go:48](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/developer_controller.go#L48) | 建立新筆記草稿 (需 DEV) |
-| **PUT** | `/api/developer/games/{id}/publish` | `developer.PUT("/games/:id/publish", ...)` | [developer_controller.go:79](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/developer_controller.go#L79) | 正式上架筆記 (需 DEV) |
-| **PUT** | `/api/developer/games/{id}` | `developer.PUT("/games/:id", ...)` | [developer_controller.go:110](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/developer_controller.go#L110) | 編輯筆記資訊 (需 DEV) |
-| **DELETE** | `/api/developer/games/{id}` | `developer.DELETE("/games/:id", ...)` | [developer_controller.go:145](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/developer_controller.go#L145) | 下架自己的筆記 (需 DEV) |
-| **DELETE** | `/api/admin/games/{id}` | `admin.DELETE("/games/:id", ...)` | [admin_controller.go:88](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/admin_controller.go#L88) | 強制下架筆記 (需 ADMIN) |
-| **POST** | `/api/developer/games/{id}/media` | `developer.POST("/games/:id/media", ...)` | [developer_controller.go:181](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/developer_controller.go#L181) | 上傳筆記圖片或主檔 (需 DEV) |
-| **DELETE** | `/api/developer/games/{id}/media/{id}`| `developer.DELETE("/games/:id/media/:media_id", ...)`| [developer_controller.go:278](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/developer_controller.go#L278) | 刪除筆記素材 (需 DEV) |
-| **GET** | `/api/developer/games/{id}/stats` | `developer.GET("/games/:id/stats", ...)` | [developer_controller.go:330](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/developer_controller.go#L330) | 查看筆記銷售量與收入 (需 DEV) |
-| **GET** | `/api/tags` | `api.GET("/tags", ...)` | [developer_controller.go:361](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/developer_controller.go#L361) | 查看科目列表 |
-| **POST** | `/api/developer/tags` | `developer.POST("/tags", ...)` | [developer_controller.go:371](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/developer_controller.go#L371) | 建立科目 (需 DEV) |
-| **POST** | `/api/developer/games/{id}/tags` | `developer.POST("/games/:id/tags", ...)` | [developer_controller.go:402](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/developer_controller.go#L402) | 貼上科目 (需 DEV) |
-| **DELETE** | `/api/developer/games/{id}/tags/{id}` | `developer.DELETE("/games/:id/tags/:tag_id", ...)`| [developer_controller.go:436](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/developer_controller.go#L436) | 移除科目 (需 DEV) |
+| **GET** | `/api/notes` | `api.GET("/notes", ...)` | [note_controller.go:37](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/note_controller.go#L37) | 取得所有筆記 (含搜尋/篩選) |
+| **GET** | `/api/notes/{id}` | `api.GET("/notes/:id", ...)` | [note_controller.go:112](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/note_controller.go#L112) | 取得單一筆記詳情 |
+| **GET** | `/api/notes/{id}/reviews` | `api.GET("/notes/:id/reviews", ...)` | [social_controller.go:48](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/social_controller.go#L48) | 取得筆記評論 |
+| **GET** | `/api/seller/notes` | `seller.GET("/notes", ...)` | [seller_controller.go:29](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/seller_controller.go#L29) | 查看自己的筆記列表 (需 DEV) |
+| **POST** | `/api/seller/notes` | `seller.POST("/notes", ...)` | [seller_controller.go:48](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/seller_controller.go#L48) | 建立新筆記草稿 (需 DEV) |
+| **PUT** | `/api/seller/notes/{id}/publish` | `seller.PUT("/notes/:id/publish", ...)` | [seller_controller.go:79](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/seller_controller.go#L79) | 正式上架筆記 (需 DEV) |
+| **PUT** | `/api/seller/notes/{id}` | `seller.PUT("/notes/:id", ...)` | [seller_controller.go:110](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/seller_controller.go#L110) | 編輯筆記資訊 (需 DEV) |
+| **DELETE** | `/api/seller/notes/{id}` | `seller.DELETE("/notes/:id", ...)` | [seller_controller.go:145](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/seller_controller.go#L145) | 下架自己的筆記 (需 DEV) |
+| **DELETE** | `/api/admin/notes/{id}` | `admin.DELETE("/notes/:id", ...)` | [admin_controller.go:88](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/admin_controller.go#L88) | 強制下架筆記 (需 ADMIN) |
+| **POST** | `/api/seller/notes/{id}/media` | `seller.POST("/notes/:id/media", ...)` | [seller_controller.go:181](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/seller_controller.go#L181) | 上傳筆記圖片或主檔 (需 DEV) |
+| **DELETE** | `/api/seller/notes/{id}/media/{id}`| `seller.DELETE("/notes/:id/media/:media_id", ...)`| [seller_controller.go:278](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/seller_controller.go#L278) | 刪除筆記素材 (需 DEV) |
+| **GET** | `/api/seller/notes/{id}/stats` | `seller.GET("/notes/:id/stats", ...)` | [seller_controller.go:330](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/seller_controller.go#L330) | 查看筆記銷售量與收入 (需 DEV) |
+| **GET** | `/api/tags` | `api.GET("/tags", ...)` | [seller_controller.go:361](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/seller_controller.go#L361) | 查看科目列表 |
+| **POST** | `/api/seller/tags` | `seller.POST("/tags", ...)` | [seller_controller.go:371](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/seller_controller.go#L371) | 建立科目 (需 DEV) |
+| **POST** | `/api/seller/notes/{id}/tags` | `seller.POST("/notes/:id/tags", ...)` | [seller_controller.go:402](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/seller_controller.go#L402) | 貼上科目 (需 DEV) |
+| **DELETE** | `/api/seller/notes/{id}/tags/{id}` | `seller.DELETE("/notes/:id/tags/:tag_id", ...)`| [seller_controller.go:436](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/seller_controller.go#L436) | 移除科目 (需 DEV) |
 
 ---
 
@@ -54,7 +54,7 @@
 |---|---|---|---|---|
 | **GET** | `/api/protected/cart` | `protected.GET("/cart", ...)` | [cart_controller.go:16](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/cart_controller.go#L16) | 查看購物車內容 |
 | **POST** | `/api/protected/cart` | `protected.POST("/cart", ...)` | [cart_controller.go:31](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/cart_controller.go#L31) | 將筆記加入購物車 |
-| **DELETE** | `/api/protected/cart/{game_id}` | `protected.DELETE("/cart/:game_id", ...)` | [cart_controller.go:81](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/cart_controller.go#L81) | 移除購物車項目 |
+| **DELETE** | `/api/protected/cart/{note_id}` | `protected.DELETE("/cart/:note_id", ...)` | [cart_controller.go:81](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/cart_controller.go#L81) | 移除購物車項目 |
 | **POST** | `/api/protected/checkout` | `protected.POST("/checkout", ...)` | [transaction_controller.go:15](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/transaction_controller.go#L15) | 結帳購買 |
 | **GET** | `/api/protected/transactions` | `protected.GET("/transactions", ...)` | [transaction_controller.go:99](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/transaction_controller.go#L99) | 查看購買紀錄 |
 | **GET** | `/api/protected/refunds` | `protected.GET("/refunds", ...)` | [social_controller.go:660](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/social_controller.go#L660) | 取得個人退款歷史紀錄 |
@@ -69,11 +69,11 @@
 | HTTP 方法 | API 網址路徑 | 路由註冊 (Router) | 對應的控制器函式 (Controller) | 備註功能 |
 |---|---|---|---|---|
 | **GET** | `/api/protected/library` | `protected.GET("/library", ...)` | [library_controller.go:15](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/library_controller.go#L15) | 顯示個人筆記庫 |
-| **GET** | `/api/protected/library/{game_id}/play` | `protected.GET("/library/:game_id/play", ...)` | [library_controller.go:97](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/library_controller.go#L97) | 玩筆記 (驗證授權) |
-| **GET** | `/api/protected/library/{game_id}/download` | `protected.GET("/library/:game_id/download", ...)` | [library_controller.go:112](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/library_controller.go#L112) | 下載筆記 (直接串流檔案) |
+| **GET** | `/api/protected/library/{note_id}/play` | `protected.GET("/library/:note_id/play", ...)` | [library_controller.go:97](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/library_controller.go#L97) | 玩筆記 (驗證授權) |
+| **GET** | `/api/protected/library/{note_id}/download` | `protected.GET("/library/:note_id/download", ...)` | [library_controller.go:112](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/library_controller.go#L112) | 下載筆記 (直接串流檔案) |
 | **GET** | `/api/protected/wishlist` | `protected.GET("/wishlist", ...)` | [library_controller.go:30](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/library_controller.go#L30) | 查看願望清單 |
 | **POST** | `/api/protected/wishlist` | `protected.POST("/wishlist", ...)` | [library_controller.go:44](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/library_controller.go#L44) | 加入願望清單 |
-| **DELETE** | `/api/protected/wishlist/{game_id}`| `protected.DELETE("/wishlist/:game_id", ...)`| [library_controller.go:83](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/library_controller.go#L83)| 移除願望清單 |
+| **DELETE** | `/api/protected/wishlist/{note_id}`| `protected.DELETE("/wishlist/:note_id", ...)`| [library_controller.go:83](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/library_controller.go#L83)| 移除願望清單 |
 
 ---
 
@@ -81,7 +81,7 @@
 
 | HTTP 方法 | API 網址路徑 | 路由註冊 (Router) | 對應的控制器函式 (Controller) | 備註功能 |
 |---|---|---|---|---|
-| **POST** | `/api/social/games/{id}/reviews` | `social.POST("/games/:id/reviews", ...)` | [social_controller.go:118](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/social_controller.go#L118) | 對筆記發表評價 |
+| **POST** | `/api/social/notes/{id}/reviews` | `social.POST("/notes/:id/reviews", ...)` | [social_controller.go:118](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/social_controller.go#L118) | 對筆記發表評價 |
 | **POST** | `/api/social/reviews/{id}/replies` | `social.POST("/reviews/:review_id/replies",...)`| [social_controller.go:422](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/social_controller.go#L422) | 樓中樓回覆評論 |
 | **DELETE** | `/api/social/reviews/replies/{id}` | `social.DELETE("/reviews/replies/:reply_id",...)`| [social_controller.go:458](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/social_controller.go#L458)| 刪除樓中樓回覆 |
 | **GET** | `/api/social/friends` | `social.GET("/friends", ...)` | [social_controller.go:221](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/social_controller.go#L221) | 查看好友列表 |

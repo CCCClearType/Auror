@@ -4,7 +4,7 @@ import "time"
 
 type Review struct {
 	ReviewID  uint      `gorm:"primaryKey;column:review_id" json:"review_id"`
-	GameID    uint      `gorm:"not null" json:"game_id"`
+	NoteID    uint      `gorm:"not null" json:"note_id"`
 	UserID    uint      `gorm:"not null" json:"user_id"`
 	Content   string    `gorm:"not null" json:"content"`
 	Attitude  string    `gorm:"not null" json:"attitude"` // POSITIVE or NEGATIVE

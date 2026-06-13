@@ -65,13 +65,13 @@ func buildRoleContent(content string, role string) string {
 	return content
 }
 
-// GetReviews handles GET /api/games/:id/reviews
+// GetReviews handles GET /api/notes/:id/reviews
 func GetReviews(c *gin.Context) {
-	gameID := c.Param("id")
+	noteID := c.Param("id")
 	var reviews []models.Review
 
 	// Preload the User to get Username
-	if err := database.DB.Where("game_id = ?", gameID).Order("created_at desc").Find(&reviews).Error; err != nil {
+	if err := database.DB.Where("note_id = ?", noteID).Order("created_at desc").Find(&reviews).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch reviews"})
 		return
 	}
@@ -88,7 +88,7 @@ func GetReviews(c *gin.Context) {
 	}
 	type ReviewDTO struct {
 		ReviewID   uint             `json:"review_id"`
-		GameID     uint             `json:"game_id"`
+		NoteID     uint             `json:"note_id"`
 		UserID     uint             `json:"user_id"`
 		Author     reviewAuthorDTO  `json:"user"`
 		AuthorName string           `json:"author_username"`
@@ -125,7 +125,7 @@ func GetReviews(c *gin.Context) {
 		revRole, revContent := parseRoleFromContent(r.Content)
 		fullReviews = append(fullReviews, ReviewDTO{
 			ReviewID:   r.ReviewID,
-			GameID:     r.GameID,
+			NoteID:     r.NoteID,
 			UserID:     r.UserID,
 			Author:     author,
 			AuthorName: author.Username,
@@ -141,11 +141,11 @@ func GetReviews(c *gin.Context) {
 	c.JSON(http.StatusOK, fullReviews)
 }
 
-// PostReview handles POST /api/social/games/:id/reviews
+// PostReview handles POST /api/social/notes/:id/reviews
 func PostReview(c *gin.Context) {
 	userIDFloat, _ := c.Get("user_id")
 	userID := uint(userIDFloat.(float64))
-	gameID := c.Param("id")
+	noteID := c.Param("id")
 
 	var input struct {
 		Attitude   string `json:"attitude" binding:"required"` // POSITIVE or NEGATIVE
@@ -157,13 +157,13 @@ func PostReview(c *gin.Context) {
 		return
 	}
 
-	var game models.Game
-	if err := database.DB.First(&game, gameID).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Game not found"})
+	var note models.Note
+	if err := database.DB.First(&note, noteID).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Note not found"})
 		return
 	}
-	if game.Status == "TAKEN_DOWN" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Cannot review a game that has been taken down"})
+	if note.Status == "TAKEN_DOWN" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Cannot review a note that has been taken down"})
 		return
 	}
 
@@ -178,17 +178,17 @@ func PostReview(c *gin.Context) {
 		canBypass = true
 	} else if input.PostAsRole == "CSR" && user.Role == "CSR" {
 		canBypass = true
-	} else if input.PostAsRole == "AUTHOR" && user.Role == "DEVELOPER" && game.DeveloperID == userID {
+	} else if input.PostAsRole == "AUTHOR" && user.Role == "SELLER" && note.SellerID == userID {
 		canBypass = true
 	} else {
 		input.PostAsRole = "USERS"
 	}
 
 	if !canBypass {
-		// VERIFY OWNERSHIP: Only players who own the game can leave a review
-		var license models.GameLicense
-		if err := database.DB.Where("user_id = ? AND game_id = ? AND status = ?", userID, game.GameID, "ACTIVE").First(&license).Error; err != nil {
-			c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden: You must own the game to leave a review"})
+		// VERIFY OWNERSHIP: Only players who own the note can leave a review
+		var license models.NoteLicense
+		if err := database.DB.Where("user_id = ? AND note_id = ? AND status = ?", userID, note.NoteID, "ACTIVE").First(&license).Error; err != nil {
+			c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden: You must own the note to leave a review"})
 			return
 		}
 	}
@@ -196,7 +196,7 @@ func PostReview(c *gin.Context) {
 	finalContent := buildRoleContent(input.Content, input.PostAsRole)
 
 	review := models.Review{
-		GameID:   game.GameID,
+		NoteID:   note.NoteID,
 		UserID:   userID,
 		Attitude: input.Attitude,
 		Content:  finalContent,
@@ -206,7 +206,7 @@ func PostReview(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to post review"})
 		return
 	}
-	refreshStoredGameRating(game.GameID)
+	refreshStoredNoteRating(note.NoteID)
 
 	c.JSON(http.StatusCreated, gin.H{"message": "Review posted successfully"})
 }
@@ -226,7 +226,7 @@ func ApplyRefund(c *gin.Context) {
 	}
 
 	// 1. Verify Ownership: The user must own the transaction item
-	var license models.GameLicense
+	var license models.NoteLicense
 	if err := database.DB.Where("user_id = ? AND transaction_item_id = ?", userID, input.TransactionItemID).First(&license).Error; err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden: Transaction item not found in your library"})
 		return
@@ -234,7 +234,7 @@ func ApplyRefund(c *gin.Context) {
 
 	// 1.5 Verify License is Active
 	if license.Status != "ACTIVE" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "This game license is not active or has already been refunded"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "This note license is not active or has already been refunded"})
 		return
 	}
 
@@ -505,8 +505,8 @@ func ReplyToReview(c *gin.Context) {
 		return
 	}
 
-	var game models.Game
-	if err := database.DB.First(&game, review.GameID).Error; err == nil {
+	var note models.Note
+	if err := database.DB.First(&note, review.NoteID).Error; err == nil {
 		var user models.User
 		if err := database.DB.First(&user, userID).Error; err == nil {
 			canBypass := false
@@ -514,14 +514,14 @@ func ReplyToReview(c *gin.Context) {
 				canBypass = true
 			} else if input.PostAsRole == "CSR" && user.Role == "CSR" {
 				canBypass = true
-			} else if input.PostAsRole == "AUTHOR" && user.Role == "DEVELOPER" && game.DeveloperID == userID {
+			} else if input.PostAsRole == "AUTHOR" && user.Role == "SELLER" && note.SellerID == userID {
 				canBypass = true
 			} else {
 				input.PostAsRole = "USERS"
 			}
 
 			if !canBypass {
-				// We don't block users from replying even if they don't own the game in original code,
+				// We don't block users from replying even if they don't own the note in original code,
 				// but we shouldn't allow them to pretend they are ADMIN.
 			}
 		}
@@ -754,33 +754,33 @@ func GetMyRefunds(c *gin.Context) {
 	userID := uint(userIDFloat.(float64))
 
 	var refunds []models.RefundRequest
-	// We might need to manually populate Game details later, but for now we fetch the requests.
+	// We might need to manually populate Note details later, but for now we fetch the requests.
 	if err := database.DB.Where("buyer_id = ?", userID).Order("created_at desc").Find(&refunds).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch refunds"})
 		return
 	}
 
-	// Fetch transaction items and their game details so frontend can display titles
-	type RefundWithGameDTO struct {
+	// Fetch transaction items and their note details so frontend can display titles
+	type RefundWithNoteDTO struct {
 		models.RefundRequest
-		GameTitle string `json:"game_title"`
-		GameCover string `json:"game_cover"`
+		NoteTitle string `json:"note_title"`
+		NoteCover string `json:"note_cover"`
 	}
 
-	var results []RefundWithGameDTO
+	var results []RefundWithNoteDTO
 	for _, req := range refunds {
 		var item models.TransactionItem
 		title := "未知筆記"
 		cover := ""
-		if err := database.DB.Preload("Game").Where("item_id = ?", req.TransactionItemID).First(&item).Error; err == nil {
-			title = item.Game.Title
+		if err := database.DB.Preload("Note").Where("item_id = ?", req.TransactionItemID).First(&item).Error; err == nil {
+			title = item.Note.Title
 			// We won't fetch the full media array here to keep it fast, or we could if needed.
 		}
 
-		results = append(results, RefundWithGameDTO{
+		results = append(results, RefundWithNoteDTO{
 			RefundRequest: req,
-			GameTitle:     title,
-			GameCover:     cover,
+			NoteTitle:     title,
+			NoteCover:     cover,
 		})
 	}
 

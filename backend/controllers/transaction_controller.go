@@ -20,9 +20,9 @@ func Checkout(c *gin.Context) {
 	// This ensures that if anything fails (e.g., deducting money, giving license),
 	// everything is rolled back, preventing half-finished transactions.
 	err := database.DB.Transaction(func(tx *gorm.DB) error {
-		// 1. Fetch user's cart items with Game prices
+		// 1. Fetch user's cart items with Note prices
 		var cartItems []models.ShoppingCart
-		if err := tx.Preload("Game").Where("user_id = ?", userID).Find(&cartItems).Error; err != nil {
+		if err := tx.Preload("Note").Where("user_id = ?", userID).Find(&cartItems).Error; err != nil {
 			return err
 		}
 
@@ -33,15 +33,15 @@ func Checkout(c *gin.Context) {
 		// 2. Calculate Total Amount & Check Ownership
 		var totalAmount float64 = 0
 		for _, item := range cartItems {
-			if item.Game.Status != "ACTIVE" {
-				return fmt.Errorf("Game '%s' is no longer available for purchase", item.Game.Title)
+			if item.Note.Status != "ACTIVE" {
+				return fmt.Errorf("Note '%s' is no longer available for purchase", item.Note.Title)
 			}
 			// Double check ownership in case of concurrent requests or bypassed frontend
-			var existingLicense models.GameLicense
-			if err := tx.Where("user_id = ? AND game_id = ? AND status = ?", userID, item.GameID, "ACTIVE").First(&existingLicense).Error; err == nil {
-				return fmt.Errorf("You already own '%s'", item.Game.Title)
+			var existingLicense models.NoteLicense
+			if err := tx.Where("user_id = ? AND note_id = ? AND status = ?", userID, item.NoteID, "ACTIVE").First(&existingLicense).Error; err == nil {
+				return fmt.Errorf("You already own '%s'", item.Note.Title)
 			}
-			totalAmount += item.Game.Price
+			totalAmount += item.Note.Price
 		}
 
 		// 3. Create Transaction Record
@@ -55,21 +55,21 @@ func Checkout(c *gin.Context) {
 			return err
 		}
 
-		// 4. Create Transaction Items & Game Licenses
+		// 4. Create Transaction Items & Note Licenses
 		for _, cartItem := range cartItems {
 			// 4a. Create TransactionItem
 			txItem := models.TransactionItem{
 				TransactionID: transaction.TransactionID,
-				GameID:        cartItem.GameID,
-				PurchasePrice: cartItem.Game.Price,
+				NoteID:        cartItem.NoteID,
+				PurchasePrice: cartItem.Note.Price,
 			}
 			if err := tx.Create(&txItem).Error; err != nil {
 				return err
 			}
 
-			// 4b. Create GameLicense (Grant access to the player)
-			license := models.GameLicense{
-				GameID:            cartItem.GameID,
+			// 4b. Create NoteLicense (Grant access to the player)
+			license := models.NoteLicense{
+				NoteID:            cartItem.NoteID,
 				UserID:            userID,
 				TransactionItemID: txItem.ItemID,
 			}
@@ -92,7 +92,7 @@ func Checkout(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Checkout successful. Games added to your library!"})
+	c.JSON(http.StatusOK, gin.H{"message": "Checkout successful. Notes added to your library!"})
 }
 
 // GetTransactions handles GET /api/protected/transactions
@@ -101,8 +101,8 @@ func GetTransactions(c *gin.Context) {
 	userID := uint(userIDFloat.(float64))
 
 	var transactions []models.Transaction
-	// Preload Items, Game inside the Items, and Media inside the Game
-	if err := database.DB.Preload("Items").Preload("Items.Game").Preload("Items.Game.Media").Where("user_id = ?", userID).Find(&transactions).Error; err != nil {
+	// Preload Items, Note inside the Items, and Media inside the Note
+	if err := database.DB.Preload("Items").Preload("Items.Note").Preload("Items.Note.Media").Where("user_id = ?", userID).Find(&transactions).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch transactions"})
 		return
 	}

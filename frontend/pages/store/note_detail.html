@@ -13,13 +13,13 @@
     <header id="global-header"></header>
 
     <main>
-        <div class="game-detail-layout" id="game-detail-header">
-            <div class="game-media-left" id="game-cover">
+        <div class="note-detail-layout" id="note-detail-header">
+            <div class="note-media-left" id="note-cover">
                 <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);background:#1a1a2e;">
                     [筆記封面載入中...]
                 </div>
             </div>
-            <div class="box game-info-right" style="display: flex; flex-direction: column; background: #0b0f19; padding: 24px; border-radius: 8px; border: none;">
+            <div class="box note-info-right" style="display: flex; flex-direction: column; background: #0b0f19; padding: 24px; border-radius: 8px; border: none;">
                 <h1 id="detail-title" style="color: #ffffff; font-size: 26px; font-weight: bold; margin-bottom: 16px; line-height: 1.2;">載入中...</h1>
                 
                 <div id="detail-short-desc" style="color: #c6d4df; font-size: 14px; margin-bottom: 16px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5;"></div>
@@ -33,7 +33,7 @@
                 </div>
 
                 <div style="margin-bottom: auto;">
-                    <div id="detail-tags" class="game-list-tags" style="margin: 0; display: flex; flex-wrap: wrap; gap: 4px;"></div>
+                    <div id="detail-tags" class="note-list-tags" style="margin: 0; display: flex; flex-wrap: wrap; gap: 4px;"></div>
                 </div>
 
                 <div style="margin-top: 20px; background: rgba(0,0,0,0.3); padding: 16px; border-radius: 4px;">
@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <section class="box game-description-section">
+        <section class="box note-description-section">
             <h2 class="title is-4">筆記介紹</h2>
             <div class="markdown-content" id="detail-desc"></div>
         </section>
@@ -62,13 +62,13 @@
     <script src="/assets/js/api.js"></script>
     <script src="/assets/js/main.js"></script>
     <script>
-        let currentGameId = null;
+        let currentNoteId = null;
 
         document.addEventListener("DOMContentLoaded", async () => {
             const params = new URLSearchParams(window.location.search);
-            currentGameId = parseInt(params.get('id'));
+            currentNoteId = parseInt(params.get('id'));
 
-            if (!currentGameId) {
+            if (!currentNoteId) {
                 document.getElementById('detail-title').textContent = '找不到筆記資料';
                 return;
             }
@@ -77,32 +77,32 @@
             const user = getCurrentUser();
 
             try {
-                // GET /api/games/{id} — 公開端點
-                const response = await apiGetGame(currentGameId);
-                const game = response.data || response;
+                // GET /api/notes/{id} — 公開端點
+                const response = await apiGetNote(currentNoteId);
+                const note = response.data || response;
 
-                document.title = `${game.game.title || game.title} — AurorNote`;
-                document.getElementById('detail-title').textContent = game.game.title || game.title;
-                document.getElementById('detail-desc').innerHTML = renderMarkdown(game.game.description || game.game.desc || game.desc || '');
+                document.title = `${note.note.title || note.title} — AurorNote`;
+                document.getElementById('detail-title').textContent = note.note.title || note.title;
+                document.getElementById('detail-desc').innerHTML = renderMarkdown(note.note.description || note.note.desc || note.desc || '');
                 
-                const rawDesc = game.game.description || game.game.desc || game.desc || '';
+                const rawDesc = note.note.description || note.note.desc || note.desc || '';
                 const plainDesc = rawDesc.replace(/<[^>]*>?/gm, '').replace(/[#*`_\[\]]/g, '').slice(0, 150);
                 const shortDescEl = document.getElementById('detail-short-desc');
                 if (shortDescEl) shortDescEl.textContent = plainDesc + (plainDesc.length >= 150 ? '...' : '');
 
-                const devName = game.developer_name || game.game.developer_name || game.game.developer || game.developer || '未知';
+                const devName = note.seller_name || note.note.seller_name || note.note.seller || note.seller || '未知';
                 const devEl = document.getElementById('detail-dev-name');
                 if (devEl) devEl.textContent = devName;
                 
-                updateDetailRating(game.game || game);
+                updateDetailRating(note.note || note);
                 
-                const price = Number(game.game.price || game.price || 0);
+                const price = Number(note.note.price || note.price || 0);
                 document.getElementById('detail-price').textContent =
                     price === 0 ? '免費下載' : `NT$ ${price.toLocaleString()}`;
 
                 // 處理封面圖與多圖輪播 (Carousel)
-                const media = game.media || [];
-                const coverEl = document.getElementById('game-cover');
+                const media = note.media || [];
+                const coverEl = document.getElementById('note-cover');
                 if (media.length > 0) {
                     let displayMedia = media.filter(m => m.media_type === 'media' || m.media_type === 'thumbnail');
                     if (displayMedia.length === 0) displayMedia = media;
@@ -129,7 +129,7 @@
                 }
 
                 const tagsEl = document.getElementById('detail-tags');
-                const tags = game.tags || [];
+                const tags = note.tags || [];
                 tags.forEach(t => {
                     const span = document.createElement('span');
                     span.className = 'tag';
@@ -149,25 +149,25 @@
                 let isOwned = false;
                 let isWishlisted = false;
                 let isCarted = false;
-                window._gameDevId = game.game ? game.game.developer_id : game.developer_id;
+                window._noteDevId = note.note ? note.note.seller_id : note.seller_id;
                 if (role !== 'GUEST') {
                     try {
                         const lib = await apiGetLibrary();
-                        const libArr = Array.isArray(lib) ? lib : (lib.data || lib.games || []);
+                        const libArr = Array.isArray(lib) ? lib : (lib.data || lib.notes || []);
                         isOwned = libArr.some(item => {
-                            const g = item.game || item;
-                            const gid = g.game_id || g.id || item.game_id;
-                            return Number(gid) === Number(currentGameId) && (item.status === 'ACTIVE' || !item.status);
+                            const g = item.note || item;
+                            const gid = g.note_id || g.id || item.note_id;
+                            return Number(gid) === Number(currentNoteId) && (item.status === 'ACTIVE' || !item.status);
                         });
                     } catch (_) { }
 
                     try {
                         const wishlist = await apiGetWishlist();
-                        const wishlistArr = Array.isArray(wishlist) ? wishlist : (wishlist.data || wishlist.games || []);
+                        const wishlistArr = Array.isArray(wishlist) ? wishlist : (wishlist.data || wishlist.notes || []);
                         isWishlisted = wishlistArr.some(item => {
-                            const g = item.game || item;
-                            const gid = g.game_id || g.id || item.game_id;
-                            return Number(gid) === Number(currentGameId);
+                            const g = item.note || item;
+                            const gid = g.note_id || g.id || item.note_id;
+                            return Number(gid) === Number(currentNoteId);
                         });
                     } catch (_) { }
 
@@ -175,20 +175,20 @@
                         const cart = await apiGetCart();
                         const cartArr = Array.isArray(cart) ? cart : (cart.data || cart.items || []);
                         isCarted = cartArr.some(item => {
-                            const g = item.game || item;
-                            const gid = g.game_id || g.id || item.game_id;
-                            return Number(gid) === Number(currentGameId);
+                            const g = item.note || item;
+                            const gid = g.note_id || g.id || item.note_id;
+                            return Number(gid) === Number(currentNoteId);
                         });
                     } catch (_) { }
                 }
-                window._gameIsOwned = isOwned;
+                window._noteIsOwned = isOwned;
 
-                renderActionArea(game, role, isOwned, isWishlisted, isCarted);
-                renderReviewWriteArea(game, role, user, isOwned);
+                renderActionArea(note, role, isOwned, isWishlisted, isCarted);
+                renderReviewWriteArea(note, role, user, isOwned);
 
-                // GET /api/games/{id}/reviews
+                // GET /api/notes/{id}/reviews
                 try {
-                    const reviews = await apiGetReviews(currentGameId);
+                    const reviews = await apiGetReviews(currentNoteId);
                     renderReviews(Array.isArray(reviews) ? reviews : (reviews.data || reviews.reviews || []));
                 } catch (_) {
                     renderReviews([]);
@@ -208,15 +208,15 @@
         };
 
         // ─── 動作按鈕區 ────────────────────────────────────────
-        function renderActionArea(game, role, isOwned, isWishlisted, isCarted) {
+        function renderActionArea(note, role, isOwned, isWishlisted, isCarted) {
             const area = document.getElementById('action-area');
             let html = '';
 
-            const gameData = game.game || game;
-            const isTakenDown = gameData.status === 'TAKEN_DOWN';
+            const noteData = note.note || note;
+            const isTakenDown = noteData.status === 'TAKEN_DOWN';
 
             if (isOwned) {
-                html += `<div class="game-owned-badge">已在你的筆記庫</div><br>`;
+                html += `<div class="note-owned-badge">已在你的筆記庫</div><br>`;
             }
 
             html += `<div class="buttons" style="margin-top: 15px;">`;
@@ -230,8 +230,8 @@
                 html += `<button class="button is-light" onclick="showToast('請先登入！', 'error')">加入願望清單</button>`;
             } else {
                 if (isOwned) {
-                    html += `<button class="button is-primary" onclick="playGame(${gameData.game_id || gameData.id})">啟動</button>`;
-                    html += `<button class="button is-light" onclick="downloadGame(${gameData.game_id || gameData.id})">下載</button>`;
+                    html += `<button class="button is-primary" onclick="playNote(${noteData.note_id || noteData.id})">啟動</button>`;
+                    html += `<button class="button is-light" onclick="downloadNote(${noteData.note_id || noteData.id})">下載</button>`;
                 } else {
                     if (isTakenDown) {
                         html += `<button class="button is-danger is-outlined" disabled style="background-color: transparent; border-color: var(--accent-red); color: var(--accent-red);">此筆記已下架</button>`;
@@ -265,18 +265,18 @@
         }
 
         // ─── 評論撰寫框 ────────────────────────────────────────
-        function renderReviewWriteArea(game, role, user, isOwned) {
+        function renderReviewWriteArea(note, role, user, isOwned) {
             const area = document.getElementById('review-write-area');
             if (!area) return;
 
             let canReview = false;
             let reasonMsg = '';
-            const devId = window._gameDevId;
+            const devId = window._noteDevId;
 
             if (role === 'GUEST') {
                 reasonMsg = `<p style="color:var(--text-muted);font-size:14px;">請 <a href="/pages/auth/login.html">登入</a> 後才能發表評論。</p>`;
             } else {
-                canReview = isOwned || role === 'ADMIN' || role === 'CSR' || (role === 'DEVELOPER' && (user.id || user.user_id) == devId);
+                canReview = isOwned || role === 'ADMIN' || role === 'CSR' || (role === 'SELLER' && (user.id || user.user_id) == devId);
                 if (!canReview) reasonMsg = `<p style="color:var(--text-muted);font-size:14px;">購買此筆記後即可發表評論。</p>`;
             }
 
@@ -293,10 +293,10 @@
             }
             if (role === 'ADMIN') roleOptions += `<option value="ADMIN" ${!isOwned ? 'selected' : ''}>管理員 (Admin)</option>`;
             if (role === 'CSR') roleOptions += `<option value="CSR" ${!isOwned ? 'selected' : ''}>客服人員 (CSR)</option>`;
-            if (role === 'DEVELOPER' && user && (user.id || user.user_id) == devId) roleOptions += `<option value="AUTHOR" ${!isOwned ? 'selected' : ''}>賣家 (Author)</option>`;
+            if (role === 'SELLER' && user && (user.id || user.user_id) == devId) roleOptions += `<option value="AUTHOR" ${!isOwned ? 'selected' : ''}>賣家 (Author)</option>`;
             
             let roleSelectHtml = '';
-            if (role === 'ADMIN' || role === 'CSR' || (role === 'DEVELOPER' && user && (user.id || user.user_id) == devId)) {
+            if (role === 'ADMIN' || role === 'CSR' || (role === 'SELLER' && user && (user.id || user.user_id) == devId)) {
                 roleSelectHtml = `
                     <div class="form-group" style="margin-bottom:12px;">
                         <label style="font-size:12px;color:var(--text-muted);">發布身分：</label>
@@ -454,8 +454,8 @@
                 const role = getCurrentRole();
                 if (role !== 'GUEST') {
                     let replyRoleOptions = '';
-                    const isOwned = window._gameIsOwned || false;
-                    const devId = window._gameDevId || 0;
+                    const isOwned = window._noteIsOwned || false;
+                    const devId = window._noteDevId || 0;
                     if (isOwned) {
                         replyRoleOptions += `<option value="USERS">買家</option>`;
                     } else {
@@ -464,10 +464,10 @@
                     if (role === 'ADMIN') replyRoleOptions += `<option value="ADMIN" ${!isOwned ? 'selected' : ''}>ADMIN</option>`;
                     if (role === 'CSR') replyRoleOptions += `<option value="CSR" ${!isOwned ? 'selected' : ''}>CSR</option>`;
                     const user = getCurrentUser();
-                    if (role === 'DEVELOPER' && user && (user.id || user.user_id) == devId) replyRoleOptions += `<option value="AUTHOR" ${!isOwned ? 'selected' : ''}>AUTHOR</option>`;
+                    if (role === 'SELLER' && user && (user.id || user.user_id) == devId) replyRoleOptions += `<option value="AUTHOR" ${!isOwned ? 'selected' : ''}>AUTHOR</option>`;
                     
                     let replySelectHtml = '';
-                    if (role === 'ADMIN' || role === 'CSR' || (role === 'DEVELOPER' && user && (user.id || user.user_id) == devId)) {
+                    if (role === 'ADMIN' || role === 'CSR' || (role === 'SELLER' && user && (user.id || user.user_id) == devId)) {
                         replySelectHtml = `
                             <select id="reply-role-${reviewId}" class="input" style="height:32px; width:90px; font-size:12px; padding:0 8px; margin-right:8px; border:none; background:rgba(255,255,255,0.1); color:white;">
                                 ${replyRoleOptions}
@@ -497,9 +497,9 @@
             });
         }
 
-        function updateDetailRating(game) {
-            const rating = Number(game.overall_rating || 0);
-            const count = Number(game.rating_count || 0);
+        function updateDetailRating(note) {
+            const rating = Number(note.overall_rating || 0);
+            const count = Number(note.rating_count || 0);
             
             let sentiment = '尚無評價';
             let color = '#8f98a0';
@@ -530,7 +530,7 @@
                 await apiPostReply(reviewId, content, postAsRole);
                 showToast('回覆成功！', 'success');
                 // 重新載入評論
-                const reviews = await apiGetReviews(currentGameId);
+                const reviews = await apiGetReviews(currentNoteId);
                 renderReviews(Array.isArray(reviews) ? reviews : (reviews.data || reviews.reviews || []));
             } catch (err) {
                 showToast(`回覆失敗：${err.message}`, 'error');
@@ -544,7 +544,7 @@
                 await authFetch(`/api/social/reviews/replies/${replyId}`, { method: 'DELETE' });
                 showToast('回覆已刪除！', 'success');
                 // Reload reviews
-                const reviews = await apiGetReviews(currentGameId);
+                const reviews = await apiGetReviews(currentNoteId);
                 renderReviews(Array.isArray(reviews) ? reviews : (reviews.data || reviews.reviews || []));
             } catch (err) {
                 showToast(`刪除失敗：${err.message}`, 'error');
@@ -554,7 +554,7 @@
         // ─── 互動函式 ─────────────────────────────────────────
         async function addToCart(btnElement) {
             try {
-                await apiAddToCart(currentGameId);
+                await apiAddToCart(currentNoteId);
                 showToast('已加入購物車！', 'success');
                 if (btnElement) {
                     btnElement.disabled = true;
@@ -570,7 +570,7 @@
 
         async function addToWishlist(btnElement) {
             try {
-                const result = await apiAddWishlist(currentGameId);
+                const result = await apiAddWishlist(currentNoteId);
                 if (btnElement) {
                     btnElement.disabled = true;
                     btnElement.textContent = '已在願望清單內';
@@ -584,7 +584,7 @@
         async function adminTakeDown() {
             if (!confirm('確定要以官方身分強制下架此筆記嗎？')) return;
             try {
-                await apiAdminDeleteGame(currentGameId);
+                await apiAdminDeleteNote(currentNoteId);
                 showToast('筆記已成功下架。', 'success');
                 setTimeout(() => window.location.href = '/', 1500);
             } catch (err) {
@@ -592,9 +592,9 @@
             }
         }
 
-        async function playGame(gameId) {
+        async function playNote(noteId) {
             try {
-                const result = await authFetch(`/api/protected/library/${gameId}/play`);
+                const result = await authFetch(`/api/protected/library/${noteId}/play`);
                 const data   = await result.json();
                 if (data && data.launch_url) {
                     window.open(data.launch_url, '_blank');
@@ -606,16 +606,16 @@
             }
         }
 
-        async function downloadGame(gameId) {
+        async function downloadNote(noteId) {
             try {
-                const result = await authFetch(`/api/protected/library/${gameId}/download`);
+                const result = await authFetch(`/api/protected/library/${noteId}/download`);
                 if (!result.ok) {
                     await parseResponse(result);
                 }
                 const blob = await result.blob();
                 const disposition = result.headers.get('content-disposition') || '';
                 const match = disposition.match(/filename="?([^";]+)"?/i);
-                const filename = match ? match[1] : `game-${gameId}.download`;
+                const filename = match ? match[1] : `note-${noteId}.download`;
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
@@ -646,14 +646,14 @@
             const postAsRole = roleSelect ? roleSelect.value : 'USERS';
 
             try {
-                await apiPostReview(currentGameId, sentiment, text, postAsRole);
+                await apiPostReview(currentNoteId, sentiment, text, postAsRole);
                 textEl.value = '';
                 showToast('評論已送出！', 'success');
-                const gameResponse = await apiGetGame(currentGameId);
-                const gameData = gameResponse.data || gameResponse;
-                updateDetailRating(gameData.game || gameData);
+                const noteResponse = await apiGetNote(currentNoteId);
+                const noteData = noteResponse.data || noteResponse;
+                updateDetailRating(noteData.note || noteData);
                 // 重新載入評論
-                const reviews = await apiGetReviews(currentGameId);
+                const reviews = await apiGetReviews(currentNoteId);
                 renderReviews(Array.isArray(reviews) ? reviews : (reviews.data || reviews.reviews || []));
             } catch (err) {
                 showToast(`評論送出失敗：${err.message}`, 'error');

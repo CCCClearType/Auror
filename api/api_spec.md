@@ -24,7 +24,7 @@
     "username": "PlayerOne",
     "email": "player1@test.com",
     "password": "password123", // 必填，長度需 >= 6
-    "is_developer": false      // 選填，是否註冊為賣家
+    "is_seller": false      // 選填，是否註冊為賣家
   }
   ```
 - **Responses**:
@@ -136,22 +136,22 @@
 - **Headers**: `Authorization: Bearer <admin_token>`
 - **Request Body**:
   ```json
-  { "role": "DEVELOPER" } // 'USERS', 'CSR', 'DEVELOPER', 'ADMIN'
+  { "role": "SELLER" } // 'USERS', 'CSR', 'SELLER', 'ADMIN'
   ```
 - **Responses**:
   - `200 OK`: `{"message": "User role updated successfully"}`
 
 ---
 
-## 2. 商店與筆記 (Store & Games)
+## 2. 商店與筆記 (Store & Notes)
 
-### `[GET] /api/games` (瀏覽/搜尋筆記)
-- **Go 對應模組**: `game_controller.go` (函式: `GetGames`)
+### `[GET] /api/notes` (瀏覽/搜尋筆記)
+- **Go 對應模組**: `note_controller.go` (函式: `GetNotes`)
 - **Headers**: 無
 - **Query Params** (可選): 
   - `?q=elden` (關鍵字搜尋：比對標題、介紹、科目與賣家名稱)
   - `?tag=Action` (科目精準篩選)
-  - `?developer=StudioAurora` (賣家名稱篩選)
+  - `?seller=StudioAurora` (賣家名稱篩選)
   - `?min_price=100&max_price=500` (價格區間篩選)
   - `?sort=price_asc` (排序方式：`price_asc` 便宜到貴, `price_desc` 貴到便宜)
   - `?hide_owned=true` (隱藏已購買筆記與自己開發的筆記：需同時提供 Authorization Bearer Token 才能生效)
@@ -161,66 +161,66 @@
     {
       "data": [
         {
-          "game_id": 1,
+          "note_id": 1,
           "title": "Elden Ring",
           "price": 1290,
-          "developer_name": "StudioAurora",
+          "seller_name": "StudioAurora",
           "overall_rating": 4.8
         }
       ]
     }
     ```
 
-### `[GET] /api/games/{id}` (查看筆記詳情)
-- **Go 對應模組**: `game_controller.go` (函式: `GetGameByID`)
+### `[GET] /api/notes/{id}` (查看筆記詳情)
+- **Go 對應模組**: `note_controller.go` (函式: `GetNoteByID`)
 - **Headers**: 無
 - **Responses**:
-  - `200 OK`: `{"data": { "game": {...}, "developer_name": "DevUser", "media": [...], "tags": [...], "reviews": [...] }}`
-  - `404 Not Found`: `{"error": "Game not found"}`
+  - `200 OK`: `{"data": { "note": {...}, "seller_name": "DevUser", "media": [...], "tags": [...], "reviews": [...] }}`
+  - `404 Not Found`: `{"error": "Note not found"}`
 
-### `[GET] /api/games/{id}/reviews` (查看筆記評論)
+### `[GET] /api/notes/{id}/reviews` (查看筆記評論)
 - **Go 對應模組**: `social_controller.go` (函式: `GetReviews`)
 - **Headers**: 無
 - **Responses**:
   - `200 OK`: `[ { "review_id": 1, "content": "...", "attitude": "POSITIVE", "posted_as_role": "USERS", "user": {...}, "replies": [...] } ]`
   - **注意**: 回傳格式為陣列 (非包在 `{"data": [...]}` 內)。
 
-### `[GET] /api/developer/games` (查看自己的筆記列表)
-- **Go 對應模組**: `developer_controller.go` (函式: `GetDeveloperGames`)
-- **Headers**: `Authorization: Bearer <developer_token>`
+### `[GET] /api/seller/notes` (查看自己的筆記列表)
+- **Go 對應模組**: `seller_controller.go` (函式: `GetSellerNotes`)
+- **Headers**: `Authorization: Bearer <seller_token>`
 - **Responses**:
-  - `200 OK`: `{"data": [ { ...game_objects_with_media... } ]}`
-  - **說明**: DEVELOPER 只會看到自己上架的筆記；ADMIN 可查看全部筆記。
+  - `200 OK`: `{"data": [ { ...note_objects_with_media... } ]}`
+  - **說明**: SELLER 只會看到自己上架的筆記；ADMIN 可查看全部筆記。
 
-### `[POST] /api/developer/games` (建立新筆記草稿)
-- **Go 對應模組**: `developer_controller.go` (函式: `UploadGame`)
-- **Headers**: `Authorization: Bearer <developer_token>`
+### `[POST] /api/seller/notes` (建立新筆記草稿)
+- **Go 對應模組**: `seller_controller.go` (函式: `UploadNote`)
+- **Headers**: `Authorization: Bearer <seller_token>`
 - **Request Body**:
   ```json
   {
-    "title": "My Indie Game",    // 必填
+    "title": "My Indie Note",    // 必填
     "price": 350.00,             // 必填，最小值 0
     "desc": "筆記描述 (選填，支援 Markdown)"  // 選填
   }
   ```
 - **Responses**:
-  - `201 Created`: `{"message": "Game uploaded successfully", "game": {...}}`
+  - `201 Created`: `{"message": "Note uploaded successfully", "note": {...}}`
   - **說明**: 建立的新筆記預設狀態為 `DRAFT` (草稿)，不會出現在商店首頁。
 
-### `[PUT] /api/developer/games/{id}/publish` (正式上架筆記)
-- **Go 對應模組**: `developer_controller.go` (函式: `PublishGame`)
-- **Headers**: `Authorization: Bearer <developer_token>`
+### `[PUT] /api/seller/notes/{id}/publish` (正式上架筆記)
+- **Go 對應模組**: `seller_controller.go` (函式: `PublishNote`)
+- **Headers**: `Authorization: Bearer <seller_token>`
 - **說明**: 將草稿筆記轉換為 `ACTIVE` 狀態。
 - **後端驗證約束**: 必須檢查該筆記是否**至少有 1 個科目 (tag)**。若未達條件則拒絕上架。
 - **Responses**:
-  - `200 OK`: `{"message": "Game published successfully"}`
-  - `400 Bad Request`: `{"error": "Game must have at least 1 tag to be published"}`
-  - `403 Forbidden`: `{"error": "Forbidden: You can only publish your own games"}`
-  - `404 Not Found`: `{"error": "Game not found"}`
+  - `200 OK`: `{"message": "Note published successfully"}`
+  - `400 Bad Request`: `{"error": "Note must have at least 1 tag to be published"}`
+  - `403 Forbidden`: `{"error": "Forbidden: You can only publish your own notes"}`
+  - `404 Not Found`: `{"error": "Note not found"}`
 
-### `[PUT] /api/developer/games/{id}` (編輯筆記資訊)
-- **Go 對應模組**: `developer_controller.go` (函式: `UpdateGame`)
-- **Headers**: `Authorization: Bearer <developer_token>`
+### `[PUT] /api/seller/notes/{id}` (編輯筆記資訊)
+- **Go 對應模組**: `seller_controller.go` (函式: `UpdateNote`)
+- **Headers**: `Authorization: Bearer <seller_token>`
 - **Request Body**:
   ```json
   {
@@ -230,54 +230,54 @@
   ```
   > **注意**: `title` 無法透過此 API 修改；`price` 若傳 `0` 仍會被視為有效值並寫入。ADMIN 可編輯任何筆記。
 - **Responses**:
-  - `200 OK`: `{"message": "Game updated successfully", "game": {...}}`
-  - `403 Forbidden`: `{"error": "Forbidden: You can only edit your own games"}`
-  - `404 Not Found`: `{"error": "Game not found"}`
+  - `200 OK`: `{"message": "Note updated successfully", "note": {...}}`
+  - `403 Forbidden`: `{"error": "Forbidden: You can only edit your own notes"}`
+  - `404 Not Found`: `{"error": "Note not found"}`
 
-### `[DELETE] /api/developer/games/{id}` (下架自己的筆記)
-- **Go 對應模組**: `developer_controller.go` (函式: `DeleteGame`)
-- **Headers**: `Authorization: Bearer <developer_token>`
+### `[DELETE] /api/seller/notes/{id}` (下架自己的筆記)
+- **Go 對應模組**: `seller_controller.go` (函式: `DeleteNote`)
+- **Headers**: `Authorization: Bearer <seller_token>`
 - **說明**: 實作上為「軟刪除」(將 `status` 設為 `TAKEN_DOWN`)，以確保已購買此筆記的買家依然能從筆記庫下載與閱讀，但會從商店清單中隱藏。
 - **Responses**:
-  - `200 OK`: `{"message": "Game deleted successfully"}`
-  - `403 Forbidden`: `{"error": "Forbidden: You can only delete your own games"}`
-  - `404 Not Found`: `{"error": "Game not found"}`
+  - `200 OK`: `{"message": "Note deleted successfully"}`
+  - `403 Forbidden`: `{"error": "Forbidden: You can only delete your own notes"}`
+  - `404 Not Found`: `{"error": "Note not found"}`
 
-### `[DELETE] /api/admin/games/{id}` (強制下架筆記)
-- **Go 對應模組**: `admin_controller.go` (函式: `AdminDeleteGame`)
+### `[DELETE] /api/admin/notes/{id}` (強制下架筆記)
+- **Go 對應模組**: `admin_controller.go` (函式: `AdminDeleteNote`)
 - **Headers**: `Authorization: Bearer <admin_token>`
 - **說明**: 實作上同樣為「軟刪除」。
 - **Responses**:
-  - `200 OK`: `{"message": "Game deleted successfully by Admin"}`
+  - `200 OK`: `{"message": "Note deleted successfully by Admin"}`
 
-### `[POST] /api/developer/games/{id}/media` (上傳筆記素材)
-- **Go 對應模組**: `developer_controller.go` (函式: `UploadMedia`)
-- **Headers**: `Authorization: Bearer <developer_token>`, `Content-Type: multipart/form-data`
+### `[POST] /api/seller/notes/{id}/media` (上傳筆記素材)
+- **Go 對應模組**: `seller_controller.go` (函式: `UploadMedia`)
+- **Headers**: `Authorization: Bearer <seller_token>`, `Content-Type: multipart/form-data`
 - **Request Body** (`multipart/form-data`):
   | 欄位名稱 | 類型 | 必填 | 說明 |
   |----------|------|------|------|
   | `file` | File | ✅ | 要上傳的圖片或筆記檔案 |
-  | `media_type` | String | 否 | `"media"` (圖片，預設) 或 `"game_file"` (筆記檔案) |
+  | `media_type` | String | 否 | `"media"` (圖片，預設) 或 `"note_file"` (筆記檔案) |
 - **儲存路徑與命名規則**:
-  - `media` (圖片/影片) → 會以檔案內容進行 SHA-256 Hash 重新命名：`assets/images/{game_id}/{sha256}.{ext}`，對外 URL `/media/images/{game_id}/{sha256}.{ext}`
-  - `game_file` (筆記檔案) → 不會進行 Hash，保留上傳的原始檔名：`assets/game-files/{game_id}/{original_name}`，對外 URL `/downloads/{game_id}/{original_name}`
+  - `media` (圖片/影片) → 會以檔案內容進行 SHA-256 Hash 重新命名：`assets/images/{note_id}/{sha256}.{ext}`，對外 URL `/media/images/{note_id}/{sha256}.{ext}`
+  - `note_file` (筆記檔案) → 不會進行 Hash，保留上傳的原始檔名：`assets/note-files/{note_id}/{original_name}`，對外 URL `/downloads/{note_id}/{original_name}`
 - **Responses**:
   - `201 Created`: `{"message": "Media uploaded successfully", "data": {...}, "file_url": "/media/images/..."}`
   - `400 Bad Request`: `{"error": "Missing file field"}`
-  - `403 Forbidden`: `{"error": "Forbidden: You can only upload media for your own games"}`
-  - `404 Not Found`: `{"error": "Game not found"}`
+  - `403 Forbidden`: `{"error": "Forbidden: You can only upload media for your own notes"}`
+  - `404 Not Found`: `{"error": "Note not found"}`
 
-### `[DELETE] /api/developer/games/{id}/media/{media_id}` (刪除筆記素材)
-- **Go 對應模組**: `developer_controller.go` (函式: `DeleteMedia`)
-- **Headers**: `Authorization: Bearer <developer_token>`
+### `[DELETE] /api/seller/notes/{id}/media/{media_id}` (刪除筆記素材)
+- **Go 對應模組**: `seller_controller.go` (函式: `DeleteMedia`)
+- **Headers**: `Authorization: Bearer <seller_token>`
 - **Responses**:
   - `200 OK`: `{"message": "Media deleted successfully"}`
-  - `403 Forbidden`: `{"error": "Forbidden: You can only manage your own games"}`
-  - `404 Not Found`: `{"error": "Media not found"}` 或 `{"error": "Game not found"}`
+  - `403 Forbidden`: `{"error": "Forbidden: You can only manage your own notes"}`
+  - `404 Not Found`: `{"error": "Media not found"}` 或 `{"error": "Note not found"}`
 
-### `[GET] /api/developer/games/{id}/stats` (查看筆記銷售數據)
-- **Go 對應模組**: `developer_controller.go` (函式: `GetGameStats`)
-- **Headers**: `Authorization: Bearer <developer_token>`
+### `[GET] /api/seller/notes/{id}/stats` (查看筆記銷售數據)
+- **Go 對應模組**: `seller_controller.go` (函式: `GetNoteStats`)
+- **Headers**: `Authorization: Bearer <seller_token>`
 - **Responses**:
   - `200 OK`:
     ```json
@@ -288,39 +288,39 @@
       }
     }
     ```
-  - `403 Forbidden`: `{"error": "Forbidden: You can only view stats for your own games"}`
-  - `404 Not Found`: `{"error": "Game not found"}`
+  - `403 Forbidden`: `{"error": "Forbidden: You can only view stats for your own notes"}`
+  - `404 Not Found`: `{"error": "Note not found"}`
 
 ### `[GET] /api/tags` (查看所有可用科目)
-- **Go 對應模組**: `developer_controller.go` (函式: `GetTags`)
+- **Go 對應模組**: `seller_controller.go` (函式: `GetTags`)
 - **Headers**: 無
 - **Responses**:
   - `200 OK`: `{"data": [ {"tag_id": 1, "tag_name": "RPG"} ]}`
 
-### `[POST] /api/developer/tags` (建立新科目)
-- **Go 對應模組**: `developer_controller.go` (函式: `CreateTag`)
-- **Headers**: `Authorization: Bearer <developer_token>`
+### `[POST] /api/seller/tags` (建立新科目)
+- **Go 對應模組**: `seller_controller.go` (函式: `CreateTag`)
+- **Headers**: `Authorization: Bearer <seller_token>`
 - **Request Body**: `{"tag_name": "Action"}`
 - **Responses**:
   - `201 Created`: `{"message": "Tag created successfully", "data": { "tag_id": 1, "tag_name": "Action" }}`
   - `500 Internal Server Error`: `{"error": "Failed to create tag (might already exist)"}`
 
-### `[POST] /api/developer/games/{id}/tags` (為筆記貼科目)
-- **Go 對應模組**: `developer_controller.go` (函式: `AddTagToGame`)
-- **Headers**: `Authorization: Bearer <developer_token>`
+### `[POST] /api/seller/notes/{id}/tags` (為筆記貼科目)
+- **Go 對應模組**: `seller_controller.go` (函式: `AddTagToNote`)
+- **Headers**: `Authorization: Bearer <seller_token>`
 - **Request Body**: `{"tag_id": 2}`
 - **Responses**:
-  - `200 OK`: `{"message": "Tag added to game"}`
-  - `403 Forbidden`: `{"error": "Forbidden: Not your game"}`
-  - `404 Not Found`: `{"error": "Game not found"}`
+  - `200 OK`: `{"message": "Tag added to note"}`
+  - `403 Forbidden`: `{"error": "Forbidden: Not your note"}`
+  - `404 Not Found`: `{"error": "Note not found"}`
 
-### `[DELETE] /api/developer/games/{id}/tags/{tag_id}` (移除筆記科目)
-- **Go 對應模組**: `developer_controller.go` (函式: `RemoveTagFromGame`)
-- **Headers**: `Authorization: Bearer <developer_token>`
+### `[DELETE] /api/seller/notes/{id}/tags/{tag_id}` (移除筆記科目)
+- **Go 對應模組**: `seller_controller.go` (函式: `RemoveTagFromNote`)
+- **Headers**: `Authorization: Bearer <seller_token>`
 - **Responses**:
-  - `200 OK`: `{"message": "Tag removed from game"}`
+  - `200 OK`: `{"message": "Tag removed from note"}`
   - `403 Forbidden`: `{"error": "Forbidden"}`
-  - `404 Not Found`: `{"error": "Game not found"}`
+  - `404 Not Found`: `{"error": "Note not found"}`
 
 ---
 
@@ -335,24 +335,24 @@
 ### `[POST] /api/protected/cart` (放入購物車)
 - **Go 對應模組**: `cart_controller.go` (函式: `AddToCart`)
 - **Headers**: `Authorization: Bearer <token>`
-- **Request Body**: `{"game_id": 1}`
+- **Request Body**: `{"note_id": 1}`
 - **Responses**:
-  - `200 OK`: `{"message": "Game added to cart successfully"}`
-  - `400 Bad Request`: `{"error": "Game already in cart"}` 或 `{"error": "You already own this game"}` 或 `{"error": "This game is not available for purchase"}`
+  - `200 OK`: `{"message": "Note added to cart successfully"}`
+  - `400 Bad Request`: `{"error": "Note already in cart"}` 或 `{"error": "You already own this note"}` 或 `{"error": "This note is not available for purchase"}`
 
-### `[DELETE] /api/protected/cart/{game_id}` (移出購物車)
+### `[DELETE] /api/protected/cart/{note_id}` (移出購物車)
 - **Go 對應模組**: `cart_controller.go` (函式: `RemoveFromCart`)
 - **Headers**: `Authorization: Bearer <token>`
 - **Responses**:
-  - `200 OK`: `{"message": "Game removed from cart"}`
+  - `200 OK`: `{"message": "Note removed from cart"}`
 
 ### `[POST] /api/protected/checkout` (結帳)
 - **Go 對應模組**: `transaction_controller.go` (函式: `Checkout`)
 - **Headers**: `Authorization: Bearer <token>`
 - **Request Body**: 無 (自動結算購物車內所有物品)
 - **Responses**:
-  - `200 OK`: `{"message": "Checkout successful. Games added to your library!"}`
-  - `500 Internal Server Error`: `{"error": "Checkout failed: Cart is empty"}` 或 `{"error": "Checkout failed: Game '...' is no longer available for purchase"}`
+  - `200 OK`: `{"message": "Checkout successful. Notes added to your library!"}`
+  - `500 Internal Server Error`: `{"error": "Checkout failed: Cart is empty"}` 或 `{"error": "Checkout failed: Note '...' is no longer available for purchase"}`
 
 ### `[GET] /api/protected/transactions` (查看購買紀錄)
 - **Go 對應模組**: `transaction_controller.go` (函式: `GetTransactions`)
@@ -364,7 +364,7 @@
 - **Go 對應模組**: `social_controller.go` (函式: `GetMyRefunds`)
 - **Headers**: `Authorization: Bearer <token>`
 - **Responses**:
-  - `200 OK`: `{"data": [ { "refund_id": 1, "status": "REJECTED", "game_title": "...", "game_cover": "..." } ]}`
+  - `200 OK`: `{"data": [ { "refund_id": 1, "status": "REJECTED", "note_title": "...", "note_cover": "..." } ]}`
 
 ### `[POST] /api/social/refunds` (申請退款)
 - **Go 對應模組**: `social_controller.go` (函式: `ApplyRefund`)
@@ -409,7 +409,7 @@
 - **Go 對應模組**: `library_controller.go` (函式: `GetLibrary`)
 - **Headers**: `Authorization: Bearer <token>`
 - **Responses**:
-  - `200 OK`: `{"data": [ { "license_id": 1, "game_id": 5, "status": "ACTIVE" } ]}`
+  - `200 OK`: `{"data": [ { "license_id": 1, "note_id": 5, "status": "ACTIVE" } ]}`
 
 ### `[GET] /api/protected/wishlist` (查看願望清單)
 - **Go 對應模組**: `library_controller.go` (函式: `GetWishlist`)
@@ -420,38 +420,38 @@
 ### `[POST] /api/protected/wishlist` (加入願望清單)
 - **Go 對應模組**: `library_controller.go` (函式: `AddToWishlist`)
 - **Headers**: `Authorization: Bearer <token>`
-- **Request Body**: `{"game_id": 3}`
+- **Request Body**: `{"note_id": 3}`
 - **Responses**:
   - `200 OK`: `{"message": "Added to wishlist"}`
   - `500 Internal Server Error`: `{"error": "Failed to add to wishlist (might already exist)"}`
 
-### `[DELETE] /api/protected/wishlist/{game_id}` (移除願望清單)
+### `[DELETE] /api/protected/wishlist/{note_id}` (移除願望清單)
 - **Go 對應模組**: `library_controller.go` (函式: `RemoveFromWishlist`)
 - **Headers**: `Authorization: Bearer <token>`
 - **Responses**:
   - `200 OK`: `{"message": "Removed from wishlist"}`
 
-### `[GET] /api/protected/library/{game_id}/play` (玩筆記)
-- **Go 對應模組**: `library_controller.go` (函式: `PlayGame`)
+### `[GET] /api/protected/library/{note_id}/play` (玩筆記)
+- **Go 對應模組**: `library_controller.go` (函式: `PlayNote`)
 - **Headers**: `Authorization: Bearer <token>`
 - **Responses**:
-  - `200 OK`: `{"message": "Game launched successfully", "auth_token": "mock-play-token-12345"}`
-  - `403 Forbidden`: `{"error": "You do not own this game or the license is inactive"}`
+  - `200 OK`: `{"message": "Note launched successfully", "auth_token": "mock-play-token-12345"}`
+  - `403 Forbidden`: `{"error": "You do not own this note or the license is inactive"}`
 
-### `[GET] /api/protected/library/{game_id}/download` (下載筆記)
-- **Go 對應模組**: `library_controller.go` (函式: `DownloadGame`)
+### `[GET] /api/protected/library/{note_id}/download` (下載筆記)
+- **Go 對應模組**: `library_controller.go` (函式: `DownloadNote`)
 - **Headers**: `Authorization: Bearer <token>`
 - **Responses**:
   - `200 OK`: 直接回傳檔案串流 (binary)，附帶 `Content-Disposition: attachment; filename="{filename}"` 標頭。
     > 前端應直接觸發瀏覽器下載 (例如 `window.location.href = url` 或 `<a>` 科目)，而非當作 JSON 處理。
-  - `403 Forbidden`: `{"error": "You do not own this game or the license is inactive"}`
-  - `404 Not Found`: `{"error": "No downloadable game file is available"}`
+  - `403 Forbidden`: `{"error": "You do not own this note or the license is inactive"}`
+  - `404 Not Found`: `{"error": "No downloadable note file is available"}`
 
 ---
 
 ## 5. 社交、評論與通訊 (Social & Reviews)
 
-### `[POST] /api/social/games/{id}/reviews` (對筆記發表評價)
+### `[POST] /api/social/notes/{id}/reviews` (對筆記發表評價)
 - **Go 對應模組**: `social_controller.go` (函式: `PostReview`)
 - **Headers**: `Authorization: Bearer <token>`
 - **Request Body**:
@@ -464,8 +464,8 @@
   ```
 - **Responses**:
   - `201 Created`: `{"message": "Review posted successfully"}`
-  - `403 Forbidden`: `{"error": "Forbidden: You must own the game to leave a review"}`
-  - `404 Not Found`: `{"error": "Game not found"}`
+  - `403 Forbidden`: `{"error": "Forbidden: You must own the note to leave a review"}`
+  - `404 Not Found`: `{"error": "Note not found"}`
 
 ### `[POST] /api/social/reviews/{review_id}/replies` (樓中樓回覆)
 - **Go 對應模組**: `social_controller.go` (函式: `ReplyToReview`)

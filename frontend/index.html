@@ -13,7 +13,7 @@
 
     <main>
         <section class="section store-hero">
-            <div class="featured-game">
+            <div class="featured-note">
                 <div class="featured-content">
                     <p class="tag is-rounded is-info is-light">AurorNote Storefront</p>
                     <h1 class="title">探索你的下一款最愛筆記</h1>
@@ -66,7 +66,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="game-list-container" id="game-list">
+                <div class="note-list-container" id="note-list">
                     <p class="has-text-centered p-6">載入中...</p>
                 </div>
             </div>
@@ -87,27 +87,27 @@
 
             hideOwnedToggle.addEventListener('click', () => {
                 hideOwnedToggle.classList.toggle('is-active');
-                loadHomeGames();
+                loadHomeNotes();
             });
 
-            sortSelect.addEventListener('change', () => loadHomeGames());
+            sortSelect.addEventListener('change', () => loadHomeNotes());
 
             loadHomeTags();
-            renderGames(null);
-            await loadHomeGames();
+            renderNotes(null);
+            await loadHomeNotes();
         });
 
-        async function loadHomeGames() {
+        async function loadHomeNotes() {
             try {
                 const query = { sort: document.getElementById('sort-select').value };
                 const hideOwnedToggle = document.getElementById('hide-owned-toggle');
                 if (hideOwnedToggle && hideOwnedToggle.classList.contains('is-active')) {
                     query.hide_owned = 'true';
                 }
-                const games = await apiGetGames(query);
-                renderGames(Array.isArray(games) ? games : (games.data || games.games || []));
+                const notes = await apiGetNotes(query);
+                renderNotes(Array.isArray(notes) ? notes : (notes.data || notes.notes || []));
             } catch (err) {
-                document.getElementById('game-list').innerHTML =
+                document.getElementById('note-list').innerHTML =
                     `<p style="color:var(--accent-red);text-align:center;padding:40px;">無法載入筆記列表：${err.message}</p>`;
             }
         }

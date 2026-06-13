@@ -66,8 +66,8 @@
                     item.className = 'library-item';
 
                     const itemId  = itemInfo.item_id || itemInfo.id;
-                    const game    = itemInfo.Game || itemInfo.game || {};
-                    const title   = game.title || game.Title || itemInfo.game_title || itemInfo.GameTitle || itemInfo.title || '未知筆記';
+                    const note    = itemInfo.Note || itemInfo.note || {};
+                    const title   = note.title || note.Title || itemInfo.note_title || itemInfo.NoteTitle || itemInfo.title || '未知筆記';
                     const price   = Number(itemInfo.purchase_price || itemInfo.price || 0);
                     const refundStatus = itemInfo.refund_status || itemInfo.refundStatus || '';
 

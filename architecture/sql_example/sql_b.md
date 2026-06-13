@@ -5,51 +5,51 @@
 ---
 
 ### 1. 查詢購物車內容與筆記資訊
-- **說明**：買家打開購物車時，系統需從 `shopping_carts` 取得紀錄，並關聯 `games` 表以顯示筆記名稱、價格與上架狀態。
+- **說明**：買家打開購物車時，系統需從 `shopping_carts` 取得紀錄，並關聯 `notes` 表以顯示筆記名稱、價格與上架狀態。
 - **對應 API**：`GET /api/protected/cart`
 - **Go 實作 (GORM)**：
   ```go
   var cart []models.ShoppingCart
-  database.DB.Preload("Game").Where("user_id = ?", userID).Find(&cart)
+  database.DB.Preload("Note").Where("user_id = ?", userID).Find(&cart)
   ```
 - **原生 SQL 語法 (INNER JOIN 等效邏輯)**：
   ```sql
-  SELECT shopping_carts.*, games.title, games.price, games.status, games.discount
+  SELECT shopping_carts.*, notes.title, notes.price, notes.status, notes.discount
   FROM shopping_carts
-  JOIN games ON shopping_carts.game_id = games.game_id
+  JOIN notes ON shopping_carts.note_id = notes.note_id
   WHERE shopping_carts.user_id = 5;
   ```
 
 ### 2. 查詢願望清單與筆記資訊
-- **說明**：買家查看願望清單時，同樣需關聯 `games` 表，才能在畫面上呈現出他關注的筆記之最新價格或狀態變動。
+- **說明**：買家查看願望清單時，同樣需關聯 `notes` 表，才能在畫面上呈現出他關注的筆記之最新價格或狀態變動。
 - **對應 API**：`GET /api/protected/wishlist`
 - **Go 實作 (GORM)**：
   ```go
   var wishlist []models.WishList
-  database.DB.Preload("Game").Where("user_id = ?", userID).Find(&wishlist)
+  database.DB.Preload("Note").Where("user_id = ?", userID).Find(&wishlist)
   ```
 - **原生 SQL 語法 (INNER JOIN 等效邏輯)**：
   ```sql
-  SELECT wish_lists.*, games.title, games.price, games.status
+  SELECT wish_lists.*, notes.title, notes.price, notes.status
   FROM wish_lists
-  JOIN games ON wish_lists.game_id = games.game_id
+  JOIN notes ON wish_lists.note_id = notes.note_id
   WHERE wish_lists.user_id = 5;
   ```
 
 ### 3. 獲取筆記的評論列表並包含評論者名稱
 - **說明**：載入筆記評論區時，除了評論內容本身 (`reviews` 表)，還必須 JOIN `users` 資料表來顯示這則評論是誰留的，以及該買家的暱稱。
-- **對應 API**：`GET /api/games/:id/reviews`
+- **對應 API**：`GET /api/notes/:id/reviews`
 - **Go 實作 (GORM)**：
   ```go
   var reviews []models.Review
-  database.DB.Preload("User").Where("game_id = ? AND status = 'VISIBLE'", gameID).Order("created_at DESC").Find(&reviews)
+  database.DB.Preload("User").Where("note_id = ? AND status = 'VISIBLE'", noteID).Order("created_at DESC").Find(&reviews)
   ```
 - **原生 SQL 語法 (INNER JOIN 等效邏輯)**：
   ```sql
   SELECT reviews.*, users.username, users.avatar_url
   FROM reviews
   JOIN users ON reviews.user_id = users.user_id
-  WHERE reviews.game_id = 42 AND reviews.status = 'VISIBLE'
+  WHERE reviews.note_id = 42 AND reviews.status = 'VISIBLE'
   ORDER BY reviews.created_at DESC;
   ```
 
@@ -71,18 +71,18 @@
   ```
 
 ### 5. 商店搜尋由特定賣家發布的筆記
-- **說明**：買家若想查看某間工作室或賣家所發布的所有作品，系統會將 `games` 表與 `users` 表 JOIN，根據賣家的名稱字串進行篩選。
-- **對應 API**：`GET /api/games?developer={username}`
+- **說明**：買家若想查看某間工作室或賣家所發布的所有作品，系統會將 `notes` 表與 `users` 表 JOIN，根據賣家的名稱字串進行篩選。
+- **對應 API**：`GET /api/notes?seller={username}`
 - **Go 實作 (GORM)**：
   ```go
   query = query.
-      Joins("JOIN users filter_developers ON filter_developers.user_id = games.developer_id").
-      Where("filter_developers.username ILIKE ?", "%"+developer+"%")
+      Joins("JOIN users filter_sellers ON filter_sellers.user_id = notes.seller_id").
+      Where("filter_sellers.username ILIKE ?", "%"+seller+"%")
   ```
 - **原生 SQL 語法 (真實 INNER JOIN)**：
   ```sql
-  SELECT games.* 
-  FROM games
-  JOIN users filter_developers ON filter_developers.user_id = games.developer_id
-  WHERE games.status = 'ACTIVE' AND filter_developers.username ILIKE '%CDProjekt%';
+  SELECT notes.* 
+  FROM notes
+  JOIN users filter_sellers ON filter_sellers.user_id = notes.seller_id
+  WHERE notes.status = 'ACTIVE' AND filter_sellers.username ILIKE '%CDProjekt%';
   ```

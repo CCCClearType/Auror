@@ -17,8 +17,8 @@ func GetRefundRequests(c *gin.Context) {
 		BuyerID           uint      `json:"buyer_id"`
 		Username          string    `json:"username"`
 		TransactionItemID uint      `json:"transaction_item_id"`
-		GameID            uint      `json:"game_id"`
-		GameTitle         string    `json:"game_title"`
+		NoteID            uint      `json:"note_id"`
+		NoteTitle         string    `json:"note_title"`
 		Amount            float64   `json:"amount"`
 		Reason            string    `json:"reason"`
 		RejectReason      string    `json:"reject_reason"`
@@ -28,10 +28,10 @@ func GetRefundRequests(c *gin.Context) {
 
 	var requests []RefundDTO
 	if err := database.DB.Table("refund_requests r").
-		Select("r.refund_id, r.buyer_id, u.username, r.transaction_item_id, ti.game_id, g.title AS game_title, ti.purchase_price AS amount, r.reason, r.reject_reason, r.status, r.created_at").
+		Select("r.refund_id, r.buyer_id, u.username, r.transaction_item_id, ti.note_id, g.title AS note_title, ti.purchase_price AS amount, r.reason, r.reject_reason, r.status, r.created_at").
 		Joins("JOIN users u ON u.user_id = r.buyer_id").
 		Joins("JOIN transaction_items ti ON ti.item_id = r.transaction_item_id").
-		Joins("JOIN games g ON g.game_id = ti.game_id").
+		Joins("JOIN notes g ON g.note_id = ti.note_id").
 		Order("r.created_at DESC").
 		Scan(&requests).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch refund requests"})
@@ -77,10 +77,10 @@ func ProcessRefund(c *gin.Context) {
 			return err
 		}
 
-		// If APPROVED, we must REVOKE the GameLicense
+		// If APPROVED, we must REVOKE the NoteLicense
 		if input.Status == "APPROVED" {
 			// Find the license tied to this transaction item
-			if err := tx.Model(&models.GameLicense{}).
+			if err := tx.Model(&models.NoteLicense{}).
 				Where("transaction_item_id = ?", request.TransactionItemID).
 				Update("status", "REVOKED").Error; err != nil {
 				return err

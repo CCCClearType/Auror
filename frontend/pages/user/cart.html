@@ -70,15 +70,15 @@
 
             let total = 0;
             cartData.forEach(item => {
-                const game  = item.game || item;
-                const gameId = game.game_id || game.id || item.game_id;
-                const title  = game.title || item.title || '';
-                const price  = Number(game.price || item.price || 0);
-                const coverUrl = getGameCoverUrl(game);
+                const note  = item.note || item;
+                const noteId = note.note_id || note.id || item.note_id;
+                const title  = note.title || item.title || '';
+                const price  = Number(note.price || item.price || 0);
+                const coverUrl = getNoteCoverUrl(note);
                 
-                const isTakenDown = (game.status === 'TAKEN_DOWN' || item.status === 'TAKEN_DOWN');
+                const isTakenDown = (note.status === 'TAKEN_DOWN' || item.status === 'TAKEN_DOWN');
                 
-                // If title is missing, it means the game was deleted from the store
+                // If title is missing, it means the note was deleted from the store
                 const displayTitle = title ? title : '已下架或失效的筆記';
                 
                 if (title && !isTakenDown) {
@@ -88,18 +88,18 @@
                 const el = document.createElement('div');
                 el.className = 'library-item';
                 el.innerHTML = `
-                    <a class="cart-item-cover" href="/pages/store/game_detail?id=${gameId}" aria-label="查看 ${escapeHtml(displayTitle)}">
+                    <a class="cart-item-cover" href="/pages/store/note_detail?id=${noteId}" aria-label="查看 ${escapeHtml(displayTitle)}">
                         ${coverUrl ? `<img src="${coverUrl}" alt="${escapeHtml(displayTitle)}">` : `<span>No image</span>`}
                     </a>
                     <div class="library-item-info">
                         <h3 style="color:${(title && !isTakenDown) ? 'white' : 'var(--text-muted)'}; font-size:1.2rem; margin-bottom:8px;">
-                            <a href="/pages/store/game_detail?id=${gameId}" style="color:inherit;">${escapeHtml(displayTitle)}</a>
+                            <a href="/pages/store/note_detail?id=${noteId}" style="color:inherit;">${escapeHtml(displayTitle)}</a>
                             ${isTakenDown ? '<span class="tag is-danger is-light" style="margin-left:8px;">已下架</span>' : ''}
                         </h3>
                         ${isTakenDown ? `<p style="color:var(--accent-red);font-size:14px;">此商品已下架，請先從購物車移除才能結帳。</p>` : `<p style="color:var(--accent-pink);font-size:16px;font-weight:700;">NT$ ${price.toLocaleString()}</p>`}
                     </div>
                     <div class="library-item-actions">
-                         <button class="button is-danger is-light" onclick="removeFromCart(${gameId})">移除</button>
+                         <button class="button is-danger is-light" onclick="removeFromCart(${noteId})">移除</button>
                     </div>
                 `;
                 listEl.appendChild(el);
@@ -109,8 +109,8 @@
             
             let hasTakenDown = false;
             cartData.forEach(item => {
-                const game = item.game || item;
-                if (game.status === 'TAKEN_DOWN' || item.status === 'TAKEN_DOWN') {
+                const note = item.note || item;
+                if (note.status === 'TAKEN_DOWN' || item.status === 'TAKEN_DOWN') {
                     hasTakenDown = true;
                 }
             });
@@ -129,10 +129,10 @@
             summaryEl.style.display = 'block';
         }
 
-        async function removeFromCart(gameId) {
+        async function removeFromCart(noteId) {
             try {
-                // DELETE /api/protected/cart/{game_id}
-                await apiRemoveFromCart(gameId);
+                // DELETE /api/protected/cart/{note_id}
+                await apiRemoveFromCart(noteId);
                 showToast('移除成功！', 'success');
                 await loadCart();
             } catch (err) {

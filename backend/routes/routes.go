@@ -25,11 +25,11 @@ func SetupRouter() *gin.Engine {
 		}
 
 		// ==========================================
-		// Phase 1: Game Routes (Public)
+		// Phase 1: Note Routes (Public)
 		// ==========================================
-		api.GET("/games", controllers.GetGames)
-		api.GET("/games/:id", controllers.GetGameByID)
-		api.GET("/games/:id/reviews", controllers.GetReviews)
+		api.GET("/notes", controllers.GetNotes)
+		api.GET("/notes/:id", controllers.GetNoteByID)
+		api.GET("/notes/:id/reviews", controllers.GetReviews)
 
 		// ==========================================
 		// Phase 3: Protected Routes (Require JWT Token)
@@ -39,7 +39,7 @@ func SetupRouter() *gin.Engine {
 			// 1. Shopping Cart
 			protected.GET("/cart", controllers.GetCart)
 			protected.POST("/cart", controllers.AddToCart)
-			protected.DELETE("/cart/:game_id", controllers.RemoveFromCart)
+			protected.DELETE("/cart/:note_id", controllers.RemoveFromCart)
 
 			// 2. Checkout & Transactions
 			protected.POST("/checkout", controllers.Checkout)
@@ -50,27 +50,27 @@ func SetupRouter() *gin.Engine {
 			protected.GET("/library", controllers.GetLibrary)
 			protected.GET("/wishlist", controllers.GetWishlist)
 			protected.POST("/wishlist", controllers.AddToWishlist)
-			protected.DELETE("/wishlist/:game_id", controllers.RemoveFromWishlist)
-			protected.GET("/library/:game_id/play", controllers.PlayGame)
-			protected.GET("/library/:game_id/download", controllers.DownloadGame)
+			protected.DELETE("/wishlist/:note_id", controllers.RemoveFromWishlist)
+			protected.GET("/library/:note_id/play", controllers.PlayNote)
+			protected.GET("/library/:note_id/download", controllers.DownloadNote)
 		}
 
 		// ==========================================
-		// Phase 4: Developer Routes (Require JWT + DEVELOPER Role)
+		// Phase 4: Seller Routes (Require JWT + SELLER Role)
 		// ==========================================
-		developer := api.Group("/developer").Use(middleware.RequireAuth(), middleware.RequireRole("DEVELOPER"))
+		seller := api.Group("/seller").Use(middleware.RequireAuth(), middleware.RequireRole("SELLER"))
 		{
-			developer.GET("/games", controllers.GetDeveloperGames)
-			developer.POST("/games", controllers.UploadGame)
-			developer.PUT("/games/:id", controllers.UpdateGame)
-			developer.PUT("/games/:id/publish", controllers.PublishGame)
-			developer.DELETE("/games/:id", controllers.DeleteGame)
-			developer.POST("/games/:id/media", controllers.UploadMedia)
-			developer.DELETE("/games/:id/media/:media_id", controllers.DeleteMedia)
-			developer.GET("/games/:id/stats", controllers.GetGameStats)
-			developer.POST("/tags", controllers.CreateTag)
-			developer.POST("/games/:id/tags", controllers.AddTagToGame)
-			developer.DELETE("/games/:id/tags/:tag_id", controllers.RemoveTagFromGame)
+			seller.GET("/notes", controllers.GetSellerNotes)
+			seller.POST("/notes", controllers.UploadNote)
+			seller.PUT("/notes/:id", controllers.UpdateNote)
+			seller.PUT("/notes/:id/publish", controllers.PublishNote)
+			seller.DELETE("/notes/:id", controllers.DeleteNote)
+			seller.POST("/notes/:id/media", controllers.UploadMedia)
+			seller.DELETE("/notes/:id/media/:media_id", controllers.DeleteMedia)
+			seller.GET("/notes/:id/stats", controllers.GetNoteStats)
+			seller.POST("/tags", controllers.CreateTag)
+			seller.POST("/notes/:id/tags", controllers.AddTagToNote)
+			seller.DELETE("/notes/:id/tags/:tag_id", controllers.RemoveTagFromNote)
 		}
 
 		api.GET("/tags", controllers.GetTags)
@@ -92,7 +92,7 @@ func SetupRouter() *gin.Engine {
 			admin.PUT("/users/:id/suspend", controllers.SuspendUser)
 			admin.DELETE("/users/:id", controllers.DeleteUser)
 			admin.PUT("/users/:id/role", controllers.ChangeUserRole)
-			admin.DELETE("/games/:id", controllers.AdminDeleteGame)
+			admin.DELETE("/notes/:id", controllers.AdminDeleteNote)
 		}
 
 		// CSR Zone
@@ -105,7 +105,7 @@ func SetupRouter() *gin.Engine {
 		// SOCIAL Zone
 		social := api.Group("/social").Use(middleware.RequireAuth())
 		{
-			social.POST("/games/:id/reviews", controllers.PostReview)
+			social.POST("/notes/:id/reviews", controllers.PostReview)
 			social.POST("/reviews/:review_id/replies", controllers.ReplyToReview)
 			social.DELETE("/reviews/replies/:reply_id", controllers.DeleteReviewReply)
 			social.POST("/refunds", controllers.ApplyRefund)

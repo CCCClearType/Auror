@@ -6,9 +6,9 @@
 
 ## 1. 商店瀏覽與願望清單 (Browse & Wishlist)
 
-- **起點**：買家瀏覽 `index.html` 或 `game_detail.html`。
+- **起點**：買家瀏覽 `index.html` 或 `note_detail.html`。
 - **流程 (搜尋)**：
-  - 買家可以透過 `GET /api/games?q={keyword}&tag={tag}` 進行過濾，過濾器只會返回 `status = 'ACTIVE'` 且 `price >= min_price` 的筆記。
+  - 買家可以透過 `GET /api/notes?q={keyword}&tag={tag}` 進行過濾，過濾器只會返回 `status = 'ACTIVE'` 且 `price >= min_price` 的筆記。
 - **流程 (加入願望清單)**：
   1. 買家對感興趣的筆記點擊「加入願望清單」，呼叫 `POST /api/protected/wishlist`。
   2. 後端檢查是否已存在於 `wish_lists` 表。若無，則寫入資料。
@@ -22,11 +22,11 @@
 - **流程**：
   1. 前端呼叫 `POST /api/protected/cart`。
   2. **防護檢查 1**：後端檢查該筆記的 `status` 是否為 `'ACTIVE'`。若非 ACTIVE (例如 DRAFT 或 TAKEN_DOWN)，則阻擋加入。
-  3. **防護檢查 2**：檢查買家是否已經擁有這款筆記 (在 `game_licenses` 中尋找 `ACTIVE` 的紀錄)。若已擁有，拒絕加入。
+  3. **防護檢查 2**：檢查買家是否已經擁有這款筆記 (在 `note_licenses` 中尋找 `ACTIVE` 的紀錄)。若已擁有，拒絕加入。
   4. 寫入 `shopping_carts` 資料表。
 - **管理購物車**：
   - 買家開啟購物車頁面，前端呼叫 `GET /api/protected/cart` 列出所有商品。
-  - 若買家想移除特定商品，可點擊移除並呼叫 `DELETE /api/protected/cart/:game_id`。
+  - 若買家想移除特定商品，可點擊移除並呼叫 `DELETE /api/protected/cart/:note_id`。
 - **終點**：前端右上角的購物車圖示數字增加或減少，隨時保持與資料庫同步。
 
 ---
@@ -43,7 +43,7 @@
      - 在 `transactions` 表建立一筆交易主檔 (包含總金額與時間)。
      - 針對每一款筆記，在 `transaction_items` 表建立明細 (包含單款筆記的購買價格 `purchase_price`)。
   5. **發放授權**：
-     - 針對每一款購買的筆記，在 `game_licenses` 中新增一筆紀錄，綁定 `user_id`, `game_id` 與 `transaction_item_id`，狀態為 `'ACTIVE'`。
+     - 針對每一款購買的筆記，在 `note_licenses` 中新增一筆紀錄，綁定 `user_id`, `note_id` 與 `transaction_item_id`，狀態為 `'ACTIVE'`。
      - 授權發放完畢後，清空該買家的 `shopping_carts`。
   6. 交易提交 (`DB.Commit()`)。
 - **終點**：結帳成功，買家被引導至「我的筆記庫 (`library.html`)」，可看到剛買的筆記。

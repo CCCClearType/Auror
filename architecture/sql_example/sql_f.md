@@ -44,19 +44,19 @@
   ```
 - **原生 SQL 語法**：
   ```sql
-  INSERT INTO shopping_carts (user_id, game_id) VALUES (5, 42);
+  INSERT INTO shopping_carts (user_id, note_id) VALUES (5, 42);
   ```
 
 ### 4. 移除單一購物車商品 (DELETE)
-- **說明**：買家將筆記移出購物車時，系統根據 `user_id` 與 `game_id` 的組合將該紀錄實體刪除。
+- **說明**：買家將筆記移出購物車時，系統根據 `user_id` 與 `note_id` 的組合將該紀錄實體刪除。
 - **對應 API**：`DELETE /api/protected/cart/:id`
 - **Go 實作 (GORM)**：
   ```go
-  database.DB.Where("user_id = ? AND game_id = ?", userID, gameID).Delete(&models.ShoppingCart{})
+  database.DB.Where("user_id = ? AND note_id = ?", userID, noteID).Delete(&models.ShoppingCart{})
   ```
 - **原生 SQL 語法**：
   ```sql
-  DELETE FROM shopping_carts WHERE user_id = 5 AND game_id = 42;
+  DELETE FROM shopping_carts WHERE user_id = 5 AND note_id = 42;
   ```
 
 ### 5. 清空購物車 (DELETE)
@@ -90,11 +90,11 @@
       VALUES (4, 1200.00, 'REC-DEMO-0002') 
       RETURNING transaction_id
   ), new_item AS (
-      INSERT INTO transaction_items (transaction_id, game_id, purchase_price) 
+      INSERT INTO transaction_items (transaction_id, note_id, purchase_price) 
       SELECT transaction_id, 1, 1200.00 FROM new_tx 
       RETURNING item_id
   ), new_license AS (
-      INSERT INTO game_licenses (user_id, game_id, transaction_item_id, status) 
+      INSERT INTO note_licenses (user_id, note_id, transaction_item_id, status) 
       SELECT 4, 1, item_id, 'ACTIVE' FROM new_item
   )
   DELETE FROM shopping_carts WHERE user_id = 4;
@@ -109,7 +109,7 @@
   ```
 - **原生 SQL 語法**：
   ```sql
-  INSERT INTO wish_lists (user_id, game_id) VALUES (5, 42);
+  INSERT INTO wish_lists (user_id, note_id) VALUES (5, 42);
   ```
 
 ### 8. 移除願望清單 (DELETE)
@@ -117,11 +117,11 @@
 - **對應 API**：`DELETE /api/protected/wishlist/:id`
 - **Go 實作 (GORM)**：
   ```go
-  database.DB.Where("user_id = ? AND game_id = ?", userID, gameID).Delete(&models.WishList{})
+  database.DB.Where("user_id = ? AND note_id = ?", userID, noteID).Delete(&models.WishList{})
   ```
 - **原生 SQL 語法**：
   ```sql
-  DELETE FROM wish_lists WHERE user_id = 5 AND game_id = 42;
+  DELETE FROM wish_lists WHERE user_id = 5 AND note_id = 42;
   ```
 
 ### 9. 買家申請退款 (INSERT)
@@ -241,14 +241,14 @@
 
 ### 18. 發布筆記評論 (INSERT)
 - **說明**：買家在購買筆記後發表心路歷程與評價，供其他買家參考。
-- **對應 API**：`POST /api/social/games/:id/reviews`
+- **對應 API**：`POST /api/social/notes/:id/reviews`
 - **Go 實作 (GORM)**：
   ```go
   database.DB.Create(&review)
   ```
 - **原生 SQL 語法**：
   ```sql
-  INSERT INTO reviews (game_id, user_id, attitude, content, status) 
+  INSERT INTO reviews (note_id, user_id, attitude, content, status) 
   VALUES (42, 5, 'POSITIVE', '超好玩', 'VISIBLE');
   ```
 
@@ -302,93 +302,93 @@
 
 ---
 
-## 模組四：賣家功能 (Developer)
+## 模組四：賣家功能 (Seller)
 
 ### 23. 發行新筆記草稿 (INSERT)
 - **說明**：賣家建立一款新筆記的基本資料，此時筆記會是 `DRAFT` (草稿) 狀態，暫時不會在商店中曝光。
-- **對應 API**：`POST /api/developer/games`
+- **對應 API**：`POST /api/seller/notes`
 - **Go 實作 (GORM)**：
   ```go
-  database.DB.Create(&game)
+  database.DB.Create(&note)
   ```
 - **原生 SQL 語法**：
   ```sql
-  INSERT INTO games (title, description, price, developer_id, status) VALUES ('新筆記', '...', 500, 5, 'DRAFT');
+  INSERT INTO notes (title, description, price, seller_id, status) VALUES ('新筆記', '...', 500, 5, 'DRAFT');
   ```
 
 ### 24. 正式上架或編輯筆記資訊 (UPDATE)
 - **說明**：補齊資料並加上至少一個科目後，賣家將筆記正式公開 (`ACTIVE`)，或者日後更新售價等欄位。
-- **對應 API**：`PUT /api/developer/games/:id/publish` 與 `PUT /api/developer/games/:id`
+- **對應 API**：`PUT /api/seller/notes/:id/publish` 與 `PUT /api/seller/notes/:id`
 - **Go 實作 (GORM)**：
   ```go
-  database.DB.Save(&game)
+  database.DB.Save(&note)
   ```
 - **原生 SQL 語法**：
   ```sql
-  UPDATE games SET status = 'ACTIVE' WHERE game_id = 42 AND developer_id = 5;
-  UPDATE games SET title = '新標題', price = 400 WHERE game_id = 42 AND developer_id = 5;
+  UPDATE notes SET status = 'ACTIVE' WHERE note_id = 42 AND seller_id = 5;
+  UPDATE notes SET title = '新標題', price = 400 WHERE note_id = 42 AND seller_id = 5;
   ```
 
 ### 25. 下架自己的筆記 (UPDATE)
 - **說明**：賣家決定不再販售該筆記，將狀態改為 `TAKEN_DOWN`。這不會影響已經買過筆記的買家。
-- **對應 API**：`DELETE /api/developer/games/:id`
+- **對應 API**：`DELETE /api/seller/notes/:id`
 - **Go 實作 (GORM)**：
   ```go
-  database.DB.Model(&game).Update("status", "TAKEN_DOWN")
+  database.DB.Model(&note).Update("status", "TAKEN_DOWN")
   ```
 - **原生 SQL 語法**：
   ```sql
-  UPDATE games SET status = 'TAKEN_DOWN' WHERE game_id = 42 AND developer_id = 5;
+  UPDATE notes SET status = 'TAKEN_DOWN' WHERE note_id = 42 AND seller_id = 5;
   ```
 
 ### 26. 上傳筆記圖片或檔案 (INSERT)
 - **說明**：上傳圖片預覽或筆記檔案案時，在資料庫記錄檔案的虛擬路徑與類型。
-- **對應 API**：`POST /api/developer/games/:id/media`
+- **對應 API**：`POST /api/seller/notes/:id/media`
 - **Go 實作 (GORM)**：
   ```go
   database.DB.Create(&media)
   ```
 - **原生 SQL 語法**：
   ```sql
-  INSERT INTO game_media (game_id, media_type, file_url) VALUES (42, 'media', '/media/images/123.jpg');
+  INSERT INTO note_media (note_id, media_type, file_url) VALUES (42, 'media', '/media/images/123.jpg');
   ```
 
 ### 27. 刪除媒體檔案 (DELETE)
 - **說明**：若是上傳錯檔案或圖片，可以針對該媒體紀錄進行刪除。
-- **對應 API**：`DELETE /api/developer/games/:id/media/:media_id`
+- **對應 API**：`DELETE /api/seller/notes/:id/media/:media_id`
 - **Go 實作 (GORM)**：
   ```go
   database.DB.Delete(&media)
   ```
 - **原生 SQL 語法**：
   ```sql
-  DELETE FROM game_media WHERE media_id = 77;
+  DELETE FROM note_media WHERE media_id = 77;
   ```
 
 ### 28. 為筆記新增科目 (INSERT)
 - **說明**：為了精準觸及受眾，賣家將筆記與特定科目綁定，這是建立多對多關係的操作。
-- **對應 API**：`POST /api/developer/games/:id/tags`
+- **對應 API**：`POST /api/seller/notes/:id/tags`
 - **Go 實作 (GORM)**：
   ```go
-  database.DB.Create(&gameTag)
+  database.DB.Create(&noteTag)
   ```
 - **原生 SQL 語法**：
   ```sql
-  INSERT INTO game_tags (game_id, tag_id) VALUES (42, 3);
+  INSERT INTO note_tags (note_id, tag_id) VALUES (42, 3);
   ```
 
 ### 29. 建立全域新科目與移除筆記科目 (INSERT / DELETE)
-- **說明**：如果系統目前的科目不夠用，賣家可以創造新科目；若標錯了，也能夠從 `game_tags` 中解綁。
-- **對應 API**：`POST /api/developer/tags` 與 `DELETE /api/developer/games/:id/tags/:tag_id`
+- **說明**：如果系統目前的科目不夠用，賣家可以創造新科目；若標錯了，也能夠從 `note_tags` 中解綁。
+- **對應 API**：`POST /api/seller/tags` 與 `DELETE /api/seller/notes/:id/tags/:tag_id`
 - **Go 實作 (GORM)**：
   ```go
   database.DB.Create(&newTag)
-  database.DB.Where("game_id = ? AND tag_id = ?", gameID, tagID).Delete(&models.GameTag{})
+  database.DB.Where("note_id = ? AND tag_id = ?", noteID, tagID).Delete(&models.NoteTag{})
   ```
 - **原生 SQL 語法**：
   ```sql
   INSERT INTO tags (tag_name) VALUES ('MOBA');
-  DELETE FROM game_tags WHERE game_id = 42 AND tag_id = 3;
+  DELETE FROM note_tags WHERE note_id = 42 AND tag_id = 3;
   ```
 
 ---
@@ -422,16 +422,16 @@
 
 ### 32. 管理員強制下架筆記與終極撤銷 (UPDATE)
 - **說明**：當筆記嚴重違規時，管理員將之強制下架。與賣家自主下架不同的是，管理員的鐵腕會直接追殺到已購買的買家，一併將他們的授權改為 `REVOKED`。
-- **對應 API**：`DELETE /api/admin/games/:id`
+- **對應 API**：`DELETE /api/admin/notes/:id`
 - **Go 實作 (GORM)**：
   ```go
-  database.DB.Model(&game).Update("status", "TAKEN_DOWN")
-  database.DB.Model(&models.GameLicense{}).Where("game_id = ?", gameID).Update("status", "REVOKED")
+  database.DB.Model(&note).Update("status", "TAKEN_DOWN")
+  database.DB.Model(&models.NoteLicense{}).Where("note_id = ?", noteID).Update("status", "REVOKED")
   ```
 - **原生 SQL 語法**：
   ```sql
-  UPDATE games SET status = 'TAKEN_DOWN' WHERE game_id = 42;
-  UPDATE game_licenses SET status = 'REVOKED' WHERE game_id = 42;
+  UPDATE notes SET status = 'TAKEN_DOWN' WHERE note_id = 42;
+  UPDATE note_licenses SET status = 'REVOKED' WHERE note_id = 42;
   ```
 
 ### 33. 客服同意或拒絕退款單 (UPDATE)
@@ -445,5 +445,5 @@
 - **原生 SQL 語法**：
   ```sql
   UPDATE refund_requests SET status = 'APPROVED', resolved_at = NOW() WHERE refund_id = 88;
-  UPDATE game_licenses SET status = 'REVOKED' WHERE transaction_item_id = 105; 
+  UPDATE note_licenses SET status = 'REVOKED' WHERE transaction_item_id = 105; 
   ```

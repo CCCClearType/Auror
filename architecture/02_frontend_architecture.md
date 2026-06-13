@@ -29,7 +29,7 @@ frontend/
     │   └── register.html       # 註冊畫面
     ├── store/                  # [商店模組]
     │   ├── search.html         # 關鍵字與科目搜尋結果頁面
-    │   └── game_detail.html    # 筆記詳細介紹、評論展示與加入購物車操作
+    │   └── note_detail.html    # 筆記詳細介紹、評論展示與加入購物車操作
     ├── user/                   # [買家專屬模組]
     │   ├── library.html        # 個人筆記庫 (閱讀、下載)
     │   ├── cart.html           # 購物車結帳頁面
@@ -41,8 +41,8 @@ frontend/
     └── dashboard/              # [後台管理模組 (嚴格依角色隔離)]
         ├── admin_dashboard.html # 系統管理員後台 (管理所有帳號權限與強制下架筆記)
         ├── csr_dashboard.html   # 客服人員後台 (審核買家退款申請)
-        ├── dev_dashboard.html   # 賣家後台 (上架新筆記、查看銷售數據)
-        └── edit_game.html       # 賣家專屬：筆記內容與素材編輯器
+        ├── seller_dashboard.html   # 賣家後台 (上架新筆記、查看銷售數據)
+        └── edit_note.html       # 賣家專屬：筆記內容與素材編輯器
 ```
 
 ---
@@ -55,12 +55,12 @@ frontend/
   - **自動授權 `authFetch()`**: 封裝了原生的 `fetch()` API。每次發送受保護的請求時，會自動從 `localStorage` 取出 JWT Token，並注入 HTTP Header (`Authorization: Bearer <token>`) 中。
   - **401 攔截器**: 負責全域錯誤攔截。如果後端回傳 HTTP Status `401 Unauthorized` (Token 過期或被竄改)，會自動強制登出，清空快取並導向 `login.html`。
   - **同源代理**: 設定 `API_BASE = ''`，所有 `/api/*` 的請求都送往與前端相同的網域 (`localhost:3000`)，再由底層的 Caddy 伺服器反向代理至 Go Server (`backend:8000`)，徹底免除了 CORS 的設定麻煩。
-  - **業務函數映射**: 提供具語意化的函數如 `apiGetGames()`, `apiAddToCart()`, `apiApproveRefund()`，隱藏底層的 URL 路徑與 HTTP Method 差異，讓各頁面的程式碼保持乾淨。
+  - **業務函數映射**: 提供具語意化的函數如 `apiGetNotes()`, `apiAddToCart()`, `apiApproveRefund()`，隱藏底層的 URL 路徑與 HTTP Method 差異，讓各頁面的程式碼保持乾淨。
 
 ### 🟡 共用邏輯與狀態層 (Shared Logic Layer) - `assets/js/main.js`
 - **職責**: 處理全站共用的 DOM 操作與全域狀態快取。
 - **核心機制**:
-  - **動態導覽列 `renderHeader()`**: 根據當前使用者的登入狀態（遊客、已登入）與角色權限（`USERS`, `ADMIN`, `CSR`, `DEVELOPER`），動態生成右上角的選單按鈕（例如：只有賣家才會看到「賣家後台」按鈕）。
+  - **動態導覽列 `renderHeader()`**: 根據當前使用者的登入狀態（遊客、已登入）與角色權限（`USERS`, `ADMIN`, `CSR`, `SELLER`），動態生成右上角的選單按鈕（例如：只有賣家才會看到「賣家後台」按鈕）。
   - **全域提示組件 `showToast(msg, type)`**: 畫面的右下角彈出通知 (Success/Error)，處理非同步請求完成後的使用者回饋。
   - **狀態管理 API**: 提供 `getToken()`, `getCurrentUser()`, `getCurrentRole()` 等封裝函式，避免直接操作 localStorage 造成的拼字錯誤。
 
@@ -82,7 +82,7 @@ frontend/
 3. [依賴載入] 執行位於 HTML 文件底部的 <script src="/assets/js/api.js"> 與 main.js。
 4. [初始化] 觸發原生事件 document.addEventListener("DOMContentLoaded")。
 5. [共用渲染] main.js 自動執行 renderHeader()，讀取 Token 判斷身分並畫出導覽列。
-6. [資料請求] 該頁面專屬的腳本被觸發，向 api.js 呼叫函式 (如 apiGetGameDetails(id))。
+6. [資料請求] 該頁面專屬的腳本被觸發，向 api.js 呼叫函式 (如 apiGetNoteDetails(id))。
 7. [等待回覆] api.js 將請求包裝後送往同源 `/api/...`，由 Caddy 代理到後端。
 8. [動態更新] 收到後端 JSON 回應後，透過 document.getElementById() 將數據 (如價格、評論) 動態寫入畫面。
 9. [等待互動] 頁面渲染完畢，靜待使用者的點擊或表單輸入操作。
@@ -103,12 +103,12 @@ frontend/
 - **實作機制**：利用 `setInterval` (預設為 1 秒)，定期向後端發送請求 (`GET /api/social/messages`)。若偵測到狀態改變（如新訊息），則局部更新 DOM 元素（如將大頭貼底色轉為綠色或渲染新對話氣泡），實現低延遲的即時通訊體驗，而無須引入複雜的 WebSocket。
 
 ### 3. 安全的 Markdown 渲染 (Secure Markdown Rendering)
-- 筆記介紹 (`description`) 支援豐富的 Markdown 語法。為了防範 XSS (跨站腳本攻擊)，前端在顯示這些內容時（如 `game_detail.html`, `edit_game.html`）採用了雙層防護機制：
+- 筆記介紹 (`description`) 支援豐富的 Markdown 語法。為了防範 XSS (跨站腳本攻擊)，前端在顯示這些內容時（如 `note_detail.html`, `edit_note.html`）採用了雙層防護機制：
 - **解析器**: 使用 `marked.js` 將 Markdown 文本轉換為 HTML。
 - **消毒器**: 緊接著將產生的 HTML 餵給 `DOMPurify` 進行嚴格的過濾，拔除所有具備潛在威脅的 `<script>` 或 `onerror` 等屬性後，才透過 `innerHTML` 寫入畫面中。
 
 ### 4. 權限與身分解耦防護 (Role & ID Resolution)
-- 系統在前端負責大量的身分驗證顯示邏輯（例如：是否解鎖賣家的官方評論介面）。由於後端不同 API 回傳的 Payload 鍵值存在差異（登入時回傳 `user.id`，但在某些模組可能使用 `user_id`），前端在進行身分核對時（如判斷當前登入者是否為筆記原作者），採取了高包容性的屬性探測機制 `(user.id || user.user_id) == developerId`。這確保了賣家能順暢地解鎖 `AUTHOR` 特權，在未購買自己筆記的情況下，依然能發布官方評論或進行樓中樓回覆。
+- 系統在前端負責大量的身分驗證顯示邏輯（例如：是否解鎖賣家的官方評論介面）。由於後端不同 API 回傳的 Payload 鍵值存在差異（登入時回傳 `user.id`，但在某些模組可能使用 `user_id`），前端在進行身分核對時（如判斷當前登入者是否為筆記原作者），採取了高包容性的屬性探測機制 `(user.id || user.user_id) == sellerId`。這確保了賣家能順暢地解鎖 `AUTHOR` 特權，在未購買自己筆記的情況下，依然能發布官方評論或進行樓中樓回覆。
 
 ### 5. 特權徽章動態渲染 (Privilege Badge Rendering)
 - 配合後端「無痕修改 Schema 的隱藏字首機制」，前端負責在呈現層將「隱藏資訊」轉化為精美的「視覺組件」。

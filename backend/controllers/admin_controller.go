@@ -50,15 +50,15 @@ func DeleteUser(c *gin.Context) {
 		return
 	}
 
-	// Cascade soft-delete: if this user is a developer, take down all their games
-	if user.Role == "DEVELOPER" {
-		database.DB.Model(&models.Game{}).Where("developer_id = ?", user.UserID).Update("status", "TAKEN_DOWN")
+	// Cascade soft-delete: if this user is a seller, take down all their notes
+	if user.Role == "SELLER" {
+		database.DB.Model(&models.Note{}).Where("seller_id = ?", user.UserID).Update("status", "TAKEN_DOWN")
 
-		// Cascade revoke licenses for all games owned by this developer
-		var developerGames []uint
-		database.DB.Model(&models.Game{}).Where("developer_id = ?", user.UserID).Pluck("game_id", &developerGames)
-		if len(developerGames) > 0 {
-			database.DB.Model(&models.GameLicense{}).Where("game_id IN ?", developerGames).Update("status", "REVOKED")
+		// Cascade revoke licenses for all notes owned by this seller
+		var sellerNotes []uint
+		database.DB.Model(&models.Note{}).Where("seller_id = ?", user.UserID).Pluck("note_id", &sellerNotes)
+		if len(sellerNotes) > 0 {
+			database.DB.Model(&models.NoteLicense{}).Where("note_id IN ?", sellerNotes).Update("status", "REVOKED")
 		}
 	}
 
@@ -84,16 +84,16 @@ func ChangeUserRole(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User role updated successfully"})
 }
 
-// AdminDeleteGame handles DELETE /api/admin/games/:id
-func AdminDeleteGame(c *gin.Context) {
-	gameID := c.Param("id")
-	if err := database.DB.Model(&models.Game{}).Where("game_id = ?", gameID).Update("status", "TAKEN_DOWN").Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to take down game"})
+// AdminDeleteNote handles DELETE /api/admin/notes/:id
+func AdminDeleteNote(c *gin.Context) {
+	noteID := c.Param("id")
+	if err := database.DB.Model(&models.Note{}).Where("note_id = ?", noteID).Update("status", "TAKEN_DOWN").Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to take down note"})
 		return
 	}
 
-	// Cascade revoke all licenses for this game
-	database.DB.Model(&models.GameLicense{}).Where("game_id = ?", gameID).Update("status", "REVOKED")
+	// Cascade revoke all licenses for this note
+	database.DB.Model(&models.NoteLicense{}).Where("note_id = ?", noteID).Update("status", "REVOKED")
 
-	c.JSON(http.StatusOK, gin.H{"message": "Game deleted successfully by Admin"})
+	c.JSON(http.StatusOK, gin.H{"message": "Note deleted successfully by Admin"})
 }

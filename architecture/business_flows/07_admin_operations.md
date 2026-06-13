@@ -27,13 +27,13 @@
 
 ## 3. 強制下架違規筆記 (Force Takedown & License Revocation)
 
-- **起點**：Admin 發現某款筆記 (`games.status = 'ACTIVE'`) 涉及侵權、惡意軟體或嚴重違規，在 `admin_dashboard.html` 對該筆記點擊「強制下架」。
+- **起點**：Admin 發現某款筆記 (`notes.status = 'ACTIVE'`) 涉及侵權、惡意軟體或嚴重違規，在 `admin_dashboard.html` 對該筆記點擊「強制下架」。
 - **流程**：
-  1. 呼叫 `DELETE /api/admin/games/:id` (雖然是 DELETE，但為確保歷史交易明細不斷鏈，實施的是軟刪除)。
-  2. 後端將 `games.status` 強制設定為 `'TAKEN_DOWN'`。
+  1. 呼叫 `DELETE /api/admin/notes/:id` (雖然是 DELETE，但為確保歷史交易明細不斷鏈，實施的是軟刪除)。
+  2. 後端將 `notes.status` 強制設定為 `'TAKEN_DOWN'`。
   3. **終極撤銷授權 (Revoke Licenses)**：
      - Admin 下架與「賣家自主下架」最大的不同在於：Admin 下架帶有懲罰與保護買家的性質。
-     - 系統會透過 `game_id` 到 `game_licenses` 中尋找所有擁有此筆記的買家。
+     - 系統會透過 `note_id` 到 `note_licenses` 中尋找所有擁有此筆記的買家。
      - 將所有人的授權狀態 `status` 一次性全部變更為 `'REVOKED'`。
 - **終點**：
   - 商店首頁再也找不到該筆記。
@@ -49,7 +49,7 @@
   1. 呼叫 `DELETE /api/admin/users/:id`。
   2. 將 `users.permission` 設為 `'DELETED'` (永遠無法登入)。
   3. **自動觸發上述的強制下架機制**：
-     - 如果該使用者是 `DEVELOPER`，系統會找出他建立的所有筆記。
-     - 執行 `UPDATE games SET status = 'TAKEN_DOWN'`。
-     - 再對這些筆記執行 `UPDATE game_licenses SET status = 'REVOKED'`。
+     - 如果該使用者是 `SELLER`，系統會找出他建立的所有筆記。
+     - 執行 `UPDATE notes SET status = 'TAKEN_DOWN'`。
+     - 再對這些筆記執行 `UPDATE note_licenses SET status = 'REVOKED'`。
 - **終點**：單次點擊即將該惡劣賣家、其散佈的所有筆記、以及買家庫存中的授權徹底淨空，實現平台的最高安全閉環。

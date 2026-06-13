@@ -7,12 +7,12 @@
 ## 1. 帳號註冊 (Registration)
 
 - **起點**：使用者在 `register.html` 填寫註冊表單。
-- **輸入資料**：`username`, `email`, `password`，以及一個可選的「我是賣家 (IsDeveloper)」勾選框。
+- **輸入資料**：`username`, `email`, `password`，以及一個可選的「我是賣家 (IsSeller)」勾選框。
 - **流程與後端驗證 (`POST /api/auth/register`)**：
   1. **基礎驗證**：後端檢查密碼長度必須 `>= 6`，且 Email 必須包含 `@`。
   2. **密碼加密**：使用 Bcrypt 將密碼雜湊化後存入資料庫。
   3. **角色分派 (Role Assignment)**：
-     - 若 `is_developer` 為 `true`，賦予 `DEVELOPER` 角色。
+     - 若 `is_seller` 為 `true`，賦予 `SELLER` 角色。
      - 若為 `false`，賦予 `USERS` 角色。
   4. **預設狀態**：帳號建立時，系統預設將 `Status` 設為 `OFFLINE`，`Permission` 設為 `ACTIVE`。
   5. **資料庫寫入**：寫入 `users` 表。若 `username` 或 `email` 已被占用，會由 GORM 的 Unique 限制擋下並回傳錯誤。

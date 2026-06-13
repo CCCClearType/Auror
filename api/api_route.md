@@ -9,9 +9,9 @@
 | :--- | :--- | :---: |
 | `[POST] /api/auth/register` | `auth.POST("/register")` | ✅ |
 | `[POST] /api/auth/login` | `auth.POST("/login")` | ✅ |
-| `[GET] /api/games` | `api.GET("/games")` | ✅ |
-| `[GET] /api/games/{id}` | `api.GET("/games/:id")` | ✅ |
-| `[GET] /api/games/{id}/reviews` | `api.GET("/games/:id/reviews")` | ✅ |
+| `[GET] /api/notes` | `api.GET("/notes")` | ✅ |
+| `[GET] /api/notes/{id}` | `api.GET("/notes/:id")` | ✅ |
+| `[GET] /api/notes/{id}/reviews` | `api.GET("/notes/:id/reviews")` | ✅ |
 | `[GET] /api/tags` | `api.GET("/tags")` | ✅ |
 
 ### 2. 一般登入保護 (Protected Routes) - 僅需 JWT
@@ -22,17 +22,17 @@
 | `[PUT] /api/users/profile` | `users.PUT("/profile")` | ✅ |
 | `[GET] /api/protected/cart` | `protected.GET("/cart")` | ✅ |
 | `[POST] /api/protected/cart` | `protected.POST("/cart")` | ✅ |
-| `[DELETE] /api/protected/cart/{id}` | `protected.DELETE("/cart/:game_id")` | ✅ |
+| `[DELETE] /api/protected/cart/{id}` | `protected.DELETE("/cart/:note_id")` | ✅ |
 | `[POST] /api/protected/checkout` | `protected.POST("/checkout")` | ✅ |
 | `[GET] /api/protected/transactions` | `protected.GET("/transactions")` | ✅ |
 | `[GET] /api/protected/refunds` | `protected.GET("/refunds")` | ✅ |
 | `[GET] /api/protected/library` | `protected.GET("/library")` | ✅ |
 | `[GET] /api/protected/wishlist` | `protected.GET("/wishlist")` | ✅ |
 | `[POST] /api/protected/wishlist` | `protected.POST("/wishlist")` | ✅ |
-| `[DELETE] /api/protected/wishlist/{id}` | `protected.DELETE("/wishlist/:game_id")` | ✅ |
-| `[GET] /api/protected/library/.../play` | `protected.GET("/library/:game_id/play")` | ✅ |
-| `[GET] /api/protected/library/.../download` | `protected.GET("/library/:game_id/download")` | ✅ |
-| `[POST] /api/social/.../reviews` | `social.POST("/games/:id/reviews")` | ✅ |
+| `[DELETE] /api/protected/wishlist/{id}` | `protected.DELETE("/wishlist/:note_id")` | ✅ |
+| `[GET] /api/protected/library/.../play` | `protected.GET("/library/:note_id/play")` | ✅ |
+| `[GET] /api/protected/library/.../download` | `protected.GET("/library/:note_id/download")` | ✅ |
+| `[POST] /api/social/.../reviews` | `social.POST("/notes/:id/reviews")` | ✅ |
 | `[POST] /api/social/.../replies` | `social.POST("/reviews/:review_id/replies")` | ✅ |
 | `[DELETE] /api/social/.../replies/{id}`| `social.DELETE("/reviews/replies/:reply_id")` | ✅ |
 | `[POST] /api/social/refunds` | `social.POST("/refunds")` | ✅ |
@@ -48,20 +48,20 @@
 | `[POST] /api/social/messages` | `social.POST("/messages")` | ✅ |
 | `[GET] /api/social/messages/{user_id}` | `social.GET("/messages/:user_id")` | ✅ |
 
-### 3. 賣家路由 (Developer Routes) - 需 DEVELOPER 權限
+### 3. 賣家路由 (Seller Routes) - 需 SELLER 權限
 | API 規格 | `routes.go` 註冊狀態 | 驗證 |
 | :--- | :--- | :---: |
-| `[GET] /api/developer/games` | `developer.GET("/games")` | ✅ |
-| `[POST] /api/developer/games` | `developer.POST("/games")` | ✅ |
-| `[PUT] /api/developer/games/{id}/publish` | `developer.PUT("/games/:id/publish")` | ✅ |
-| `[PUT] /api/developer/games/{id}` | `developer.PUT("/games/:id")` | ✅ |
-| `[DELETE] /api/developer/games/{id}` | `developer.DELETE("/games/:id")` | ✅ |
-| `[POST] /api/developer/games/{id}/media` | `developer.POST("/games/:id/media")` | ✅ |
-| `[DELETE] /api/developer/.../media/{id}` | `developer.DELETE("/games/:id/media/:media_id")` | ✅ |
-| `[GET] /api/developer/games/{id}/stats` | `developer.GET("/games/:id/stats")` | ✅ |
-| `[POST] /api/developer/tags` | `developer.POST("/tags")` | ✅ |
-| `[POST] /api/developer/games/{id}/tags` | `developer.POST("/games/:id/tags")` | ✅ |
-| `[DELETE] /api/developer/.../tags/{id}` | `developer.DELETE("/games/:id/tags/:tag_id")` | ✅ |
+| `[GET] /api/seller/notes` | `seller.GET("/notes")` | ✅ |
+| `[POST] /api/seller/notes` | `seller.POST("/notes")` | ✅ |
+| `[PUT] /api/seller/notes/{id}/publish` | `seller.PUT("/notes/:id/publish")` | ✅ |
+| `[PUT] /api/seller/notes/{id}` | `seller.PUT("/notes/:id")` | ✅ |
+| `[DELETE] /api/seller/notes/{id}` | `seller.DELETE("/notes/:id")` | ✅ |
+| `[POST] /api/seller/notes/{id}/media` | `seller.POST("/notes/:id/media")` | ✅ |
+| `[DELETE] /api/seller/.../media/{id}` | `seller.DELETE("/notes/:id/media/:media_id")` | ✅ |
+| `[GET] /api/seller/notes/{id}/stats` | `seller.GET("/notes/:id/stats")` | ✅ |
+| `[POST] /api/seller/tags` | `seller.POST("/tags")` | ✅ |
+| `[POST] /api/seller/notes/{id}/tags` | `seller.POST("/notes/:id/tags")` | ✅ |
+| `[DELETE] /api/seller/.../tags/{id}` | `seller.DELETE("/notes/:id/tags/:tag_id")` | ✅ |
 
 ### 4. 管理員與客服路由 (Admin & CSR Routes)
 | API 規格 | `routes.go` 註冊狀態 | 驗證 |
@@ -70,12 +70,12 @@
 | `[PUT] /api/admin/users/{id}/suspend` | `admin.PUT("/users/:id/suspend")` | ✅ |
 | `[DELETE] /api/admin/users/{id}` | `admin.DELETE("/users/:id")` | ✅ |
 | `[PUT] /api/admin/users/{id}/role` | `admin.PUT("/users/:id/role")` | ✅ |
-| `[DELETE] /api/admin/games/{id}` | `admin.DELETE("/games/:id")` | ✅ |
+| `[DELETE] /api/admin/notes/{id}` | `admin.DELETE("/notes/:id")` | ✅ |
 | `[GET] /api/csr/refunds` | `csr.GET("/refunds")` | ✅ |
 | `[PUT] /api/csr/refunds/{id}` | `csr.PUT("/refunds/:id")` | ✅ |
 
 ---
 > [!NOTE]
 > **補充說明**
-> 1. API 文件中的路徑參數採用標準的 `{id}` 寫法，在 Go/Gin 框架中實作為 `:id`（如 `:game_id` 或 `:user_id`），此為框架約定俗成的語法對應，邏輯上等同於文件描述。
-> 2. `auth`, `admin`, `csr`, `developer`, `protected`, `social` 各大 Router Group 皆已正確綁定對應的 `RequireRole()` 或 `RequireAuth()` 中介軟體防護。
+> 1. API 文件中的路徑參數採用標準的 `{id}` 寫法，在 Go/Gin 框架中實作為 `:id`（如 `:note_id` 或 `:user_id`），此為框架約定俗成的語法對應，邏輯上等同於文件描述。
+> 2. `auth`, `admin`, `csr`, `seller`, `protected`, `social` 各大 Router Group 皆已正確綁定對應的 `RequireRole()` 或 `RequireAuth()` 中介軟體防護。

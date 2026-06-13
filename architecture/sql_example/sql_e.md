@@ -5,12 +5,12 @@
 ---
 
 ### 1. 筆記評分統計 (使用 COUNT, AVG 與 CASE WHEN)
-- **說明**：當買家新增或刪除筆記評論時，系統會動態觸發此查詢，針對該款筆記的所有可見評論 (`VISIBLE`) 進行統計。利用 `COUNT` 算出總評論數，再利用 `AVG` 搭配 `CASE WHEN` 將正負評轉換為具體的 0.0 ~ 5.0 平均分數，最後將這個分數存回 `games.overall_rating`。
-- **對應功能**：新增/刪除評論時觸發的重算邏輯 (內部呼叫 `refreshStoredGameRating`)
+- **說明**：當買家新增或刪除筆記評論時，系統會動態觸發此查詢，針對該款筆記的所有可見評論 (`VISIBLE`) 進行統計。利用 `COUNT` 算出總評論數，再利用 `AVG` 搭配 `CASE WHEN` 將正負評轉換為具體的 0.0 ~ 5.0 平均分數，最後將這個分數存回 `notes.overall_rating`。
+- **對應功能**：新增/刪除評論時觸發的重算邏輯 (內部呼叫 `refreshStoredNoteRating`)
 - **Go 實作 (GORM)**：
   ```go
   database.DB.Model(&models.Review{}).
-      Where("game_id = ? AND status = 'VISIBLE'", gameID).
+      Where("note_id = ? AND status = 'VISIBLE'", noteID).
       Select("COUNT(*) as total_reviews, COALESCE(AVG(CASE WHEN attitude = 'POSITIVE' THEN 5.0 ELSE 1.0 END), 0) as average_rating").
       Row().Scan(&totalReviews, &averageRating)
   ```
@@ -20,53 +20,53 @@
     COUNT(*) as total_reviews, 
     COALESCE(AVG(CASE WHEN attitude = 'POSITIVE' THEN 5.0 ELSE 1.0 END), 0) as average_rating 
   FROM reviews 
-  WHERE game_id = 42 AND status = 'VISIBLE';
+  WHERE note_id = 42 AND status = 'VISIBLE';
   ```
 
 ### 2. 商店首頁的分群與自訂排序 (使用 GROUP BY 與 ORDER BY)
-- **說明**：在商店查詢時，為了避免因為 JOIN 多個科目導致同一款筆記重複出現，必須使用 `GROUP BY games.game_id` 將結果合併。同時也利用 `ORDER BY` 實現依照價格由高至低或發售日期排列的功能。
-- **對應 API**：`GET /api/games?sort={sort_type}`
+- **說明**：在商店查詢時，為了避免因為 JOIN 多個科目導致同一款筆記重複出現，必須使用 `GROUP BY notes.note_id` 將結果合併。同時也利用 `ORDER BY` 實現依照價格由高至低或發售日期排列的功能。
+- **對應 API**：`GET /api/notes?sort={sort_type}`
 - **Go 實作 (GORM)**：
   ```go
-  query = query.Group("games.game_id")
+  query = query.Group("notes.note_id")
   if sort == "price_desc" {
-      query = query.Order("games.price DESC")
+      query = query.Order("notes.price DESC")
   } else {
-      query = query.Order("games.release_date DESC")
+      query = query.Order("notes.release_date DESC")
   }
   ```
 - **原生 SQL 語法**：
   ```sql
-  SELECT games.* FROM games 
-  LEFT JOIN game_tags ON game_tags.game_id = games.game_id
-  WHERE games.status = 'ACTIVE' 
-  GROUP BY games.game_id
-  ORDER BY games.price DESC;
+  SELECT notes.* FROM notes 
+  LEFT JOIN note_tags ON note_tags.note_id = notes.note_id
+  WHERE notes.status = 'ACTIVE' 
+  GROUP BY notes.note_id
+  ORDER BY notes.price DESC;
   ```
 
 ### 3. 結帳前的購物車商品清單校驗 (使用 IN)
-- **說明**：當買家按下結帳按鈕，系統會將購物車內的多個 `game_id` 集合成一個陣列，並使用 `IN` 語法一次性向資料庫拉出所有筆記最新的價格與狀態，以防在結帳瞬間有筆記被下架或改價。
+- **說明**：當買家按下結帳按鈕，系統會將購物車內的多個 `note_id` 集合成一個陣列，並使用 `IN` 語法一次性向資料庫拉出所有筆記最新的價格與狀態，以防在結帳瞬間有筆記被下架或改價。
 - **對應 API**：`POST /api/shopping/checkout`
 - **Go 實作 (GORM)**：
   ```go
-  var games []models.Game
-  database.DB.Where("game_id IN ?", gameIDs).Find(&games)
+  var notes []models.Note
+  database.DB.Where("note_id IN ?", noteIDs).Find(&notes)
   ```
 - **原生 SQL 語法**：
   ```sql
-  SELECT * FROM games 
-  WHERE game_id IN (14, 25, 42, 58);
+  SELECT * FROM notes 
+  WHERE note_id IN (14, 25, 42, 58);
   ```
 
 ### 4. 賣家總銷售額與銷量統計 (使用 SUM, COUNT)
 - **說明**：賣家在查看某款筆記的統計數據時，系統會 JOIN 交易明細表，並利用聚合函數 `SUM` 計算總營業額、`COUNT` 統計總共賣出的套數。
-- **對應 API**：`GET /api/developer/games/:id/stats`
+- **對應 API**：`GET /api/seller/notes/:id/stats`
 - **Go 實作 (GORM)**：
   ```go
   database.DB.Table("transaction_items ti").
       Select("COUNT(ti.item_id) as total_sales_count, COALESCE(SUM(ti.purchase_price), 0) as total_revenue").
-      Joins("JOIN games g ON ti.game_id = g.game_id").
-      Where("g.developer_id = ? AND g.game_id = ?", developerID, gameID).
+      Joins("JOIN notes g ON ti.note_id = g.note_id").
+      Where("g.seller_id = ? AND g.note_id = ?", sellerID, noteID).
       Row().Scan(&stats.TotalSalesCount, &stats.TotalRevenue)
   ```
 - **原生 SQL 語法**：
@@ -75,8 +75,8 @@
     COUNT(ti.item_id) as total_sales_count,
     COALESCE(SUM(ti.purchase_price), 0) as total_revenue
   FROM transaction_items ti
-  JOIN games g ON ti.game_id = g.game_id
-  WHERE g.developer_id = 5 AND g.game_id = 42;
+  JOIN notes g ON ti.note_id = g.note_id
+  WHERE g.seller_id = 5 AND g.note_id = 42;
   ```
 
 ### 5. 後台使用者列表排序 (ORDER BY)

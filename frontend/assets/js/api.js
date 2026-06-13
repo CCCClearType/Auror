@@ -64,11 +64,11 @@ async function apiLogin(email, password) {
 }
 
 // POST /api/auth/register
-async function apiRegister(username, email, password, isDeveloper = false) {
+async function apiRegister(username, email, password, isSeller = false) {
     const res = await fetch(`${API_BASE}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password, is_developer: isDeveloper })
+        body: JSON.stringify({ username, email, password, is_seller: isSeller })
     });
     return parseResponse(res);
 }
@@ -96,11 +96,11 @@ async function apiUpdateProfile(data) {
 }
 
 // ============================================================
-// 2. 商店與筆記 (Games)
+// 2. 商店與筆記 (Notes)
 // ============================================================
 
-// GET /api/games?q=keyword&tag=tag&developer=name&min_price=0&max_price=1000&sort=popular
-async function apiGetGames(query = '') {
+// GET /api/notes?q=keyword&tag=tag&seller=name&min_price=0&max_price=1000&sort=popular
+async function apiGetNotes(query = '') {
     const params = new URLSearchParams();
     if (typeof query === 'string') {
         if (query) params.set('q', query);
@@ -112,7 +112,7 @@ async function apiGetGames(query = '') {
         });
     }
     const qs = params.toString();
-    const url = qs ? `/api/games?${qs}` : '/api/games';
+    const url = qs ? `/api/notes?${qs}` : '/api/notes';
     const options = {};
     const token = localStorage.getItem('token');
     if (token && params.get('hide_owned') === 'true') {
@@ -127,21 +127,21 @@ async function apiGetTags() {
     return parseResponse(res);
 }
 
-// GET /api/games/{id}
-async function apiGetGame(id) {
-    const res = await fetch(`${API_BASE}/api/games/${id}`);
+// GET /api/notes/{id}
+async function apiGetNote(id) {
+    const res = await fetch(`${API_BASE}/api/notes/${id}`);
     return parseResponse(res);
 }
 
-// GET /api/games/{id}/reviews  (透過 game detail 一起取得或單獨端點)
-async function apiGetReviews(gameId) {
-    const res = await fetch(`${API_BASE}/api/games/${gameId}/reviews`);
+// GET /api/notes/{id}/reviews  (透過 note detail 一起取得或單獨端點)
+async function apiGetReviews(noteId) {
+    const res = await fetch(`${API_BASE}/api/notes/${noteId}/reviews`);
     return parseResponse(res);
 }
 
-// POST /api/social/games/{id}/reviews
-async function apiPostReview(gameId, attitude, content, postAsRole = 'USERS') {
-    const res = await authFetch(`/api/social/games/${gameId}/reviews`, {
+// POST /api/social/notes/{id}/reviews
+async function apiPostReview(noteId, attitude, content, postAsRole = 'USERS') {
+    const res = await authFetch(`/api/social/notes/${noteId}/reviews`, {
         method: 'POST',
         body: JSON.stringify({ attitude: attitude.toUpperCase(), content, post_as_role: postAsRole })
     });
@@ -157,22 +157,22 @@ async function apiPostReply(reviewId, content, postAsRole = 'USERS') {
     return parseResponse(res);
 }
 
-// POST /api/developer/games  [DEVELOPER]
-async function apiGetDeveloperGames() {
-    const res = await authFetch('/api/developer/games');
+// POST /api/seller/notes  [SELLER]
+async function apiGetSellerNotes() {
+    const res = await authFetch('/api/seller/notes');
     return parseResponse(res);
 }
 
-async function apiCreateGame(title, price, desc) {
-    const res = await authFetch('/api/developer/games', {
+async function apiCreateNote(title, price, desc) {
+    const res = await authFetch('/api/seller/notes', {
         method: 'POST',
         body: JSON.stringify({ title, price, desc })
     });
     return parseResponse(res);
 }
 
-async function apiUpdateGame(id, price, desc) {
-    const res = await authFetch(`/api/developer/games/${id}`, {
+async function apiUpdateNote(id, price, desc) {
+    const res = await authFetch(`/api/seller/notes/${id}`, {
         method: 'PUT',
         body: JSON.stringify({ price, desc })
     });
@@ -180,41 +180,41 @@ async function apiUpdateGame(id, price, desc) {
 }
 
 async function apiCreateTag(tagName) {
-    const res = await authFetch('/api/developer/tags', {
+    const res = await authFetch('/api/seller/tags', {
         method: 'POST',
         body: JSON.stringify({ tag_name: tagName })
     });
     return parseResponse(res);
 }
 
-async function apiAddTagToGame(gameId, tagId) {
-    const res = await authFetch(`/api/developer/games/${gameId}/tags`, {
+async function apiAddTagToNote(noteId, tagId) {
+    const res = await authFetch(`/api/seller/notes/${noteId}/tags`, {
         method: 'POST',
         body: JSON.stringify({ tag_id: tagId })
     });
     return parseResponse(res);
 }
 
-async function apiRemoveTagFromGame(gameId, tagId) {
-    const res = await authFetch(`/api/developer/games/${gameId}/tags/${tagId}`, { method: 'DELETE' });
+async function apiRemoveTagFromNote(noteId, tagId) {
+    const res = await authFetch(`/api/seller/notes/${noteId}/tags/${tagId}`, { method: 'DELETE' });
     return parseResponse(res);
 }
 
-// DELETE /api/developer/games/{id}  [DEVELOPER]
-async function apiDeleteGame(id) {
-    const res = await authFetch(`/api/developer/games/${id}`, { method: 'DELETE' });
+// DELETE /api/seller/notes/{id}  [SELLER]
+async function apiDeleteNote(id) {
+    const res = await authFetch(`/api/seller/notes/${id}`, { method: 'DELETE' });
     return parseResponse(res);
 }
 
-// DELETE /api/admin/games/{id} [ADMIN]
-async function apiAdminDeleteGame(id) {
-    const res = await authFetch(`/api/admin/games/${id}`, { method: 'DELETE' });
+// DELETE /api/admin/notes/{id} [ADMIN]
+async function apiAdminDeleteNote(id) {
+    const res = await authFetch(`/api/admin/notes/${id}`, { method: 'DELETE' });
     return parseResponse(res);
 }
 
-// GET /api/developer/games/{id}/stats  [DEVELOPER]
-async function apiGetGameStats(id) {
-    const res = await authFetch(`/api/developer/games/${id}/stats`);
+// GET /api/seller/notes/{id}/stats  [SELLER]
+async function apiGetNoteStats(id) {
+    const res = await authFetch(`/api/seller/notes/${id}/stats`);
     const result = await parseResponse(res);
     return result.stats || result;
 }
@@ -229,18 +229,18 @@ async function apiGetCart() {
     return parseResponse(res);
 }
 
-// POST /api/protected/cart  { game_id }
-async function apiAddToCart(gameId) {
+// POST /api/protected/cart  { note_id }
+async function apiAddToCart(noteId) {
     const res = await authFetch('/api/protected/cart', {
         method: 'POST',
-        body: JSON.stringify({ game_id: gameId })
+        body: JSON.stringify({ note_id: noteId })
     });
     return parseResponse(res);
 }
 
-// DELETE /api/protected/cart/{game_id}
-async function apiRemoveFromCart(gameId) {
-    const res = await authFetch(`/api/protected/cart/${gameId}`, { method: 'DELETE' });
+// DELETE /api/protected/cart/{note_id}
+async function apiRemoveFromCart(noteId) {
+    const res = await authFetch(`/api/protected/cart/${noteId}`, { method: 'DELETE' });
     return parseResponse(res);
 }
 
@@ -306,18 +306,18 @@ async function apiGetWishlist() {
     return parseResponse(res);
 }
 
-// POST /api/protected/wishlist  { game_id }
-async function apiAddWishlist(gameId) {
+// POST /api/protected/wishlist  { note_id }
+async function apiAddWishlist(noteId) {
     const res = await authFetch('/api/protected/wishlist', {
         method: 'POST',
-        body: JSON.stringify({ game_id: gameId })
+        body: JSON.stringify({ note_id: noteId })
     });
     return parseResponse(res);
 }
 
-// DELETE /api/protected/wishlist/{game_id}
-async function apiRemoveWishlist(gameId) {
-    const res = await authFetch(`/api/protected/wishlist/${gameId}`, { method: 'DELETE' });
+// DELETE /api/protected/wishlist/{note_id}
+async function apiRemoveWishlist(noteId) {
+    const res = await authFetch(`/api/protected/wishlist/${noteId}`, { method: 'DELETE' });
     return parseResponse(res);
 }
 

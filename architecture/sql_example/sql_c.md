@@ -5,83 +5,83 @@
 ---
 
 ### 1. 透過特定科目搜尋筆記 (多對多關聯)
-- **說明**：買家點擊某個科目 (例如 RPG) 來找筆記時，由於這是一個多對多關係，必須先從 `games` 表 JOIN 中介表 `game_tags`，再 JOIN 科目主檔 `tags` 來做名稱比對。
-- **對應 API**：`GET /api/games?tag={name}`
+- **說明**：買家點擊某個科目 (例如 RPG) 來找筆記時，由於這是一個多對多關係，必須先從 `notes` 表 JOIN 中介表 `note_tags`，再 JOIN 科目主檔 `tags` 來做名稱比對。
+- **對應 API**：`GET /api/notes?tag={name}`
 - **Go 實作 (GORM)**：
   ```go
   query = query.
-      Joins("JOIN game_tags filter_game_tags ON filter_game_tags.game_id = games.game_id").
-      Joins("JOIN tags filter_tags ON filter_tags.tag_id = filter_game_tags.tag_id").
+      Joins("JOIN note_tags filter_note_tags ON filter_note_tags.note_id = notes.note_id").
+      Joins("JOIN tags filter_tags ON filter_tags.tag_id = filter_note_tags.tag_id").
       Where("filter_tags.tag_name ILIKE ?", tag)
   ```
 - **原生 SQL 語法 (連續 INNER JOIN)**：
   ```sql
-  SELECT games.* 
-  FROM games
-  JOIN game_tags ON game_tags.game_id = games.game_id
-  JOIN tags ON tags.tag_id = game_tags.tag_id
-  WHERE games.status = 'ACTIVE' 
+  SELECT notes.* 
+  FROM notes
+  JOIN note_tags ON note_tags.note_id = notes.note_id
+  JOIN tags ON tags.tag_id = note_tags.tag_id
+  WHERE notes.status = 'ACTIVE' 
     AND tags.tag_name ILIKE 'RPG';
   ```
 
 ### 2. 查詢買家的筆記庫並包含筆記封面圖
-- **說明**：買家的筆記庫紀錄了買過的筆記 (`game_licenses`)。為了在前端渲染出筆記圖示，必須先串接 `games` 主檔，再串接 `game_media` 取出附屬的圖片，總共橫跨三個表。
+- **說明**：買家的筆記庫紀錄了買過的筆記 (`note_licenses`)。為了在前端渲染出筆記圖示，必須先串接 `notes` 主檔，再串接 `note_media` 取出附屬的圖片，總共橫跨三個表。
 - **對應 API**：`GET /api/protected/library`
 - **Go 實作 (GORM)**：
   ```go
-  var licenses []models.GameLicense
-  database.DB.Preload("Game.Media").Where("user_id = ? AND status = 'ACTIVE'", userID).Find(&licenses)
+  var licenses []models.NoteLicense
+  database.DB.Preload("Note.Media").Where("user_id = ? AND status = 'ACTIVE'", userID).Find(&licenses)
   ```
 - **原生 SQL 語法 (JOIN + LEFT JOIN 等效邏輯)**：
   ```sql
-  SELECT game_licenses.license_id, games.title, game_media.file_url 
-  FROM game_licenses 
-  JOIN games ON game_licenses.game_id = games.game_id 
-  LEFT JOIN game_media ON games.game_id = game_media.game_id 
-  WHERE game_licenses.user_id = 5 
-    AND game_licenses.status = 'ACTIVE';
+  SELECT note_licenses.license_id, notes.title, note_media.file_url 
+  FROM note_licenses 
+  JOIN notes ON note_licenses.note_id = notes.note_id 
+  LEFT JOIN note_media ON notes.note_id = note_media.note_id 
+  WHERE note_licenses.user_id = 5 
+    AND note_licenses.status = 'ACTIVE';
   ```
 
 ### 3. 查詢歷史訂單明細與對應的筆記名稱
-- **說明**：這是標準的電商一對多對一三表關聯。從主訂單表 (`transactions`) 關聯出底下的購物明細項目 (`transaction_items`)，再關聯到筆記檔案 (`games`) 來顯示買家到底買了哪些筆記。
+- **說明**：這是標準的電商一對多對一三表關聯。從主訂單表 (`transactions`) 關聯出底下的購物明細項目 (`transaction_items`)，再關聯到筆記檔案 (`notes`) 來顯示買家到底買了哪些筆記。
 - **對應 API**：`GET /api/protected/transactions`
 - **Go 實作 (GORM)**：
   ```go
   var transactions []models.Transaction
-  database.DB.Preload("Items.Game").Where("user_id = ?", userID).Order("created_at DESC").Find(&transactions)
+  database.DB.Preload("Items.Note").Where("user_id = ?", userID).Order("created_at DESC").Find(&transactions)
   ```
 - **原生 SQL 語法 (連續 JOIN 等效邏輯)**：
   ```sql
   SELECT transactions.transaction_id, transactions.created_at, 
-         transaction_items.purchase_price, games.title
+         transaction_items.purchase_price, notes.title
   FROM transactions
   JOIN transaction_items ON transactions.transaction_id = transaction_items.transaction_id
-  JOIN games ON transaction_items.game_id = games.game_id
+  JOIN notes ON transaction_items.note_id = notes.note_id
   WHERE transactions.user_id = 5
   ORDER BY transactions.created_at DESC;
   ```
 
 ### 4. 下載筆記檔案前之授權與實體檔案驗證
-- **說明**：當買家點擊下載筆記時，系統必須橫跨三個表進行確認：1) 買家真的擁有這款筆記 (`game_licenses`)，2) 該筆記沒被硬刪除 (`games`)，3) 該筆記有上傳對應的實體安裝檔 (`game_media`) 供下載。
-- **對應 API**：`GET /api/protected/library/:game_id/download`
+- **說明**：當買家點擊下載筆記時，系統必須橫跨三個表進行確認：1) 買家真的擁有這款筆記 (`note_licenses`)，2) 該筆記沒被硬刪除 (`notes`)，3) 該筆記有上傳對應的實體安裝檔 (`note_media`) 供下載。
+- **對應 API**：`GET /api/protected/library/:note_id/download`
 - **Go 實作 (GORM)**：
   ```go
-  var license models.GameLicense
-  // 驗證授權 (Table 1: game_licenses, Table 2: games)
-  database.DB.Joins("Game").Where("user_id = ? AND game_licenses.game_id = ? AND game_licenses.status = 'ACTIVE'", userID, gameID).First(&license)
+  var license models.NoteLicense
+  // 驗證授權 (Table 1: note_licenses, Table 2: notes)
+  database.DB.Joins("Note").Where("user_id = ? AND note_licenses.note_id = ? AND note_licenses.status = 'ACTIVE'", userID, noteID).First(&license)
 
-  var media models.GameMedia
-  // 尋找實體檔案 (Table 3: game_media)
-  database.DB.Where("game_id = ? AND media_type = 'GAME_FILE'", gameID).First(&media)
+  var media models.NoteMedia
+  // 尋找實體檔案 (Table 3: note_media)
+  database.DB.Where("note_id = ? AND media_type = 'NOTE_FILE'", noteID).First(&media)
   ```
 - **原生 SQL 語法 (邏輯上等同三表驗證 JOIN)**：
   ```sql
-  SELECT game_licenses.license_id, games.game_id, game_media.file_url 
-  FROM game_licenses
-  JOIN games ON game_licenses.game_id = games.game_id
-  JOIN game_media ON games.game_id = game_media.game_id
-  WHERE game_licenses.user_id = 5 
-    AND game_licenses.game_id = 42 
-    AND game_licenses.status = 'ACTIVE'
-    AND game_media.media_type = 'GAME_FILE';
+  SELECT note_licenses.license_id, notes.note_id, note_media.file_url 
+  FROM note_licenses
+  JOIN notes ON note_licenses.note_id = notes.note_id
+  JOIN note_media ON notes.note_id = note_media.note_id
+  WHERE note_licenses.user_id = 5 
+    AND note_licenses.note_id = 42 
+    AND note_licenses.status = 'ACTIVE'
+    AND note_media.media_type = 'NOTE_FILE';
   ```

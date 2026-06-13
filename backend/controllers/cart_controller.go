@@ -9,7 +9,7 @@ import (
 )
 
 type AddCartInput struct {
-	GameID uint `json:"game_id" binding:"required"`
+	NoteID uint `json:"note_id" binding:"required"`
 }
 
 // GetCart handles GET /api/protected/cart
@@ -17,9 +17,9 @@ func GetCart(c *gin.Context) {
 	// 1. Get user_id from the AuthMiddleware
 	userID, _ := c.Get("user_id")
 
-	// 2. Fetch all cart items for this user, and Preload the "Game" details
+	// 2. Fetch all cart items for this user, and Preload the "Note" details
 	var cartItems []models.ShoppingCart
-	if err := database.DB.Preload("Game").Preload("Game.Media").Where("user_id = ?", userID).Find(&cartItems).Error; err != nil {
+	if err := database.DB.Preload("Note").Preload("Note.Media").Where("user_id = ?", userID).Find(&cartItems).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch cart"})
 		return
 	}
@@ -38,35 +38,35 @@ func AddToCart(c *gin.Context) {
 		return
 	}
 
-	// 1. Check if game already in cart
+	// 1. Check if note already in cart
 	var existing models.ShoppingCart
-	if err := database.DB.Where("user_id = ? AND game_id = ?", userID, input.GameID).First(&existing).Error; err == nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Game already in cart"})
+	if err := database.DB.Where("user_id = ? AND note_id = ?", userID, input.NoteID).First(&existing).Error; err == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Note already in cart"})
 		return
 	}
 
-	// 1.5 Check if the user already OWNS the game (has an ACTIVE license)
-	var license models.GameLicense
-	if err := database.DB.Where("user_id = ? AND game_id = ? AND status = ?", userID, input.GameID, "ACTIVE").First(&license).Error; err == nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "You already own this game"})
+	// 1.5 Check if the user already OWNS the note (has an ACTIVE license)
+	var license models.NoteLicense
+	if err := database.DB.Where("user_id = ? AND note_id = ? AND status = ?", userID, input.NoteID, "ACTIVE").First(&license).Error; err == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "You already own this note"})
 		return
 	}
 
-	// 1.8 Check if the game is TAKEN_DOWN
-	var game models.Game
-	if err := database.DB.First(&game, input.GameID).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Game not found"})
+	// 1.8 Check if the note is TAKEN_DOWN
+	var note models.Note
+	if err := database.DB.First(&note, input.NoteID).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Note not found"})
 		return
 	}
-	if game.Status != "ACTIVE" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "This game is not available for purchase"})
+	if note.Status != "ACTIVE" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "This note is not available for purchase"})
 		return
 	}
 
 	// 2. Add to cart
 	cartItem := models.ShoppingCart{
 		UserID: userID,
-		GameID: input.GameID,
+		NoteID: input.NoteID,
 	}
 
 	if err := database.DB.Create(&cartItem).Error; err != nil {
@@ -74,19 +74,19 @@ func AddToCart(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Game added to cart successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "Note added to cart successfully"})
 }
 
-// RemoveFromCart handles DELETE /api/protected/cart/:game_id
+// RemoveFromCart handles DELETE /api/protected/cart/:note_id
 func RemoveFromCart(c *gin.Context) {
 	userIDFloat, _ := c.Get("user_id")
 	userID := uint(userIDFloat.(float64))
-	gameID := c.Param("game_id")
+	noteID := c.Param("note_id")
 
-	if err := database.DB.Where("user_id = ? AND game_id = ?", userID, gameID).Delete(&models.ShoppingCart{}).Error; err != nil {
+	if err := database.DB.Where("user_id = ? AND note_id = ?", userID, noteID).Delete(&models.ShoppingCart{}).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to remove from cart"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Game removed from cart"})
+	c.JSON(http.StatusOK, gin.H{"message": "Note removed from cart"})
 }

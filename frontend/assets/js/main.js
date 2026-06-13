@@ -63,8 +63,8 @@ function renderHeader() {
             <a class="navbar-item" href="/pages/user/library">筆記庫</a>
             <a class="navbar-item" href="/pages/user/social">社群</a>
         `;
-        if (currentRole === 'DEVELOPER') {
-            navItems += `<a class="navbar-item has-text-warning" href="/pages/dashboard/dev_dashboard">賣家中心</a>`;
+        if (currentRole === 'SELLER') {
+            navItems += `<a class="navbar-item has-text-warning" href="/pages/dashboard/seller_dashboard">賣家中心</a>`;
         } else if (currentRole === 'CSR') {
             navItems += `<a class="navbar-item has-text-info" href="/pages/dashboard/csr_dashboard">客服中心</a>`;
         } else if (currentRole === 'ADMIN') {
@@ -136,23 +136,23 @@ function renderHeader() {
 // ============================================================
 // 渲染筆記卡片列表
 // ============================================================
-function renderGames(games) {
-    const container = document.getElementById('game-list');
+function renderNotes(notes) {
+    const container = document.getElementById('note-list');
     if (!container) return;
 
-    if (!games) {
+    if (!notes) {
         // Skeleton Loading 骨架屏狀態
         container.innerHTML = '';
         for (let i = 0; i < 4; i++) {
             const skeleton = document.createElement('div');
-            skeleton.className = 'game-list-card card';
+            skeleton.className = 'note-list-card card';
             skeleton.innerHTML = `
-                <div class="game-thumbnail skeleton"></div>
-                <div class="game-list-info">
+                <div class="note-thumbnail skeleton"></div>
+                <div class="note-list-info">
                     <div class="skeleton skeleton-title"></div>
                     <div class="skeleton skeleton-text"></div>
                     <div class="skeleton skeleton-text" style="width: 80%;"></div>
-                    <div class="game-list-tags" style="margin-top: 10px;">
+                    <div class="note-list-tags" style="margin-top: 10px;">
                         <span class="tag skeleton" style="width: 40px; height: 16px;"></span>
                         <span class="tag skeleton" style="width: 50px; height: 16px;"></span>
                     </div>
@@ -163,7 +163,7 @@ function renderGames(games) {
         return;
     }
 
-    if (games.length === 0) {
+    if (notes.length === 0) {
         container.innerHTML = `
             <div class="empty-state">
                 <p>找不到符合條件的筆記</p>
@@ -173,39 +173,39 @@ function renderGames(games) {
     }
 
     container.innerHTML = '';
-    games.forEach(game => {
+    notes.forEach(note => {
         const card = document.createElement('div');
-        card.className = 'game-list-card card';
+        card.className = 'note-list-card card';
 
-        const tagsHtml = (game.tags || []).map(t => {
+        const tagsHtml = (note.tags || []).map(t => {
             const tagName = typeof t === 'string' ? t : (t.tag_name || t.name || t);
             return `<span class="tag is-rounded">${escapeHtml(String(tagName))}</span>`;
         }).join('');
-        const priceHtml = game.price === 0
-            ? `<span class="game-list-price free">免費</span>`
-            : `<span class="game-list-price">NT$ ${game.price.toLocaleString()}</span>`;
+        const priceHtml = note.price === 0
+            ? `<span class="note-list-price free">免費</span>`
+            : `<span class="note-list-price">NT$ ${note.price.toLocaleString()}</span>`;
 
-        let coverHtml = `<span style="font-size:13px;color:#8f98a0;">[${escapeHtml(game.title)} 封面]</span>`;
-        if (game.media && game.media.length > 0) {
-            const thumb = game.media.find(m => m.media_type === 'thumbnail') || game.media.find(m => m.media_type === 'media');
+        let coverHtml = `<span style="font-size:13px;color:#8f98a0;">[${escapeHtml(note.title)} 封面]</span>`;
+        if (note.media && note.media.length > 0) {
+            const thumb = note.media.find(m => m.media_type === 'thumbnail') || note.media.find(m => m.media_type === 'media');
             if (thumb) {
                 coverHtml = `<img src="${thumb.file_url}" alt="cover" style="width:100%; height:100%; object-fit:cover; border-radius: 8px;">`;
             }
         }
 
         card.innerHTML = `
-            <div class="card-image game-thumbnail">${coverHtml}</div>
-            <div class="card-content game-list-info">
-                <p class="title is-5 game-list-title">${escapeHtml(game.title)}</p>
-                <p class="content game-list-desc">${escapeHtml(game.desc || '')}</p>
-                <div class="game-list-tags tags">${tagsHtml}</div>
+            <div class="card-image note-thumbnail">${coverHtml}</div>
+            <div class="card-content note-list-info">
+                <p class="title is-5 note-list-title">${escapeHtml(note.title)}</p>
+                <p class="content note-list-desc">${escapeHtml(note.desc || '')}</p>
+                <div class="note-list-tags tags">${tagsHtml}</div>
                 <p>${priceHtml}</p>
             </div>
         `;
 
         card.addEventListener('click', () => {
-            const gameId = game.game_id || game.id;
-            window.location.href = `/pages/store/game_detail?id=${gameId}`;
+            const noteId = note.note_id || note.id;
+            window.location.href = `/pages/store/note_detail?id=${noteId}`;
         });
 
         container.appendChild(card);
@@ -234,8 +234,8 @@ function getCurrentRole() {
     return localStorage.getItem('userRole') || 'GUEST';
 }
 
-function getGameCoverUrl(game) {
-    const media = (game && game.media) || (game && game.Media) || [];
+function getNoteCoverUrl(note) {
+    const media = (note && note.media) || (note && note.Media) || [];
     const image = media.find(m => m.media_type === 'thumbnail') || media.find(m => m.media_type === 'media');
     return image ? image.file_url : '';
 }

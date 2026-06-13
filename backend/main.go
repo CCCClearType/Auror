@@ -25,17 +25,17 @@ func main() {
 	}
 
 	// Move legacy frontend-hosted media paths to backend-hosted media/download URLs.
-	database.DB.Exec("ALTER TABLE games ADD COLUMN IF NOT EXISTS description TEXT DEFAULT ''")
-	database.DB.Exec("UPDATE game_media SET file_url = ? WHERE game_id = 1 AND media_type = 'game_file'", "/downloads/1/data-structures-notes.txt")
-	database.DB.Exec("UPDATE game_media SET file_url = ? WHERE game_id = 4 AND media_type = 'game_file'", "/downloads/4/calculus-guide.txt")
-	database.DB.Exec("UPDATE game_media SET file_url = regexp_replace(file_url, '^https?://[^/]+', '') WHERE file_url ~ '^https?://[^/]+/media/images/' AND media_type <> 'game_file'")
-	database.DB.Exec("UPDATE game_media SET file_url = REPLACE(file_url, '/assets/images/', '/media/images/') WHERE file_url LIKE '/assets/images/%' AND media_type <> 'game_file'")
-	database.DB.Exec("UPDATE game_media SET file_url = regexp_replace(file_url, '^https?://[^/]+', '') WHERE file_url ~ '^https?://[^/]+/downloads/' AND media_type = 'game_file'")
-	database.DB.Exec("UPDATE game_media SET file_url = ? WHERE file_url LIKE ?", "/media/images/protoss_12+8.png", "%protoss_knife.png")
-	database.DB.Exec("UPDATE game_media SET file_url = ? WHERE file_url LIKE ?", "/media/images/protoss_cross.png", "%protoss_best_16.png")
+	database.DB.Exec("ALTER TABLE notes ADD COLUMN IF NOT EXISTS description TEXT DEFAULT ''")
+	database.DB.Exec("UPDATE note_media SET file_url = ? WHERE note_id = 1 AND media_type = 'note_file'", "/downloads/1/data-structures-notes.txt")
+	database.DB.Exec("UPDATE note_media SET file_url = ? WHERE note_id = 4 AND media_type = 'note_file'", "/downloads/4/calculus-guide.txt")
+	database.DB.Exec("UPDATE note_media SET file_url = regexp_replace(file_url, '^https?://[^/]+', '') WHERE file_url ~ '^https?://[^/]+/media/images/' AND media_type <> 'note_file'")
+	database.DB.Exec("UPDATE note_media SET file_url = REPLACE(file_url, '/assets/images/', '/media/images/') WHERE file_url LIKE '/assets/images/%' AND media_type <> 'note_file'")
+	database.DB.Exec("UPDATE note_media SET file_url = regexp_replace(file_url, '^https?://[^/]+', '') WHERE file_url ~ '^https?://[^/]+/downloads/' AND media_type = 'note_file'")
+	database.DB.Exec("UPDATE note_media SET file_url = ? WHERE file_url LIKE ?", "/media/images/protoss_12+8.png", "%protoss_knife.png")
+	database.DB.Exec("UPDATE note_media SET file_url = ? WHERE file_url LIKE ?", "/media/images/protoss_cross.png", "%protoss_best_16.png")
 
-	// Fix existing TAKEN_DOWN games to have REVOKED licenses
-	database.DB.Exec("UPDATE game_licenses SET status = 'REVOKED' FROM games WHERE game_licenses.game_id = games.game_id AND games.status = 'TAKEN_DOWN'")
+	// Fix existing TAKEN_DOWN notes to have REVOKED licenses
+	database.DB.Exec("UPDATE note_licenses SET status = 'REVOKED' FROM notes WHERE note_licenses.note_id = notes.note_id AND notes.status = 'TAKEN_DOWN'")
 
 	// Setup Gin router
 	r := routes.SetupRouter()

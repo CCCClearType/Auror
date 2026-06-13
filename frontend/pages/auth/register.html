@@ -36,8 +36,8 @@
                 </div>
                 <div class="field form-group" style="margin-top: 15px; margin-bottom: 20px;">
                     <label class="checkbox" style="color: var(--text-light); font-size: 14px;">
-                        <input type="checkbox" id="reg-developer" style="margin-right: 8px;">
-                        我要註冊為賣家 (Developer)
+                        <input type="checkbox" id="reg-seller" style="margin-right: 8px;">
+                        我要註冊為賣家 (Seller)
                     </label>
                 </div>
                 <button type="submit" class="button is-primary is-fullwidth" id="register-btn">建立帳號</button>
@@ -61,7 +61,7 @@
             const email    = document.getElementById('reg-email').value.trim();
             const password = document.getElementById('reg-password').value;
             const confirm  = document.getElementById('reg-confirm').value;
-            const isDev    = document.getElementById('reg-developer').checked;
+            const isDev    = document.getElementById('reg-seller').checked;
             const errorEl  = document.getElementById('register-error');
             const btn      = document.getElementById('register-btn');
 

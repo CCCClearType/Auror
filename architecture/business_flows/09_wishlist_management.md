@@ -7,7 +7,7 @@
 
 ## 1. 核心概念：純標記 (Simple Mark)
 
-在 AurorNote 中，願望清單 (`wish_lists` 表) 僅代表 User 對 Game 的「關注 / 收藏」標記。
+在 AurorNote 中，願望清單 (`wish_lists` 表) 僅代表 User 對 Note 的「關注 / 收藏」標記。
 對於任何一款筆記，它在買家的願望清單中只有兩種狀態：
 - **有 (In Wishlist)**
 - **沒有 (Not in Wishlist)**
@@ -21,7 +21,7 @@
 為了確保願望清單的行為可預期且極簡，系統在加入或保留願望清單時，**不進行以下任何攔截**：
 
 1. **無視擁有權 (Independent of Ownership)**：
-   - 即使買家已經購買該筆記（在 `game_licenses` 中具有 `ACTIVE` 狀態），系統仍允許買家將其加入願望清單，或繼續保留在清單中。
+   - 即使買家已經購買該筆記（在 `note_licenses` 中具有 `ACTIVE` 狀態），系統仍允許買家將其加入願望清單，或繼續保留在清單中。
    - 系統不會因為「已擁有」就自動隱藏或禁止收藏按鈕。
    - **前端介面防護 (UI Protection)**：雖然資料庫層次絕對解耦，但在前端 (`wishlist.html`) 渲染列表時，會額外核對買家的個人筆記庫。若買家已擁有該筆記，會將原先的「加入購物車」轉變為不可點擊的「已在筆記庫」按鈕，防止買家送出無效的重複購買請求。
 
@@ -29,7 +29,7 @@
    - 買家將筆記從願望清單加入購物車時，願望清單的標記不會消失。
    - 買家完成結帳後，筆記也不會被自動從願望清單中剔除。願望清單的增刪純粹依賴使用者的手動操作。
 
-3. **無視筆記狀態 (Independent of Game Status)**：
+3. **無視筆記狀態 (Independent of Note Status)**：
    - 無論筆記是 `ACTIVE` (正常上架) 還是 `TAKEN_DOWN` (強制下架/自主下架)。
    - **已收藏的保留**：若筆記被下架，它依然會安穩地存在於買家的願望清單列表中（供買家做關注紀錄）。
    - **下架亦可收藏**：即使筆記目前處於 `TAKEN_DOWN` 狀態，若買家透過其他途徑 (如社群連結、歷史紀錄) 進入該筆記頁面，系統依然允許買家將其加入願望清單。
@@ -45,16 +45,16 @@
 
 - **取得願望清單** 
   - `GET /api/protected/wishlist`
-  - 後端單純利用 `user_id` 查詢 `wish_lists` 表，並透過 Preload 帶出對應的 `Game` 與 `Game.Media` 資訊供前端渲染列表。
+  - 後端單純利用 `user_id` 查詢 `wish_lists` 表，並透過 Preload 帶出對應的 `Note` 與 `Note.Media` 資訊供前端渲染列表。
 
 - **加入願望清單**
   - `POST /api/protected/wishlist`
-  - Body: `{ "game_id": 123 }`
-  - 後端僅檢查 `game_id` 是否存在於 `games` 表。若存在且尚未收藏，即新增一筆 `wish_lists` 紀錄。
+  - Body: `{ "note_id": 123 }`
+  - 後端僅檢查 `note_id` 是否存在於 `notes` 表。若存在且尚未收藏，即新增一筆 `wish_lists` 紀錄。
 
 - **移除願望清單**
-  - `DELETE /api/protected/wishlist/:game_id`
-  - 後端根據 `user_id` 與 `game_id` 直接刪除對應的 `wish_lists` 紀錄。
+  - `DELETE /api/protected/wishlist/:note_id`
+  - 後端根據 `user_id` 與 `note_id` 直接刪除對應的 `wish_lists` 紀錄。
 
 ---
 

@@ -6,15 +6,15 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NOT NULL,
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_visit_ip VARCHAR(45),
-    role VARCHAR(20) NOT NULL CHECK (role IN ('NULL', 'USERS', 'CSR', 'ADMIN', 'DEVELOPER')),
+    role VARCHAR(20) NOT NULL CHECK (role IN ('NULL', 'USERS', 'CSR', 'ADMIN', 'SELLER')),
     status VARCHAR(20) DEFAULT 'OFFLINE' CHECK (status IN ('ONLINE', 'OFFLINE')),
     permission VARCHAR(20) DEFAULT 'ACTIVE' CHECK (permission IN ('ACTIVE', 'DEACTIVE', 'DELETED'))
 );
 
--- 2. 建立 games 資料表
-CREATE TABLE games (
-    game_id SERIAL PRIMARY KEY,
-    developer_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+-- 2. 建立 notes 資料表
+CREATE TABLE notes (
+    note_id SERIAL PRIMARY KEY,
+    seller_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
     description TEXT DEFAULT '',
     price DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (price >= 0),
@@ -28,19 +28,19 @@ CREATE TABLE tags (
     tag_name VARCHAR(50) UNIQUE NOT NULL
 );
 
--- 4. 建立 game_tags 中介資料表
-CREATE TABLE game_tags (
-    game_id INT REFERENCES games(game_id) ON DELETE CASCADE,
+-- 4. 建立 note_tags 中介資料表
+CREATE TABLE note_tags (
+    note_id INT REFERENCES notes(note_id) ON DELETE CASCADE,
     tag_id INT REFERENCES tags(tag_id) ON DELETE CASCADE,
-    PRIMARY KEY (game_id, tag_id)
+    PRIMARY KEY (note_id, tag_id)
 );
 
--- 5. 建立 game_media 資料表
-CREATE TABLE game_media (
+-- 5. 建立 note_media 資料表
+CREATE TABLE note_media (
     media_id SERIAL PRIMARY KEY,
-    game_id INT NOT NULL REFERENCES games(game_id) ON DELETE CASCADE,
+    note_id INT NOT NULL REFERENCES notes(note_id) ON DELETE CASCADE,
     file_url VARCHAR(500) NOT NULL,
-    media_type VARCHAR(20) DEFAULT 'media' CHECK (media_type IN ('media', 'game_file'))
+    media_type VARCHAR(20) DEFAULT 'media' CHECK (media_type IN ('media', 'note_file'))
 );
 
 -- 6. 建立 transactions 資料表
@@ -56,7 +56,7 @@ CREATE TABLE transactions (
 CREATE TABLE transaction_items (
     item_id SERIAL PRIMARY KEY,
     transaction_id INT NOT NULL REFERENCES transactions(transaction_id) ON DELETE CASCADE,
-    game_id INT NOT NULL REFERENCES games(game_id) ON DELETE CASCADE,
+    note_id INT NOT NULL REFERENCES notes(note_id) ON DELETE CASCADE,
     purchase_price DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (purchase_price >= 0)
 );
 
@@ -64,14 +64,14 @@ CREATE TABLE transaction_items (
 CREATE TABLE shopping_carts (
     cart_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-    game_id INT NOT NULL REFERENCES games(game_id) ON DELETE CASCADE,
+    note_id INT NOT NULL REFERENCES notes(note_id) ON DELETE CASCADE,
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 9. 建立 game_licenses 資料表
-CREATE TABLE game_licenses (
+-- 9. 建立 note_licenses 資料表
+CREATE TABLE note_licenses (
     license_id SERIAL PRIMARY KEY,
-    game_id INT NOT NULL REFERENCES games(game_id) ON DELETE CASCADE,
+    note_id INT NOT NULL REFERENCES notes(note_id) ON DELETE CASCADE,
     user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     transaction_item_id INT NOT NULL REFERENCES transaction_items(item_id) ON DELETE CASCADE,
     acquired_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -82,9 +82,9 @@ CREATE TABLE game_licenses (
 CREATE TABLE wish_lists (
     wishlist_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-    game_id INT NOT NULL REFERENCES games(game_id) ON DELETE CASCADE,
+    note_id INT NOT NULL REFERENCES notes(note_id) ON DELETE CASCADE,
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (user_id, game_id)
+    UNIQUE (user_id, note_id)
 );
 
 
@@ -104,7 +104,7 @@ CREATE TABLE refund_requests (
 -- 12. 評論 
 CREATE TABLE reviews (
     review_id SERIAL PRIMARY KEY,
-    game_id INT NOT NULL REFERENCES games(game_id) ON DELETE CASCADE,
+    note_id INT NOT NULL REFERENCES notes(note_id) ON DELETE CASCADE,
     user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

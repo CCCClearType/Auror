@@ -38,15 +38,15 @@
 
 ### 4. 取得單一筆記基本資訊
 - **說明**：買家點擊進入筆記介紹頁面時，讀取該筆記的基本資料 (名稱、價格、介紹等)。同時過濾掉已被下架的筆記。
-- **對應 API**：`GET /api/games/{id}`
+- **對應 API**：`GET /api/notes/{id}`
 - **Go 實作 (GORM)**：
   ```go
-  var game models.Game
-  database.DB.Where("game_id = ? AND status != 'TAKEN_DOWN'", id).First(&game)
+  var note models.Note
+  database.DB.Where("note_id = ? AND status != 'TAKEN_DOWN'", id).First(&note)
   ```
 - **原生 SQL 語法**：
   ```sql
-  SELECT * FROM games WHERE game_id = 42 AND status != 'TAKEN_DOWN' ORDER BY game_id LIMIT 1;
+  SELECT * FROM notes WHERE note_id = 42 AND status != 'TAKEN_DOWN' ORDER BY note_id LIMIT 1;
   ```
 
 ### 5. 查看自己的好友名單
@@ -116,15 +116,15 @@
 
 ### 10. 賣家獲取自己發布的所有筆記
 - **說明**：賣家進入自己的儀表板時，只會看到屬於自己開發的筆記清單。
-- **對應 API**：`GET /api/developer/games`
+- **對應 API**：`GET /api/seller/notes`
 - **Go 實作 (GORM)**：
   ```go
-  var games []models.Game
-  database.DB.Where("developer_id = ?", userID).Order("created_at DESC").Find(&games)
+  var notes []models.Note
+  database.DB.Where("seller_id = ?", userID).Order("created_at DESC").Find(&notes)
   ```
 - **原生 SQL 語法**：
   ```sql
-  SELECT * FROM games WHERE developer_id = 5 ORDER BY game_id DESC;
+  SELECT * FROM notes WHERE seller_id = 5 ORDER BY note_id DESC;
   ```
 
 ### 11. 檢查交易明細是否存在 (申請退款前)
@@ -154,16 +154,16 @@
   ```
 
 ### 13. 驗證買家是否擁有該筆記閱讀權限
-- **說明**：買家點擊「閱讀」時，後端必須檢查 `game_licenses` 授權表，確認買家是否購買過且未被退款或撤銷。
-- **對應 API**：`GET /api/protected/library/{game_id}/play`
+- **說明**：買家點擊「閱讀」時，後端必須檢查 `note_licenses` 授權表，確認買家是否購買過且未被退款或撤銷。
+- **對應 API**：`GET /api/protected/library/{note_id}/play`
 - **Go 實作 (GORM)**：
   ```go
-  var license models.GameLicense
-  database.DB.Where("user_id = ? AND game_id = ? AND status = 'ACTIVE'", userID, gameID).First(&license)
+  var license models.NoteLicense
+  database.DB.Where("user_id = ? AND note_id = ? AND status = 'ACTIVE'", userID, noteID).First(&license)
   ```
 - **原生 SQL 語法**：
   ```sql
-  SELECT * FROM game_licenses WHERE user_id = 5 AND game_id = 42 AND status = 'ACTIVE' ORDER BY license_id LIMIT 1;
+  SELECT * FROM note_licenses WHERE user_id = 5 AND note_id = 42 AND status = 'ACTIVE' ORDER BY license_id LIMIT 1;
   ```
 
 ### 14. 顯示與某使用者的對話紀錄

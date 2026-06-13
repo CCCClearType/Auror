@@ -70,13 +70,13 @@
 
                 const refundId  = req.id || req.refund_id;
                 const username  = req.username || (req.user && req.user.username) || '買家';
-                const gameTitle = req.game_title || (req.game && req.game.title) || req.title || '';
+                const noteTitle = req.note_title || (req.note && req.note.title) || req.title || '';
                 const price     = Number(req.amount || req.price || 0);
                 const reason    = req.reason || req.description || '未填寫';
 
                 item.innerHTML = `
                     <div class="library-item-info">
-                        <h3>申請 #${refundId} — ${escapeHtml(gameTitle)}</h3>
+                        <h3>申請 #${refundId} — ${escapeHtml(noteTitle)}</h3>
                         <p>申請人：${escapeHtml(username)} &nbsp;|&nbsp; 金額：NT$ ${price.toLocaleString()} &nbsp;|&nbsp; 理由：${escapeHtml(reason)}</p>
                     </div>
                     <div class="library-item-actions" style="display:flex; flex-direction:column; gap:8px; align-items:flex-end;">

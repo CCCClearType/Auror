@@ -7,14 +7,14 @@
 ## 1. 頂部搜尋列 (Top Search Bar)
 
 - **UI 位置**：頁面正上方、最醒目的橫向搜尋框。
-- **功能**：關鍵字模糊搜尋 (Keyword Fuzzy Search)。買家輸入文字後點擊「搜尋」按鈕。點擊進入個別筆記時，前端會呼叫 `GET /api/games/{id}` 顯示詳情。
+- **功能**：關鍵字模糊搜尋 (Keyword Fuzzy Search)。買家輸入文字後點擊「搜尋」按鈕。點擊進入個別筆記時，前端會呼叫 `GET /api/notes/{id}` 顯示詳情。
 - **底層邏輯**：
-  1. 前端將關鍵字放入 `q` 參數，呼叫 `GET /api/games?q={keyword}`。
+  1. 前端將關鍵字放入 `q` 參數，呼叫 `GET /api/notes?q={keyword}`。
   2. 後端組建 SQL 查詢，針對以下四個維度進行 `ILIKE` 模糊比對：
-     - `games.title` (筆記標題)
-     - `games.description` (筆記簡介)
+     - `notes.title` (筆記標題)
+     - `notes.description` (筆記簡介)
      - `q_tags.tag_name` (筆記綁定的科目名稱)
-     - `q_developers.username` (賣家的名稱)
+     - `q_sellers.username` (賣家的名稱)
   3. 只要上述任一欄位包含關鍵字，該筆記就會被篩選出來。
 
 ---
@@ -26,16 +26,16 @@
   - **Tag 瀏覽 (科目過濾)**：
     - 前端會列出如 `RPG`, `Action`, `Racing`, `Simulation` 等常見科目（或從 `/api/tags` 動態獲取）。
     - 當買家點擊特定科目，前端發送 `?tag={name}`。
-    - 後端透過 `JOIN game_tags` 與 `tags` 資料表，精準過濾出綁定該科目的筆記。選擇「所有筆記」則會清除 `tag` 參數。
-  - **賣家篩選 (Developer Filter)**：
-    - 當買家從特定賣家頁面進入，或點擊賣家名稱時，發送 `?developer={username}`。
+    - 後端透過 `JOIN note_tags` 與 `tags` 資料表，精準過濾出綁定該科目的筆記。選擇「所有筆記」則會清除 `tag` 參數。
+  - **賣家篩選 (Seller Filter)**：
+    - 當買家從特定賣家頁面進入，或點擊賣家名稱時，發送 `?seller={username}`。
     - 後端會透過 `ILIKE` 執行「精確的字串比對」(不加上 `%` 萬用字元)，確保輸入 `dev_1` 不會錯誤搜出 `dev_10`。
   - **價格篩選 (Price Filter)**：
     - 提供預設的價格區間選項，例如：
       - 「免費下載」：發送 `?max_price=0`。
       - 「NT$ 300 以下」：發送 `?max_price=300`。
       - 「NT$ 301 - 900」：發送 `?min_price=301&max_price=900`。
-    - 後端收到 `min_price` 與 `max_price` 後，會直接在 SQL 中加上 `games.price >= ?` 與 `games.price <= ?` 的條件。
+    - 後端收到 `min_price` 與 `max_price` 後，會直接在 SQL 中加上 `notes.price >= ?` 與 `notes.price <= ?` 的條件。
 
 ---
 
@@ -46,15 +46,15 @@
   - **隱藏已購買 (Hide Owned)**：
     - 這是一個 ON/OFF 切換開關。
     - 當開啟時，前端發送 `?hide_owned=true`，且必須在 Request Header 帶上使用者的 JWT Token。
-    - 後端偵測到該參數與 Token 後，會自動利用子查詢 (`NOT EXISTS`) 到 `game_licenses` 檢查，**並額外比對 `games.developer_id != 當前使用者`**。只要該買家擁有的授權是 `ACTIVE`，或是該筆記正是由登入者自己開發的，該筆記就會從搜尋結果中被剔除，讓買家專注於探索尚未擁有的新筆記。
+    - 後端偵測到該參數與 Token 後，會自動利用子查詢 (`NOT EXISTS`) 到 `note_licenses` 檢查，**並額外比對 `notes.seller_id != 當前使用者`**。只要該買家擁有的授權是 `ACTIVE`，或是該筆記正是由登入者自己開發的，該筆記就會從搜尋結果中被剔除，讓買家專注於探索尚未擁有的新筆記。
   - **排序方式 (Sorting Dropdown)**：
     - 提供如「價格由低到高」或「價格由高到低」的選項。
     - 選擇後前端發送 `?sort=price_asc` 或 `?sort=price_desc`。
-    - 後端將其轉換為 SQL 的 `ORDER BY games.price ASC/DESC`。
+    - 後端將其轉換為 SQL 的 `ORDER BY notes.price ASC/DESC`。
 
 ---
 
 ## 4. 綜合搜尋與最底層防護
 
 - **綜合查詢**：上述三個面板的操作可以**疊加使用**。例如，買家可以同時搜尋 "Action" (頂部)，勾選 "NT$ 300 以下" (左側)，並開啟 "隱藏已購買" (右側)。前端會將這些參數全部串接起來 (`?q=Action&max_price=300&hide_owned=true&sort=price_asc`) 一次發送給後端。
-- **最底層防護**：無論買家如何組合過濾條件，後端的查詢產生器最底層一定會加上 `WHERE games.status = 'ACTIVE'`。這確保了任何被管理員「強制下架」(`TAKEN_DOWN`) 或賣家自主下架的筆記，絕對不會出現在任何搜尋結果中。
+- **最底層防護**：無論買家如何組合過濾條件，後端的查詢產生器最底層一定會加上 `WHERE notes.status = 'ACTIVE'`。這確保了任何被管理員「強制下架」(`TAKEN_DOWN`) 或賣家自主下架的筆記，絕對不會出現在任何搜尋結果中。

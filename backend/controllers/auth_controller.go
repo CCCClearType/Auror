@@ -15,7 +15,7 @@ type RegisterInput struct {
 	Username    string `json:"username" binding:"required"`
 	Email       string `json:"email" binding:"required"`
 	Password    string `json:"password" binding:"required,min=6"`
-	IsDeveloper bool   `json:"is_developer"`
+	IsSeller bool   `json:"is_seller"`
 }
 
 type LoginInput struct {
@@ -47,10 +47,10 @@ func Register(c *gin.Context) {
 	}
 
 	// 3. Create the User model to save
-	// Assign role based on IsDeveloper flag
+	// Assign role based on IsSeller flag
 	role := "USERS"
-	if input.IsDeveloper {
-		role = "DEVELOPER"
+	if input.IsSeller {
+		role = "SELLER"
 	}
 
 	user := models.User{

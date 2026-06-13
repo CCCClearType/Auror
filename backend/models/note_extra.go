@@ -5,14 +5,14 @@ type Tag struct {
 	TagName string `gorm:"unique;not null;column:tag_name" json:"tag_name"`
 }
 
-type GameTag struct {
-	GameID uint `gorm:"primaryKey;column:game_id" json:"game_id"`
+type NoteTag struct {
+	NoteID uint `gorm:"primaryKey;column:note_id" json:"note_id"`
 	TagID  uint `gorm:"primaryKey;column:tag_id" json:"tag_id"`
 }
 
-type GameMedia struct {
+type NoteMedia struct {
 	MediaID   uint   `gorm:"primaryKey;column:media_id" json:"media_id"`
-	GameID    uint   `gorm:"not null;column:game_id" json:"game_id"`
+	NoteID    uint   `gorm:"not null;column:note_id" json:"note_id"`
 	FileURL   string `gorm:"not null;column:file_url" json:"file_url"`
 	MediaType string `gorm:"default:media;column:media_type" json:"media_type"`
 }

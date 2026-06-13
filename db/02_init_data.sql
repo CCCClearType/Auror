@@ -1,42 +1,42 @@
 -- ==========================================
 -- 0. 清除舊資料並重置 ID (避免重複插入與 ID 錯亂)
 -- ==========================================
-TRUNCATE TABLE users, games, tags, game_tags, game_media, transactions, transaction_items, shopping_carts, game_licenses, wish_lists, refund_requests, reviews, review_replies, friendships, messages, blacklists RESTART IDENTITY CASCADE;
+TRUNCATE TABLE users, notes, tags, note_tags, note_media, transactions, transaction_items, shopping_carts, note_licenses, wish_lists, refund_requests, reviews, review_replies, friendships, messages, blacklists RESTART IDENTITY CASCADE;
 
 -- ==========================================
 -- 1. 寫入 users 資料 (5筆)
 -- ==========================================
 INSERT INTO users (username, email, password_hash, last_visit_ip, role, status, permission) VALUES 
 ('AdminMaster', 'admin@aurorvapor.com', 'hashed_pwd_001', '192.168.1.1', 'ADMIN', 'ONLINE', 'ACTIVE'),
-('StudioAurora', 'dev@studioaurora.com', 'hashed_pwd_002', '10.0.0.15', 'DEVELOPER', 'OFFLINE', 'ACTIVE'),
+('StudioAurora', 'dev@studioaurora.com', 'hashed_pwd_002', '10.0.0.15', 'SELLER', 'OFFLINE', 'ACTIVE'),
 ('SupportAlice', 'alice@support.com', 'hashed_pwd_003', '172.16.0.25', 'CSR', 'ONLINE', 'ACTIVE'),
 ('PlayerOne', 'player1@gmail.com', 'hashed_pwd_004', '114.34.56.78', 'USERS', 'OFFLINE', 'DEACTIVE'),
 ('Guest999', 'guest999@tempmail.com', 'hashed_pwd_005', '2001:0db8:85a3::7334', 'NULL', 'OFFLINE', 'DELETED');
 
 -- ==========================================
--- 2. 寫入 games 資料 (4筆)
+-- 2. 寫入 notes 資料 (4筆)
 -- ==========================================
-INSERT INTO games (developer_id, title, description, price, overall_rating, status) VALUES
+INSERT INTO notes (seller_id, title, description, price, overall_rating, status) VALUES
 (1, '資料結構期末考精華筆記', '涵蓋樹、圖、排序等核心資料結構概念與考題精選。', 1200.00, 4.5, 'ACTIVE'),
 (1, '演算法章節重點總整理', '分析動態規劃、貪婪演算法與分治法等必考重點。', 150.00, 4.8, 'ACTIVE'),
 (2, '材料與生活通識課必讀筆記', '整理材料性質與日常生活應用，輕鬆取得高分。', 850.50, 3.9, 'ACTIVE'),
 (2, '微積分甲高分全攻略', '包含極限、導數、積分及多元微積分推導與習題詳解。', 300.00, 4.2, 'ACTIVE');
 
 -- ==========================================
--- 3. 寫入 tags 與 game_tags 資料
+-- 3. 寫入 tags 與 note_tags 資料
 -- ==========================================
 INSERT INTO tags (tag_name) VALUES
 ('資料結構'), ('演算法'), ('材料與生活'), ('微積分');
 
-INSERT INTO game_tags (game_id, tag_id) VALUES
+INSERT INTO note_tags (note_id, tag_id) VALUES
 (1, 1), (1, 2), (2, 1), (3, 3), (4, 4);
 
 -- ==========================================
--- 4. 寫入 game_media 資料
---    圖片/影片 (media): /media/images/{game_id}/{sha256}.{ext}
---    筆記檔案 (game_file): /downloads/{game_id}/{original_name}
+-- 4. 寫入 note_media 資料
+--    圖片/影片 (media): /media/images/{note_id}/{sha256}.{ext}
+--    筆記檔案 (note_file): /downloads/{note_id}/{original_name}
 -- ==========================================
-INSERT INTO game_media (game_id, file_url, media_type) VALUES
+INSERT INTO note_media (note_id, file_url, media_type) VALUES
 (1, '/media/images/1/63cb3d94925658f69d65f10a8a529599b42c0faaf97559f3212acc085c5d4da7.jpg', 'media'),
 (1, '/media/images/1/2899c89bd64ddca70f023a2bf9d4a0c77897dc990fe260aabe2e3814259559b7.jpg', 'media'),
 (1, '/media/images/1/acaba9e0fae5fa9d72cfe96b930ccdc4d447cce078bd6eff0ee73b869019530c.png', 'media'),
@@ -50,9 +50,9 @@ INSERT INTO game_media (game_id, file_url, media_type) VALUES
 (3, '/media/images/3/acaba9e0fae5fa9d72cfe96b930ccdc4d447cce078bd6eff0ee73b869019530c.png', 'media'),
 (3, '/media/images/3/cec7e79ee9686b5ca9fa4112ed16db99cb4c5c3f55440a065935a1e7ff171582.png', 'media'),
 
-(1, '/downloads/1/data-structures-notes.txt', 'game_file'),
-(3, '/downloads/3/bathroom.png', 'game_file'),
-(4, '/downloads/4/calculus-guide.txt', 'game_file');
+(1, '/downloads/1/data-structures-notes.txt', 'note_file'),
+(3, '/downloads/3/bathroom.png', 'note_file'),
+(4, '/downloads/4/calculus-guide.txt', 'note_file');
 
 -- ==========================================
 -- 5. 寫入 transactions 與 transaction_items 資料
@@ -63,7 +63,7 @@ INSERT INTO transactions (user_id, total_amount, receipt_number) VALUES
 (1, 850.50, 'REC-20260606-0003'),
 (2, 1200.00, 'REC-20260607-0004');
 
-INSERT INTO transaction_items (transaction_id, game_id, purchase_price) VALUES
+INSERT INTO transaction_items (transaction_id, note_id, purchase_price) VALUES
 (1, 1, 1200.00), -- item_id 1
 (1, 2, 150.00),  -- item_id 2
 (2, 4, 300.00),  -- item_id 3
@@ -73,19 +73,19 @@ INSERT INTO transaction_items (transaction_id, game_id, purchase_price) VALUES
 -- ==========================================
 -- 6. 寫入 shopping_carts 資料 (4筆)
 -- ==========================================
-INSERT INTO shopping_carts (user_id, game_id) VALUES
+INSERT INTO shopping_carts (user_id, note_id) VALUES
 (1, 3), (1, 4), (2, 1), (2, 2);
 
 -- ==========================================
--- 7. 寫入 game_licenses 與 wish_lists 資料
+-- 7. 寫入 note_licenses 與 wish_lists 資料
 -- ==========================================
-INSERT INTO game_licenses (game_id, user_id, transaction_item_id, status) VALUES
+INSERT INTO note_licenses (note_id, user_id, transaction_item_id, status) VALUES
 (1, 1, 1, 'ACTIVE'), 
 (2, 1, 2, 'REVOKED'), 
 (4, 2, 3, 'ACTIVE'), 
 (3, 1, 4, 'REVOKED');
 
-INSERT INTO wish_lists (user_id, game_id) VALUES
+INSERT INTO wish_lists (user_id, note_id) VALUES
 (1, 3), (1, 4), (2, 1), (2, 2);
 
 -- ==========================================
@@ -100,7 +100,7 @@ INSERT INTO refund_requests (buyer_id, transaction_item_id, handled_by, reason, 
 -- ==========================================
 -- 9. 寫入社交系統資料 (reviews, replies, friends, msgs, blacklists)
 -- ==========================================
-INSERT INTO reviews (game_id, user_id, content, attitude) VALUES
+INSERT INTO reviews (note_id, user_id, content, attitude) VALUES
 (1, 1, '神作！排版超讚，內容非常豐富。', 'POSITIVE'),
 (3, 2, '排版有點混亂，希望能盡快更新。', 'NEGATIVE'),
 (1, 3, '雖然有少許錯字，但不影響整體極佳的體驗。', 'POSITIVE'),
