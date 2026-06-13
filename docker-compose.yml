@@ -1,35 +1,35 @@
+version: '3.8'
+
 services:
   frontend:
-    image: caddy:2-alpine
+    # 必須改成你推送到 Docker Hub 的 Image 名稱
+    image: bananaice/auror_frontend:latest 
     container_name: auror_frontend
     restart: always
     depends_on:
       - backend
     ports:
-      - 3000:80
-    volumes:
-      - ./frontend/Caddyfile:/etc/caddy/Caddyfile:ro
-      - ./frontend/index.html:/srv/index.html:ro
-      - ./frontend/assets:/srv/assets:ro
-      - ./frontend/pages:/srv/pages:ro
+      - "80:80" # 這是 Azure 唯一會看見並導流的對外 Port
+    # 注意：這裡的 volumes 掛載全拿掉了，檔案必須直接打包進 Image 裡
 
   backend:
-    build:
-      context: ./backend
+    # 同樣必須使用預先打包好的 Image
+    image: bananaice/auror_backend:latest
     container_name: auror_backend
     restart: always
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     environment:
       DB_HOST: db
       DB_PORT: 5432
       DB_USER: admin
       DB_PASSWORD: admin
       DB_NAME: auror_vapor
+    # 後端不開放 Port，讓前端 (Caddy) 透過內部網路去反向代理它
 
   db:
-    image: postgres
+    # 如果有初始化腳本，資料庫也需要打包成自己的 Image
+    image: bananaice/auror_db:latest
     restart: always
     shm_size: 128mb
     container_name: auror_db
@@ -37,22 +37,10 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: auror_vapor
+    # 不開放 5432 對外，僅限 backend 存取
+    # volumes:
+    #  - db_data:/var/lib/postgresql/data # 在 Azure App Service 常常會因為儲存體權限問題導致 db 崩潰，改為暫時性儲存以利於部署
 
-    ports:
-      - 5432:5432
-
-    volumes:
-      - ./db:/docker-entrypoint-initdb.d/
-
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin -d auror_vapor"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-  
-  adminer:
-    image: adminer
-    restart: always
-    container_name: adminer
-    ports:
-      - 8080:8080
+# 宣告具名 volume
+# volumes:
+#   db_data:
