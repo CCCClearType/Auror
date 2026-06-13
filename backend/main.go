@@ -26,8 +26,8 @@ func main() {
 
 	// Move legacy frontend-hosted media paths to backend-hosted media/download URLs.
 	database.DB.Exec("ALTER TABLE games ADD COLUMN IF NOT EXISTS description TEXT DEFAULT ''")
-	database.DB.Exec("UPDATE game_media SET file_url = ? WHERE game_id = 1 AND media_type = 'game_file'", "/downloads/cybercity-demo.txt")
-	database.DB.Exec("UPDATE game_media SET file_url = ? WHERE game_id = 4 AND media_type = 'game_file'", "/downloads/farm-simulator-demo.txt")
+	database.DB.Exec("UPDATE game_media SET file_url = ? WHERE game_id = 1 AND media_type = 'game_file'", "/downloads/1/data-structures-notes.txt")
+	database.DB.Exec("UPDATE game_media SET file_url = ? WHERE game_id = 4 AND media_type = 'game_file'", "/downloads/4/calculus-guide.txt")
 	database.DB.Exec("UPDATE game_media SET file_url = regexp_replace(file_url, '^https?://[^/]+', '') WHERE file_url ~ '^https?://[^/]+/media/images/' AND media_type <> 'game_file'")
 	database.DB.Exec("UPDATE game_media SET file_url = REPLACE(file_url, '/assets/images/', '/media/images/') WHERE file_url LIKE '/assets/images/%' AND media_type <> 'game_file'")
 	database.DB.Exec("UPDATE game_media SET file_url = regexp_replace(file_url, '^https?://[^/]+', '') WHERE file_url ~ '^https?://[^/]+/downloads/' AND media_type = 'game_file'")

@@ -15,7 +15,7 @@
 | `[GET] /api/tags` | `api.GET("/tags")` | ✅ |
 
 ### 2. 一般登入保護 (Protected Routes) - 僅需 JWT
-*這包含購物車、玩家遊戲庫、個人檔案，以及社群互動等。*
+*這包含購物車、買家筆記庫、個人檔案，以及社群互動等。*
 | API 規格 | `routes.go` 註冊狀態 | 驗證 |
 | :--- | :--- | :---: |
 | `[POST] /api/auth/logout` | `auth.POST("/logout")` | ✅ |
@@ -48,7 +48,7 @@
 | `[POST] /api/social/messages` | `social.POST("/messages")` | ✅ |
 | `[GET] /api/social/messages/{user_id}` | `social.GET("/messages/:user_id")` | ✅ |
 
-### 3. 開發者路由 (Developer Routes) - 需 DEVELOPER 權限
+### 3. 賣家路由 (Developer Routes) - 需 DEVELOPER 權限
 | API 規格 | `routes.go` 註冊狀態 | 驗證 |
 | :--- | :--- | :---: |
 | `[GET] /api/developer/games` | `developer.GET("/games")` | ✅ |

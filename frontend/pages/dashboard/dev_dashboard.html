@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>開發者中心 — AurorVapor</title>
+    <title>賣家中心 — AurorNote</title>
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 
@@ -14,7 +14,7 @@
 
     <main>
         <div class="dashboard-header">
-            <h1 class="title">開發者中心</h1>
+            <h1 class="title">賣家中心</h1>
             <span class="tag role-badge dev">DEVELOPER</span>
         </div>
 
@@ -23,12 +23,12 @@
         </div>
 
         <div class="dashboard-grid">
-            <!-- 上架新遊戲面板 -->
+            <!-- 上架新筆記面板 -->
             <div class="box dashboard-panel">
-                <h2 class="title is-4">發行新遊戲</h2>
+                <h2 class="title is-4">發行新筆記</h2>
                 <form id="upload-game-form" class="dev-form">
                     <div class="field form-group">
-                        <label class="label" for="new-game-title">遊戲名稱</label>
+                        <label class="label" for="new-game-title">筆記名稱</label>
                         <div class="control"><input class="input" type="text" id="new-game-title" placeholder="輸入炫酷的標題"
                                 required></div>
                     </div>
@@ -38,8 +38,8 @@
                                 placeholder="0 表示免費" required></div>
                     </div>
                     <div class="field form-group">
-                        <label class="label" for="new-game-desc">遊戲介紹</label>
-                        <div class="control"><textarea class="textarea" id="new-game-desc" placeholder="簡短描述你的遊戲亮點..."
+                        <label class="label" for="new-game-desc">筆記介紹</label>
+                        <div class="control"><textarea class="textarea" id="new-game-desc" placeholder="簡短描述你的筆記亮點..."
                                 required style="min-height: 120px;"></textarea></div>
                     </div>
                     <button type="submit" class="button is-primary is-fullwidth" id="publish-btn">
@@ -48,9 +48,9 @@
                 </form>
             </div>
 
-            <!-- 管理遊戲面板 -->
+            <!-- 管理筆記面板 -->
             <div class="box dashboard-panel">
-                <h2 class="title is-4">管理我的遊戲</h2>
+                <h2 class="title is-4">管理我的筆記</h2>
                 <div class="library-list" id="my-published-games">
                     <p style="color:var(--text-muted);">載入中...</p>
                 </div>
@@ -66,7 +66,7 @@
         document.addEventListener("DOMContentLoaded", async () => {
             const role = getCurrentRole();
             if (role !== 'DEVELOPER' && role !== 'ADMIN') {
-                alert("存取被拒：您沒有開發者權限");
+                alert("存取被拒：您沒有賣家權限");
                 window.location.href = '/';
                 return;
             }
@@ -100,7 +100,7 @@
                         <div class="stat-value">${totalSales.toLocaleString()}</div>
                     </div>
                     <div class="stat-card">
-                        <h3>上架中遊戲</h3>
+                        <h3>上架中筆記</h3>
                         <div class="stat-value" style="color:var(--accent-blue);">${activeCount}</div>
                     </div>
                 `;
@@ -118,7 +118,7 @@
             listEl.innerHTML = '';
 
             if (games.length === 0) {
-                listEl.innerHTML = `<div class="empty-state"><p>尚未上架任何遊戲</p></div>`;
+                listEl.innerHTML = `<div class="empty-state"><p>尚未上架任何筆記</p></div>`;
                 return;
             }
 
@@ -136,7 +136,7 @@
                 } else if (game.status === 'DRAFT') {
                     statusBadge = `<span class="tag status-badge" style="background:var(--accent-purple); color:white;">草稿</span>`;
                     actionBtns = `
-                        <button class="button is-primary is-small" onclick="window.location.href='/pages/dashboard/edit_game?id=${gameId}'">編輯素材與標籤</button>
+                        <button class="button is-primary is-small" onclick="window.location.href='/pages/dashboard/edit_game?id=${gameId}'">編輯素材與科目</button>
                         <button class="button is-success is-small" onclick="publishGame(${gameId})">發佈</button>
                     `;
                 } else {
@@ -192,7 +192,7 @@
             try {
                 const res = await authFetch(`/api/developer/games/${id}/publish`, { method: 'PUT' });
                 if (res.ok) {
-                    showToast('遊戲已正式上架！', 'success');
+                    showToast('筆記已正式上架！', 'success');
                     loadDashboard();
                 } else {
                     const data = await res.json();
@@ -205,10 +205,10 @@
         }
 
         async function takeDownGame(id) {
-            if (!confirm('確定要下架此遊戲嗎？已購買的玩家仍可下載，但商店將不再顯示。')) return;
+            if (!confirm('確定要下架此筆記嗎？已購買的買家仍可下載，但商店將不再顯示。')) return;
             try {
                 await apiDeleteGame(id);
-                alert('遊戲已下架！');
+                alert('筆記已下架！');
                 loadDashboard();
             } catch (err) {
                 console.error(err);

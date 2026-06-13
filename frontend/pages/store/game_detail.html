@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>遊戲詳情 — AurorVapor</title>
+    <title>筆記詳情 — AurorNote</title>
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 
@@ -16,7 +16,7 @@
         <div class="game-detail-layout" id="game-detail-header">
             <div class="game-media-left" id="game-cover">
                 <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);background:#1a1a2e;">
-                    [遊戲封面載入中...]
+                    [筆記封面載入中...]
                 </div>
             </div>
             <div class="box game-info-right" style="display: flex; flex-direction: column; background: #0b0f19; padding: 24px; border-radius: 8px; border: none;">
@@ -25,7 +25,7 @@
                 <div id="detail-short-desc" style="color: #c6d4df; font-size: 14px; margin-bottom: 16px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5;"></div>
 
                 <div style="display: grid; grid-template-columns: 85px 1fr; row-gap: 6px; font-size: 12px; margin-bottom: 16px;">
-                    <span style="color: #556772;">玩家評價：</span>
+                    <span style="color: #556772;">買家評價：</span>
                     <span id="detail-rating-text" style="color: #66c0f4;">--</span>
 
                     <span style="color: #556772;">開發人員：</span>
@@ -44,12 +44,12 @@
         </div>
 
         <section class="box game-description-section">
-            <h2 class="title is-4">遊戲介紹</h2>
+            <h2 class="title is-4">筆記介紹</h2>
             <div class="markdown-content" id="detail-desc"></div>
         </section>
 
         <div class="review-section">
-            <h2 class="title section-title">玩家評論</h2>
+            <h2 class="title section-title">買家評論</h2>
             <div id="review-write-area"></div>
             <div id="reviews-container">
                 <p style="color:var(--text-muted);padding:20px 0;">載入中...</p>
@@ -69,7 +69,7 @@
             currentGameId = parseInt(params.get('id'));
 
             if (!currentGameId) {
-                document.getElementById('detail-title').textContent = '找不到遊戲資料';
+                document.getElementById('detail-title').textContent = '找不到筆記資料';
                 return;
             }
 
@@ -81,7 +81,7 @@
                 const response = await apiGetGame(currentGameId);
                 const game = response.data || response;
 
-                document.title = `${game.game.title || game.title} — AurorVapor`;
+                document.title = `${game.game.title || game.title} — AurorNote`;
                 document.getElementById('detail-title').textContent = game.game.title || game.title;
                 document.getElementById('detail-desc').innerHTML = renderMarkdown(game.game.description || game.game.desc || game.desc || '');
                 
@@ -98,7 +98,7 @@
                 
                 const price = Number(game.game.price || game.price || 0);
                 document.getElementById('detail-price').textContent =
-                    price === 0 ? '免費遊玩' : `NT$ ${price.toLocaleString()}`;
+                    price === 0 ? '免費下載' : `NT$ ${price.toLocaleString()}`;
 
                 // 處理封面圖與多圖輪播 (Carousel)
                 const media = game.media || [];
@@ -216,14 +216,14 @@
             const isTakenDown = gameData.status === 'TAKEN_DOWN';
 
             if (isOwned) {
-                html += `<div class="game-owned-badge">已在你的遊戲庫</div><br>`;
+                html += `<div class="game-owned-badge">已在你的筆記庫</div><br>`;
             }
 
             html += `<div class="buttons" style="margin-top: 15px;">`;
 
             if (role === 'GUEST') {
                 if (isTakenDown) {
-                    html += `<button class="button is-danger is-outlined" disabled style="background-color: transparent; border-color: var(--accent-red); color: var(--accent-red);">此遊戲已下架</button>`;
+                    html += `<button class="button is-danger is-outlined" disabled style="background-color: transparent; border-color: var(--accent-red); color: var(--accent-red);">此筆記已下架</button>`;
                 } else {
                     html += `<a href="/pages/auth/login.html" class="button is-primary">登入後購買</a>`;
                 }
@@ -234,7 +234,7 @@
                     html += `<button class="button is-light" onclick="downloadGame(${gameData.game_id || gameData.id})">下載</button>`;
                 } else {
                     if (isTakenDown) {
-                        html += `<button class="button is-danger is-outlined" disabled style="background-color: transparent; border-color: var(--accent-red); color: var(--accent-red);">此遊戲已下架</button>`;
+                        html += `<button class="button is-danger is-outlined" disabled style="background-color: transparent; border-color: var(--accent-red); color: var(--accent-red);">此筆記已下架</button>`;
                     } else {
                         if (isCarted) {
                             html += `<button class="button is-primary" disabled style="background-color: var(--bg-darker); color: var(--text-muted); border: 1px solid var(--border-color);">已在購物車</button>`;
@@ -277,7 +277,7 @@
                 reasonMsg = `<p style="color:var(--text-muted);font-size:14px;">請 <a href="/pages/auth/login.html">登入</a> 後才能發表評論。</p>`;
             } else {
                 canReview = isOwned || role === 'ADMIN' || role === 'CSR' || (role === 'DEVELOPER' && (user.id || user.user_id) == devId);
-                if (!canReview) reasonMsg = `<p style="color:var(--text-muted);font-size:14px;">購買此遊戲後即可發表評論。</p>`;
+                if (!canReview) reasonMsg = `<p style="color:var(--text-muted);font-size:14px;">購買此筆記後即可發表評論。</p>`;
             }
 
             if (!canReview) {
@@ -287,13 +287,13 @@
 
             let roleOptions = '';
             if (isOwned) {
-                roleOptions += `<option value="USERS">玩家 (User)</option>`;
+                roleOptions += `<option value="USERS">買家 (User)</option>`;
             } else {
-                roleOptions += `<option value="USERS" disabled>玩家 (User) - 需購買遊戲</option>`;
+                roleOptions += `<option value="USERS" disabled>買家 (User) - 需購買筆記</option>`;
             }
             if (role === 'ADMIN') roleOptions += `<option value="ADMIN" ${!isOwned ? 'selected' : ''}>管理員 (Admin)</option>`;
             if (role === 'CSR') roleOptions += `<option value="CSR" ${!isOwned ? 'selected' : ''}>客服人員 (CSR)</option>`;
-            if (role === 'DEVELOPER' && user && (user.id || user.user_id) == devId) roleOptions += `<option value="AUTHOR" ${!isOwned ? 'selected' : ''}>開發者 (Author)</option>`;
+            if (role === 'DEVELOPER' && user && (user.id || user.user_id) == devId) roleOptions += `<option value="AUTHOR" ${!isOwned ? 'selected' : ''}>賣家 (Author)</option>`;
             
             let roleSelectHtml = '';
             if (role === 'ADMIN' || role === 'CSR' || (role === 'DEVELOPER' && user && (user.id || user.user_id) == devId)) {
@@ -322,7 +322,7 @@
                         </label>
                     </div>
                     <div class="form-group" style="margin-bottom:12px;">
-                        <textarea class="textarea" id="review-text" placeholder="分享你對這款遊戲的看法..." style="min-height:90px;"></textarea>
+                        <textarea class="textarea" id="review-text" placeholder="分享你對這款筆記的看法..." style="min-height:90px;"></textarea>
                     </div>
                     <button class="button is-primary" id="submit-review-btn" onclick="submitReview()">送出評論</button>
                 </div>
@@ -365,7 +365,7 @@
                     badge += ` <span style="color:#66c0f4; border: 1px solid #234f6e; background-color: #1a2a36; border-radius: 12px; padding: 2px 10px; font-size: 11px; font-weight: bold; margin-left: 8px;">AUTHOR</span>`;
                 }
 
-                const author = escapeHtml(r.author_username || r.author || r.username || (r.user && r.user.username) || '玩家');
+                const author = escapeHtml(r.author_username || r.author || r.username || (r.user && r.user.username) || '買家');
                 
                 let dateStr = r.date || r.created_at || '';
                 let date = '未知時間';
@@ -397,7 +397,7 @@
                     const currentUser = getCurrentUser();
                     const currentUserId = currentUser ? (currentUser.user_id || currentUser.id) : null;
                     replies.forEach(reply => {
-                        const rAuthor = escapeHtml(reply.author_username || reply.author || reply.username || (reply.user && reply.user.username) || '玩家');
+                        const rAuthor = escapeHtml(reply.author_username || reply.author || reply.username || (reply.user && reply.user.username) || '買家');
                         const rText = escapeHtml(reply.content || reply.text || '');
                         const replyId = reply.id || reply.review_reply_id;
                         const replyUserId = reply.user_id || (reply.User && reply.User.user_id);
@@ -457,9 +457,9 @@
                     const isOwned = window._gameIsOwned || false;
                     const devId = window._gameDevId || 0;
                     if (isOwned) {
-                        replyRoleOptions += `<option value="USERS">玩家</option>`;
+                        replyRoleOptions += `<option value="USERS">買家</option>`;
                     } else {
-                        replyRoleOptions += `<option value="USERS" disabled>玩家</option>`;
+                        replyRoleOptions += `<option value="USERS" disabled>買家</option>`;
                     }
                     if (role === 'ADMIN') replyRoleOptions += `<option value="ADMIN" ${!isOwned ? 'selected' : ''}>ADMIN</option>`;
                     if (role === 'CSR') replyRoleOptions += `<option value="CSR" ${!isOwned ? 'selected' : ''}>CSR</option>`;
@@ -582,10 +582,10 @@
         }
 
         async function adminTakeDown() {
-            if (!confirm('確定要以官方身分強制下架此遊戲嗎？')) return;
+            if (!confirm('確定要以官方身分強制下架此筆記嗎？')) return;
             try {
                 await apiAdminDeleteGame(currentGameId);
-                showToast('遊戲已成功下架。', 'success');
+                showToast('筆記已成功下架。', 'success');
                 setTimeout(() => window.location.href = '/', 1500);
             } catch (err) {
                 showToast(`下架失敗：${err.message}`, 'error');
@@ -599,7 +599,7 @@
                 if (data && data.launch_url) {
                     window.open(data.launch_url, '_blank');
                 } else {
-                    showToast('遊戲啟動中...', 'success');
+                    showToast('筆記啟動中...', 'success');
                 }
             } catch (err) {
                 showToast(`啟動失敗：${err.message}`, 'error');
@@ -624,7 +624,7 @@
                 link.click();
                 link.remove();
                 URL.revokeObjectURL(url);
-                showToast('開始下載遊戲...', 'success');
+                showToast('開始下載筆記...', 'success');
             } catch (err) {
                 showToast(`下載失敗：${err.message}`, 'error');
             }

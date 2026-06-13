@@ -1,13 +1,13 @@
 # 1. 帳號生命週期與個人設定 (Account Lifecycle)
 
-本文件描述玩家或開發者從註冊、登入、一直到修改個人基本資料的完整閉環業務邏輯。此流程對應前端的 `login.html`, `register.html` 與 `profile.html`，並由後端 `auth_controller.go` 與 `user_controller.go` 處理。
+本文件描述買家或賣家從註冊、登入、一直到修改個人基本資料的完整閉環業務邏輯。此流程對應前端的 `login.html`, `register.html` 與 `profile.html`，並由後端 `auth_controller.go` 與 `user_controller.go` 處理。
 
 ---
 
 ## 1. 帳號註冊 (Registration)
 
 - **起點**：使用者在 `register.html` 填寫註冊表單。
-- **輸入資料**：`username`, `email`, `password`，以及一個可選的「我是開發者 (IsDeveloper)」勾選框。
+- **輸入資料**：`username`, `email`, `password`，以及一個可選的「我是賣家 (IsDeveloper)」勾選框。
 - **流程與後端驗證 (`POST /api/auth/register`)**：
   1. **基礎驗證**：後端檢查密碼長度必須 `>= 6`，且 Email 必須包含 `@`。
   2. **密碼加密**：使用 Bcrypt 將密碼雜湊化後存入資料庫。
@@ -31,7 +31,7 @@
      - 若 `user.Permission != "ACTIVE"` (例如被管理員標記為 `DEACTIVE` 停權，或 `DELETED` 刪除)，登入將被**強制拒絕**並回傳 HTTP 403 `This account is not active`。
      - 若 `user.Role == "NULL"` 也會被拒絕登入。
   4. **核發 Token**：驗證全數通過後，核發包含 `user_id` 與 `role` 的 JWT Token。
-- **終點**：前端儲存 Token，依照 `Role` 決定導覽列顯示的特殊入口 (例如「開發者中心」或「管理後台」)，並導向商店首頁。
+- **終點**：前端儲存 Token，依照 `Role` 決定導覽列顯示的特殊入口 (例如「賣家中心」或「管理後台」)，並導向商店首頁。
 
 ---
 

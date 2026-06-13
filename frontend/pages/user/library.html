@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>個人遊戲庫 — AurorVapor</title>
+    <title>個人筆記庫 — AurorNote</title>
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
 
     <main class="library-container">
         <div class="library-header">
-            <h1 class="title section-title" style="margin:0;">我的遊戲庫</h1>
+            <h1 class="title section-title" style="margin:0;">我的筆記庫</h1>
         </div>
         <div class="library-grid" id="my-games-list">
             <p style="color:var(--text-muted);text-align:center;padding:40px; grid-column: 1 / -1;">載入中...</p>
@@ -46,7 +46,7 @@
             if (activeGames.length === 0) {
                 listEl.innerHTML = `
                     <div class="empty-state">
-                        <p>你的遊戲庫空空如也，去商店逛逛吧！</p>
+                        <p>你的筆記庫空空如也，去商店逛逛吧！</p>
                         <a href="/" class="button is-primary" style="margin-top:12px;">前往商店</a>
                     </div>`;
                 return;
@@ -100,11 +100,11 @@
                 // GET /api/protected/library/{game_id}/play
                 const result = await authFetch(`/api/protected/library/${gameId}/play`);
                 const data   = await result.json();
-                // 後端可回傳遊戲啟動 URL 或 token
+                // 後端可回傳筆記啟動 URL 或 token
                 if (data && data.launch_url) {
                     window.open(data.launch_url, '_blank');
                 } else {
-                    showToast('遊戲啟動中...', 'success');
+                    showToast('筆記啟動中...', 'success');
                 }
             } catch (err) {
                 showToast(`啟動失敗：${err.message}`, 'error');
@@ -130,7 +130,7 @@
                 link.click();
                 link.remove();
                 URL.revokeObjectURL(url);
-                showToast('開始下載遊戲...', 'success');
+                showToast('開始下載筆記...', 'success');
             } catch (err) {
                 showToast(`下載失敗：${err.message}`, 'error');
             }

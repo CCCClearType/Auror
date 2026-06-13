@@ -17,16 +17,16 @@ INSERT INTO users (username, email, password_hash, last_visit_ip, role, status, 
 -- 2. 寫入 games 資料 (4筆)
 -- ==========================================
 INSERT INTO games (developer_id, title, description, price, overall_rating, status) VALUES
-(1, 'CyberCity 2077', '霓虹城市中的開放世界動作 RPG。', 1200.00, 4.5, 'ACTIVE'),
-(1, 'Magic Tower', '探索高塔、解謎並收集稀有裝備。', 150.00, 4.8, 'ACTIVE'),
-(2, 'Speed Racing V', '節奏快速的街頭競速遊戲。', 850.50, 3.9, 'ACTIVE'),
-(2, 'Farm Simulator 3', '輕鬆經營農場，擴張你的田園生活。', 300.00, 4.2, 'ACTIVE');
+(1, '資料結構期末考精華筆記', '涵蓋樹、圖、排序等核心資料結構概念與考題精選。', 1200.00, 4.5, 'ACTIVE'),
+(1, '演算法章節重點總整理', '分析動態規劃、貪婪演算法與分治法等必考重點。', 150.00, 4.8, 'ACTIVE'),
+(2, '材料與生活通識課必讀筆記', '整理材料性質與日常生活應用，輕鬆取得高分。', 850.50, 3.9, 'ACTIVE'),
+(2, '微積分甲高分全攻略', '包含極限、導數、積分及多元微積分推導與習題詳解。', 300.00, 4.2, 'ACTIVE');
 
 -- ==========================================
 -- 3. 寫入 tags 與 game_tags 資料
 -- ==========================================
 INSERT INTO tags (tag_name) VALUES
-('RPG'), ('Action'), ('Racing'), ('Simulation');
+('資料結構'), ('演算法'), ('材料與生活'), ('微積分');
 
 INSERT INTO game_tags (game_id, tag_id) VALUES
 (1, 1), (1, 2), (2, 1), (3, 3), (4, 4);
@@ -34,7 +34,7 @@ INSERT INTO game_tags (game_id, tag_id) VALUES
 -- ==========================================
 -- 4. 寫入 game_media 資料
 --    圖片/影片 (media): /media/images/{game_id}/{sha256}.{ext}
---    遊戲主檔 (game_file): /downloads/{game_id}/{original_name}
+--    筆記檔案 (game_file): /downloads/{game_id}/{original_name}
 -- ==========================================
 INSERT INTO game_media (game_id, file_url, media_type) VALUES
 (1, '/media/images/1/63cb3d94925658f69d65f10a8a529599b42c0faaf97559f3212acc085c5d4da7.jpg', 'media'),
@@ -50,9 +50,9 @@ INSERT INTO game_media (game_id, file_url, media_type) VALUES
 (3, '/media/images/3/acaba9e0fae5fa9d72cfe96b930ccdc4d447cce078bd6eff0ee73b869019530c.png', 'media'),
 (3, '/media/images/3/cec7e79ee9686b5ca9fa4112ed16db99cb4c5c3f55440a065935a1e7ff171582.png', 'media'),
 
-(1, '/downloads/1/cybercity-demo.txt', 'game_file'),
+(1, '/downloads/1/data-structures-notes.txt', 'game_file'),
 (3, '/downloads/3/bathroom.png', 'game_file'),
-(4, '/downloads/4/farm-simulator-demo.txt', 'game_file');
+(4, '/downloads/4/calculus-guide.txt', 'game_file');
 
 -- ==========================================
 -- 5. 寫入 transactions 與 transaction_items 資料
@@ -92,29 +92,29 @@ INSERT INTO wish_lists (user_id, game_id) VALUES
 -- 8. 寫入 refund_requests 退款資料 
 -- ==========================================
 INSERT INTO refund_requests (buyer_id, transaction_item_id, handled_by, reason, reject_reason, resolved_at, status) VALUES 
-(1, 1, NULL, '買錯遊戲了，我的電腦跑不動', NULL, NULL, 'PENDING'),
-(1, 2, 3, '遊戲一直閃退無法正常遊玩', NULL, '2026-06-05 14:30:00', 'APPROVED'),
-(2, 3, 3, '覺得不好玩，想退錢', '您的遊玩時間已超過 2 小時，不符合平台的退款政策。', '2026-06-06 09:15:00', 'REJECTED'),
-(1, 4, 1, '伺服器連線極度不穩定，嚴重影響體驗，要求專案處理', NULL, '2026-06-06 10:00:00', 'APPROVED');
+(1, 1, NULL, '買錯筆記了，內容跟我們班教授教的不一樣', NULL, NULL, 'PENDING'),
+(1, 2, 3, '筆記檔案損毀，無法正常開啟閱讀', NULL, '2026-06-05 14:30:00', 'APPROVED'),
+(2, 3, 3, '覺得內容不太充實，想申請退款', '您已下載此筆記，不符合平台的退款政策。', '2026-06-06 09:15:00', 'REJECTED'),
+(1, 4, 1, '筆記內容嚴重錯誤，要求處理', NULL, '2026-06-06 10:00:00', 'APPROVED');
 
 -- ==========================================
 -- 9. 寫入社交系統資料 (reviews, replies, friends, msgs, blacklists)
 -- ==========================================
 INSERT INTO reviews (game_id, user_id, content, attitude) VALUES
-(1, 1, '神作！畫面超讚，劇情非常豐富。', 'POSITIVE'),
-(3, 2, '操控手感有點差，希望能盡快更新。', 'NEGATIVE'),
-(1, 3, '雖然有少許 Bug，但不影響整體極佳的體驗。', 'POSITIVE'),
-(4, 1, '種田模擬太療癒了，可以玩一整天。', 'POSITIVE');
+(1, 1, '神作！排版超讚，內容非常豐富。', 'POSITIVE'),
+(3, 2, '排版有點混亂，希望能盡快更新。', 'NEGATIVE'),
+(1, 3, '雖然有少許錯字，但不影響整體極佳的體驗。', 'POSITIVE'),
+(4, 1, '微積分整理得太療癒了，可以看一整天。', 'POSITIVE');
 
 -- 為了避免時序錯誤，將回覆拆分為獨立語句依序寫入
 INSERT INTO review_replies (review_id, user_id, parent_reply_id, content) VALUES
-(2, 1, NULL, '真的！飄移的時候總是卡卡的。');
+(2, 1, NULL, '真的！特別是圖形演算法那段排版卡卡的。');
 
 INSERT INTO review_replies (review_id, user_id, parent_reply_id, content) VALUES
-(2, 2, 1, '原來大家都有這個問題，我以為是我手殘。');
+(2, 2, 1, '原來大家都有這個問題，我以為是我看不懂。');
 
 INSERT INTO review_replies (review_id, user_id, parent_reply_id, content) VALUES
-(1, 4, NULL, '完全同意，年度最佳遊戲無誤！');
+(1, 4, NULL, '完全同意，年度最佳筆記無誤！');
 
 INSERT INTO review_replies (review_id, user_id, parent_reply_id, content) VALUES
 (1, 1, 3, '謝謝版主的認同！');
@@ -123,8 +123,8 @@ INSERT INTO friendships (sender_id, receiver_id, status) VALUES
 (1, 2, 'ACCEPTED'), (3, 1, 'ACCEPTED'), (2, 4, 'PENDING'), (4, 1, 'DECLINED');
 
 INSERT INTO messages (sender_id, receiver_id, content, is_read) VALUES
-(1, 2, '今晚要一起連線打副本嗎？', TRUE),
-(2, 1, '好啊！我大概晚上八點上線。', FALSE),
+(1, 2, '今晚要一起討論期末考進度嗎？', TRUE),
+(2, 1, '好啊！我大概晚上八點去圖書館。', FALSE),
 (3, 1, '嗨，你的退款申請我們收到了。', TRUE),
 (1, 3, '好的，麻煩您了。', FALSE);
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>購買紀錄 — AurorVapor</title>
+    <title>購買紀錄 — AurorNote</title>
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
@@ -67,7 +67,7 @@
 
                     const itemId  = itemInfo.item_id || itemInfo.id;
                     const game    = itemInfo.Game || itemInfo.game || {};
-                    const title   = game.title || game.Title || itemInfo.game_title || itemInfo.GameTitle || itemInfo.title || '未知遊戲';
+                    const title   = game.title || game.Title || itemInfo.game_title || itemInfo.GameTitle || itemInfo.title || '未知筆記';
                     const price   = Number(itemInfo.purchase_price || itemInfo.price || 0);
                     const refundStatus = itemInfo.refund_status || itemInfo.refundStatus || '';
 
@@ -99,7 +99,7 @@
         }
 
         async function requestRefund(transactionItemId) {
-            const reason = prompt("確定要申請退款嗎？\n(注意：遊玩時間超過 2 小時可能無法退款)\n\n請填寫退款理由：");
+            const reason = prompt("確定要申請退款嗎？\n(注意：已下載之數位內容可能無法退款)\n\n請填寫退款理由：");
             if (reason === null) return;
             if (reason.trim() === '') {
                 showToast('退款理由不能為空！', 'error');

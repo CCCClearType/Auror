@@ -1,7 +1,7 @@
 # Repository Instructions
 
 ## Project Shape
-- AurorVapor is a small three-tier game-store app: static vanilla HTML/CSS/JS frontend, Go/Gin REST API, PostgreSQL database.
+- AurorNote is a small three-tier game-store app: static vanilla HTML/CSS/JS frontend, Go/Gin REST API, PostgreSQL database.
 - Backend entrypoint is `backend/main.go`; route registration lives in `backend/routes/routes.go`.
 - Frontend entrypoint is `frontend/index.html`; Caddy config is `frontend/Caddyfile`; shared API calls must go through `frontend/assets/js/api.js`, which uses same-origin relative URLs (`API_BASE = ''`).
 - Frontend is static HTML/CSS/JS with Bulma loaded from `frontend/assets/css/style.css`; there is no frontend build step.

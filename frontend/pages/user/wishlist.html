@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>願望清單 — AurorVapor</title>
+    <title>願望清單 — AurorNote</title>
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
@@ -59,7 +59,7 @@
             if (games.length === 0) {
                 listEl.innerHTML = `
                     <div class="empty-state">
-                        <p>願望清單空空如也，去商店尋找心儀的遊戲吧！</p>
+                        <p>願望清單空空如也，去商店尋找心儀的筆記吧！</p>
                         <a href="/" class="button is-primary" style="margin-top:12px;">前往商店</a>
                     </div>`;
                 return;
@@ -94,7 +94,7 @@
                 if (isTakenDown) {
                     cartBtnHtml = `<button class="button is-danger is-outlined" disabled style="background-color: transparent; border-color: var(--accent-red); color: var(--accent-red);">已下架</button>`;
                 } else if (isOwned) {
-                    cartBtnHtml = `<button class="button is-primary" disabled style="background-color: var(--bg-darker); color: var(--text-muted); border: 1px solid var(--border-color);">已在遊戲庫</button>`;
+                    cartBtnHtml = `<button class="button is-primary" disabled style="background-color: var(--bg-darker); color: var(--text-muted); border: 1px solid var(--border-color);">已在筆記庫</button>`;
                 } else if (isCarted) {
                     cartBtnHtml = `<button class="button is-primary" disabled style="background-color: var(--bg-darker); color: var(--text-muted); border: 1px solid var(--border-color);">已在購物車</button>`;
                 } else {
@@ -108,7 +108,7 @@
                     <div class="library-item-info">
                         <a href="/pages/store/game_detail?id=${gameId}" style="color:white;text-decoration:none;">
                             <h3 style="color:${isTakenDown ? 'var(--text-muted)' : 'white'}; font-size:1.3rem; margin-bottom:8px;">
-                                ${escapeHtml(title || '未命名遊戲')}
+                                ${escapeHtml(title || '未命名筆記')}
                                 ${isTakenDown ? '<span class="tag is-danger is-light" style="margin-left:8px;">已下架</span>' : ''}
                             </h3>
                         </a>
@@ -142,7 +142,7 @@
             try {
                 // POST /api/protected/cart
                 await apiAddToCart(gameId);
-                showToast('已將遊戲加入購物車！', 'success');
+                showToast('已將筆記加入購物車！', 'success');
                 await loadWishlist();
             } catch (err) {
                 showToast(`操作失敗：${err.message}`, 'error');

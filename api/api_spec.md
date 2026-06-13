@@ -1,4 +1,4 @@
-# AurorVapor 詳細 API 規格書 (API Specification)
+# AurorNote 詳細 API 規格書 (API Specification)
 
 這份文件專為**前端開發人員**撰寫。詳細列出所有 API 的傳入參數 (Request Body)、必要的標頭 (Headers)、以及各種成功與失敗情境的回傳格式 (Response JSON)。
 
@@ -8,7 +8,7 @@
 在所有端點中，如果發生以下情況，後端會統一回傳對應的錯誤代碼，下方各端點的說明中將**不再贅述**這些基本錯誤：
 - `400 Bad Request`: `{"error": "..."}` (傳入的 JSON 格式錯誤、缺少必填欄位 `binding:"required"`)
 - `401 Unauthorized`: `{"error": "..."}` (未登入、JWT Token 缺失或無效)
-- `403 Forbidden`: `{"error": "Forbidden: Requires <ROLE> role"}` (權限不足，例如一般玩家呼叫 ADMIN API)
+- `403 Forbidden`: `{"error": "Forbidden: Requires <ROLE> role"}` (權限不足，例如一般會員呼叫 ADMIN API)
 - `500 Internal Server Error`: `{"error": "..."}` (資料庫連線失敗、伺服器內部錯誤)
 
 ---
@@ -24,7 +24,7 @@
     "username": "PlayerOne",
     "email": "player1@test.com",
     "password": "password123", // 必填，長度需 >= 6
-    "is_developer": false      // 選填，是否註冊為開發者
+    "is_developer": false      // 選填，是否註冊為賣家
   }
   ```
 - **Responses**:
@@ -127,7 +127,7 @@
 - **Go 對應模組**: `admin_controller.go` (函式: `DeleteUser`)
 - **Headers**: `Authorization: Bearer <admin_token>`
 - **Request Body**: 無
-- **說明**: 實作上為「軟刪除」(將 `permission` 設為 `DELETED`)，以確保過去發布的遊戲、購買紀錄與評論不會被一併刪除。
+- **說明**: 實作上為「軟刪除」(將 `permission` 設為 `DELETED`)，以確保過去發布的筆記、購買紀錄與評論不會被一併刪除。
 - **Responses**:
   - `200 OK`: `{"message": "User completely removed"}`
 
@@ -143,18 +143,18 @@
 
 ---
 
-## 2. 商店與遊戲 (Store & Games)
+## 2. 商店與筆記 (Store & Games)
 
-### `[GET] /api/games` (瀏覽/搜尋遊戲)
+### `[GET] /api/games` (瀏覽/搜尋筆記)
 - **Go 對應模組**: `game_controller.go` (函式: `GetGames`)
 - **Headers**: 無
 - **Query Params** (可選): 
-  - `?q=elden` (關鍵字搜尋：比對標題、介紹、標籤與開發者名稱)
-  - `?tag=Action` (標籤精準篩選)
-  - `?developer=StudioAurora` (開發者名稱篩選)
+  - `?q=elden` (關鍵字搜尋：比對標題、介紹、科目與賣家名稱)
+  - `?tag=Action` (科目精準篩選)
+  - `?developer=StudioAurora` (賣家名稱篩選)
   - `?min_price=100&max_price=500` (價格區間篩選)
   - `?sort=price_asc` (排序方式：`price_asc` 便宜到貴, `price_desc` 貴到便宜)
-  - `?hide_owned=true` (隱藏已購買遊戲與自己開發的遊戲：需同時提供 Authorization Bearer Token 才能生效)
+  - `?hide_owned=true` (隱藏已購買筆記與自己開發的筆記：需同時提供 Authorization Bearer Token 才能生效)
 - **Responses**:
   - `200 OK`:
     ```json
@@ -171,28 +171,28 @@
     }
     ```
 
-### `[GET] /api/games/{id}` (查看遊戲詳情)
+### `[GET] /api/games/{id}` (查看筆記詳情)
 - **Go 對應模組**: `game_controller.go` (函式: `GetGameByID`)
 - **Headers**: 無
 - **Responses**:
   - `200 OK`: `{"data": { "game": {...}, "developer_name": "DevUser", "media": [...], "tags": [...], "reviews": [...] }}`
   - `404 Not Found`: `{"error": "Game not found"}`
 
-### `[GET] /api/games/{id}/reviews` (查看遊戲評論)
+### `[GET] /api/games/{id}/reviews` (查看筆記評論)
 - **Go 對應模組**: `social_controller.go` (函式: `GetReviews`)
 - **Headers**: 無
 - **Responses**:
   - `200 OK`: `[ { "review_id": 1, "content": "...", "attitude": "POSITIVE", "posted_as_role": "USERS", "user": {...}, "replies": [...] } ]`
   - **注意**: 回傳格式為陣列 (非包在 `{"data": [...]}` 內)。
 
-### `[GET] /api/developer/games` (查看自己的遊戲列表)
+### `[GET] /api/developer/games` (查看自己的筆記列表)
 - **Go 對應模組**: `developer_controller.go` (函式: `GetDeveloperGames`)
 - **Headers**: `Authorization: Bearer <developer_token>`
 - **Responses**:
   - `200 OK`: `{"data": [ { ...game_objects_with_media... } ]}`
-  - **說明**: DEVELOPER 只會看到自己上架的遊戲；ADMIN 可查看全部遊戲。
+  - **說明**: DEVELOPER 只會看到自己上架的筆記；ADMIN 可查看全部筆記。
 
-### `[POST] /api/developer/games` (建立新遊戲草稿)
+### `[POST] /api/developer/games` (建立新筆記草稿)
 - **Go 對應模組**: `developer_controller.go` (函式: `UploadGame`)
 - **Headers**: `Authorization: Bearer <developer_token>`
 - **Request Body**:
@@ -200,74 +200,74 @@
   {
     "title": "My Indie Game",    // 必填
     "price": 350.00,             // 必填，最小值 0
-    "desc": "遊戲描述 (選填，支援 Markdown)"  // 選填
+    "desc": "筆記描述 (選填，支援 Markdown)"  // 選填
   }
   ```
 - **Responses**:
   - `201 Created`: `{"message": "Game uploaded successfully", "game": {...}}`
-  - **說明**: 建立的新遊戲預設狀態為 `DRAFT` (草稿)，不會出現在商店首頁。
+  - **說明**: 建立的新筆記預設狀態為 `DRAFT` (草稿)，不會出現在商店首頁。
 
-### `[PUT] /api/developer/games/{id}/publish` (正式上架遊戲)
+### `[PUT] /api/developer/games/{id}/publish` (正式上架筆記)
 - **Go 對應模組**: `developer_controller.go` (函式: `PublishGame`)
 - **Headers**: `Authorization: Bearer <developer_token>`
-- **說明**: 將草稿遊戲轉換為 `ACTIVE` 狀態。
-- **後端驗證約束**: 必須檢查該遊戲是否**至少有 1 個標籤 (tag)**。若未達條件則拒絕上架。
+- **說明**: 將草稿筆記轉換為 `ACTIVE` 狀態。
+- **後端驗證約束**: 必須檢查該筆記是否**至少有 1 個科目 (tag)**。若未達條件則拒絕上架。
 - **Responses**:
   - `200 OK`: `{"message": "Game published successfully"}`
   - `400 Bad Request`: `{"error": "Game must have at least 1 tag to be published"}`
   - `403 Forbidden`: `{"error": "Forbidden: You can only publish your own games"}`
   - `404 Not Found`: `{"error": "Game not found"}`
 
-### `[PUT] /api/developer/games/{id}` (編輯遊戲資訊)
+### `[PUT] /api/developer/games/{id}` (編輯筆記資訊)
 - **Go 對應模組**: `developer_controller.go` (函式: `UpdateGame`)
 - **Headers**: `Authorization: Bearer <developer_token>`
 - **Request Body**:
   ```json
   {
     "price": 299.00,
-    "desc": "更新的遊戲描述"
+    "desc": "更新的筆記描述"
   }
   ```
-  > **注意**: `title` 無法透過此 API 修改；`price` 若傳 `0` 仍會被視為有效值並寫入。ADMIN 可編輯任何遊戲。
+  > **注意**: `title` 無法透過此 API 修改；`price` 若傳 `0` 仍會被視為有效值並寫入。ADMIN 可編輯任何筆記。
 - **Responses**:
   - `200 OK`: `{"message": "Game updated successfully", "game": {...}}`
   - `403 Forbidden`: `{"error": "Forbidden: You can only edit your own games"}`
   - `404 Not Found`: `{"error": "Game not found"}`
 
-### `[DELETE] /api/developer/games/{id}` (下架自己的遊戲)
+### `[DELETE] /api/developer/games/{id}` (下架自己的筆記)
 - **Go 對應模組**: `developer_controller.go` (函式: `DeleteGame`)
 - **Headers**: `Authorization: Bearer <developer_token>`
-- **說明**: 實作上為「軟刪除」(將 `status` 設為 `TAKEN_DOWN`)，以確保已購買此遊戲的玩家依然能從遊戲庫下載與遊玩，但會從商店清單中隱藏。
+- **說明**: 實作上為「軟刪除」(將 `status` 設為 `TAKEN_DOWN`)，以確保已購買此筆記的買家依然能從筆記庫下載與閱讀，但會從商店清單中隱藏。
 - **Responses**:
   - `200 OK`: `{"message": "Game deleted successfully"}`
   - `403 Forbidden`: `{"error": "Forbidden: You can only delete your own games"}`
   - `404 Not Found`: `{"error": "Game not found"}`
 
-### `[DELETE] /api/admin/games/{id}` (強制下架遊戲)
+### `[DELETE] /api/admin/games/{id}` (強制下架筆記)
 - **Go 對應模組**: `admin_controller.go` (函式: `AdminDeleteGame`)
 - **Headers**: `Authorization: Bearer <admin_token>`
 - **說明**: 實作上同樣為「軟刪除」。
 - **Responses**:
   - `200 OK`: `{"message": "Game deleted successfully by Admin"}`
 
-### `[POST] /api/developer/games/{id}/media` (上傳遊戲素材)
+### `[POST] /api/developer/games/{id}/media` (上傳筆記素材)
 - **Go 對應模組**: `developer_controller.go` (函式: `UploadMedia`)
 - **Headers**: `Authorization: Bearer <developer_token>`, `Content-Type: multipart/form-data`
 - **Request Body** (`multipart/form-data`):
   | 欄位名稱 | 類型 | 必填 | 說明 |
   |----------|------|------|------|
-  | `file` | File | ✅ | 要上傳的圖片或遊戲檔案 |
-  | `media_type` | String | 否 | `"media"` (圖片，預設) 或 `"game_file"` (遊戲檔案) |
+  | `file` | File | ✅ | 要上傳的圖片或筆記檔案 |
+  | `media_type` | String | 否 | `"media"` (圖片，預設) 或 `"game_file"` (筆記檔案) |
 - **儲存路徑與命名規則**:
   - `media` (圖片/影片) → 會以檔案內容進行 SHA-256 Hash 重新命名：`assets/images/{game_id}/{sha256}.{ext}`，對外 URL `/media/images/{game_id}/{sha256}.{ext}`
-  - `game_file` (遊戲主檔) → 不會進行 Hash，保留上傳的原始檔名：`assets/game-files/{game_id}/{original_name}`，對外 URL `/downloads/{game_id}/{original_name}`
+  - `game_file` (筆記檔案) → 不會進行 Hash，保留上傳的原始檔名：`assets/game-files/{game_id}/{original_name}`，對外 URL `/downloads/{game_id}/{original_name}`
 - **Responses**:
   - `201 Created`: `{"message": "Media uploaded successfully", "data": {...}, "file_url": "/media/images/..."}`
   - `400 Bad Request`: `{"error": "Missing file field"}`
   - `403 Forbidden`: `{"error": "Forbidden: You can only upload media for your own games"}`
   - `404 Not Found`: `{"error": "Game not found"}`
 
-### `[DELETE] /api/developer/games/{id}/media/{media_id}` (刪除遊戲素材)
+### `[DELETE] /api/developer/games/{id}/media/{media_id}` (刪除筆記素材)
 - **Go 對應模組**: `developer_controller.go` (函式: `DeleteMedia`)
 - **Headers**: `Authorization: Bearer <developer_token>`
 - **Responses**:
@@ -275,7 +275,7 @@
   - `403 Forbidden`: `{"error": "Forbidden: You can only manage your own games"}`
   - `404 Not Found`: `{"error": "Media not found"}` 或 `{"error": "Game not found"}`
 
-### `[GET] /api/developer/games/{id}/stats` (查看遊戲銷售數據)
+### `[GET] /api/developer/games/{id}/stats` (查看筆記銷售數據)
 - **Go 對應模組**: `developer_controller.go` (函式: `GetGameStats`)
 - **Headers**: `Authorization: Bearer <developer_token>`
 - **Responses**:
@@ -291,13 +291,13 @@
   - `403 Forbidden`: `{"error": "Forbidden: You can only view stats for your own games"}`
   - `404 Not Found`: `{"error": "Game not found"}`
 
-### `[GET] /api/tags` (查看所有可用標籤)
+### `[GET] /api/tags` (查看所有可用科目)
 - **Go 對應模組**: `developer_controller.go` (函式: `GetTags`)
 - **Headers**: 無
 - **Responses**:
   - `200 OK`: `{"data": [ {"tag_id": 1, "tag_name": "RPG"} ]}`
 
-### `[POST] /api/developer/tags` (建立新標籤)
+### `[POST] /api/developer/tags` (建立新科目)
 - **Go 對應模組**: `developer_controller.go` (函式: `CreateTag`)
 - **Headers**: `Authorization: Bearer <developer_token>`
 - **Request Body**: `{"tag_name": "Action"}`
@@ -305,7 +305,7 @@
   - `201 Created`: `{"message": "Tag created successfully", "data": { "tag_id": 1, "tag_name": "Action" }}`
   - `500 Internal Server Error`: `{"error": "Failed to create tag (might already exist)"}`
 
-### `[POST] /api/developer/games/{id}/tags` (為遊戲貼標籤)
+### `[POST] /api/developer/games/{id}/tags` (為筆記貼科目)
 - **Go 對應模組**: `developer_controller.go` (函式: `AddTagToGame`)
 - **Headers**: `Authorization: Bearer <developer_token>`
 - **Request Body**: `{"tag_id": 2}`
@@ -314,7 +314,7 @@
   - `403 Forbidden`: `{"error": "Forbidden: Not your game"}`
   - `404 Not Found`: `{"error": "Game not found"}`
 
-### `[DELETE] /api/developer/games/{id}/tags/{tag_id}` (移除遊戲標籤)
+### `[DELETE] /api/developer/games/{id}/tags/{tag_id}` (移除筆記科目)
 - **Go 對應模組**: `developer_controller.go` (函式: `RemoveTagFromGame`)
 - **Headers**: `Authorization: Bearer <developer_token>`
 - **Responses**:
@@ -373,7 +373,7 @@
   ```json
   {
     "transaction_item_id": 105,
-    "reason": "遊戲有嚴重 Bug 無法執行"
+    "reason": "筆記有嚴重 Bug 無法執行"
   }
   ```
 - **Responses**:
@@ -403,9 +403,9 @@
 
 ---
 
-## 4. 遊戲庫與願望清單 (Library & Wishlist)
+## 4. 筆記庫與願望清單 (Library & Wishlist)
 
-### `[GET] /api/protected/library` (顯示個人遊戲庫)
+### `[GET] /api/protected/library` (顯示個人筆記庫)
 - **Go 對應模組**: `library_controller.go` (函式: `GetLibrary`)
 - **Headers**: `Authorization: Bearer <token>`
 - **Responses**:
@@ -431,19 +431,19 @@
 - **Responses**:
   - `200 OK`: `{"message": "Removed from wishlist"}`
 
-### `[GET] /api/protected/library/{game_id}/play` (玩遊戲)
+### `[GET] /api/protected/library/{game_id}/play` (玩筆記)
 - **Go 對應模組**: `library_controller.go` (函式: `PlayGame`)
 - **Headers**: `Authorization: Bearer <token>`
 - **Responses**:
   - `200 OK`: `{"message": "Game launched successfully", "auth_token": "mock-play-token-12345"}`
   - `403 Forbidden`: `{"error": "You do not own this game or the license is inactive"}`
 
-### `[GET] /api/protected/library/{game_id}/download` (下載遊戲)
+### `[GET] /api/protected/library/{game_id}/download` (下載筆記)
 - **Go 對應模組**: `library_controller.go` (函式: `DownloadGame`)
 - **Headers**: `Authorization: Bearer <token>`
 - **Responses**:
   - `200 OK`: 直接回傳檔案串流 (binary)，附帶 `Content-Disposition: attachment; filename="{filename}"` 標頭。
-    > 前端應直接觸發瀏覽器下載 (例如 `window.location.href = url` 或 `<a>` 標籤)，而非當作 JSON 處理。
+    > 前端應直接觸發瀏覽器下載 (例如 `window.location.href = url` 或 `<a>` 科目)，而非當作 JSON 處理。
   - `403 Forbidden`: `{"error": "You do not own this game or the license is inactive"}`
   - `404 Not Found`: `{"error": "No downloadable game file is available"}`
 
@@ -451,7 +451,7 @@
 
 ## 5. 社交、評論與通訊 (Social & Reviews)
 
-### `[POST] /api/social/games/{id}/reviews` (對遊戲發表評價)
+### `[POST] /api/social/games/{id}/reviews` (對筆記發表評價)
 - **Go 對應模組**: `social_controller.go` (函式: `PostReview`)
 - **Headers**: `Authorization: Bearer <token>`
 - **Request Body**:

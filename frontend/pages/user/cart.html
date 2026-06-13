@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>購物車 — AurorVapor</title>
+    <title>購物車 — AurorNote</title>
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
@@ -61,7 +61,7 @@
             if (cartData.length === 0) {
                 listEl.innerHTML = `
                     <div class="empty-state">
-                        <p>購物車是空的，去商店挑選遊戲吧！</p>
+                        <p>購物車是空的，去商店挑選筆記吧！</p>
                          <a href="/" class="button is-light" style="margin-top:12px;">前往商店</a>
                     </div>`;
                 summaryEl.style.display = 'none';
@@ -79,7 +79,7 @@
                 const isTakenDown = (game.status === 'TAKEN_DOWN' || item.status === 'TAKEN_DOWN');
                 
                 // If title is missing, it means the game was deleted from the store
-                const displayTitle = title ? title : '已下架或失效的遊戲';
+                const displayTitle = title ? title : '已下架或失效的筆記';
                 
                 if (title && !isTakenDown) {
                     total += price;
@@ -147,7 +147,7 @@
             try {
                 // POST /api/protected/checkout
                 await apiCheckout();
-                showToast('結帳成功！遊戲已加入你的個人遊戲庫。', 'success');
+                showToast('結帳成功！筆記已加入你的個人筆記庫。', 'success');
                 cartData = [];
                 renderCart();
             } catch (err) {

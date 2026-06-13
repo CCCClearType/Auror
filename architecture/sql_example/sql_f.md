@@ -6,7 +6,7 @@
 
 ## 模組一：使用者與身分驗證 (User & Auth)
 
-### 1. 玩家註冊 (INSERT)
+### 1. 買家註冊 (INSERT)
 - **說明**：使用者註冊帳號時，系統會將密碼雜湊化後連同使用者名稱與信箱寫入資料庫，並取得自動遞增生成的 `user_id`。
 - **對應 API**：`POST /api/auth/register`
 - **Go 實作 (GORM)**：
@@ -35,8 +35,8 @@
 
 ## 模組二：商城與交易 (Store, Cart, Wishlist, Transactions)
 
-### 3. 將遊戲加入購物車 (INSERT)
-- **說明**：當玩家點擊加入購物車時，系統會在 `shopping_carts` 表寫入一筆對應的使用者與遊戲關聯紀錄。
+### 3. 將筆記加入購物車 (INSERT)
+- **說明**：當買家點擊加入購物車時，系統會在 `shopping_carts` 表寫入一筆對應的使用者與筆記關聯紀錄。
 - **對應 API**：`POST /api/protected/cart`
 - **Go 實作 (GORM)**：
   ```go
@@ -48,7 +48,7 @@
   ```
 
 ### 4. 移除單一購物車商品 (DELETE)
-- **說明**：玩家將遊戲移出購物車時，系統根據 `user_id` 與 `game_id` 的組合將該紀錄實體刪除。
+- **說明**：買家將筆記移出購物車時，系統根據 `user_id` 與 `game_id` 的組合將該紀錄實體刪除。
 - **對應 API**：`DELETE /api/protected/cart/:id`
 - **Go 實作 (GORM)**：
   ```go
@@ -60,7 +60,7 @@
   ```
 
 ### 5. 清空購物車 (DELETE)
-- **說明**：在結帳完成或玩家手動清空時，系統一次性刪除該名玩家在 `shopping_carts` 裡面的所有紀錄。
+- **說明**：在結帳完成或買家手動清空時，系統一次性刪除該名買家在 `shopping_carts` 裡面的所有紀錄。
 - **對應 API**：`DELETE /api/protected/cart`
 - **Go 實作 (GORM)**：
   ```go
@@ -72,7 +72,7 @@
   ```
 
 ### 6. 購物車結帳 (巨型 Transaction: INSERT + DELETE)
-- **說明**：結帳是一個跨資料表的巨型交易，必須保證原子性。系統會建立主訂單、逐一建立子明細、配發遊戲授權，最後再將使用者的購物車清空。
+- **說明**：結帳是一個跨資料表的巨型交易，必須保證原子性。系統會建立主訂單、逐一建立子明細、配發筆記授權，最後再將使用者的購物車清空。
 - **對應 API**：`POST /api/shopping/checkout`
 - **Go 實作 (GORM)**：
   ```go
@@ -100,8 +100,8 @@
   DELETE FROM shopping_carts WHERE user_id = 4;
   ```
 
-### 7. 將遊戲加入願望清單 (INSERT)
-- **說明**：玩家關注某款遊戲時，系統純粹做一個標記，將其寫入 `wish_lists` 資料表中。
+### 7. 將筆記加入願望清單 (INSERT)
+- **說明**：買家關注某款筆記時，系統純粹做一個標記，將其寫入 `wish_lists` 資料表中。
 - **對應 API**：`POST /api/protected/wishlist`
 - **Go 實作 (GORM)**：
   ```go
@@ -113,7 +113,7 @@
   ```
 
 ### 8. 移除願望清單 (DELETE)
-- **說明**：玩家取消關注或購買完成後，從 `wish_lists` 移除該關聯紀錄。
+- **說明**：買家取消關注或購買完成後，從 `wish_lists` 移除該關聯紀錄。
 - **對應 API**：`DELETE /api/protected/wishlist/:id`
 - **Go 實作 (GORM)**：
   ```go
@@ -124,8 +124,8 @@
   DELETE FROM wish_lists WHERE user_id = 5 AND game_id = 42;
   ```
 
-### 9. 玩家申請退款 (INSERT)
-- **說明**：玩家提出退款要求時，系統會產生一張新的待處理退款單 (`PENDING`)，交由客服人員後續審核。
+### 9. 買家申請退款 (INSERT)
+- **說明**：買家提出退款要求時，系統會產生一張新的待處理退款單 (`PENDING`)，交由客服人員後續審核。
 - **對應 API**：`POST /api/social/refunds`
 - **Go 實作 (GORM)**：
   ```go
@@ -142,7 +142,7 @@
 ## 模組三：社群互動 (Social, Friends, Reviews)
 
 ### 10. 送出好友邀請 (INSERT)
-- **說明**：玩家想認識其他人時發出邀請，系統建立一筆狀態為 `PENDING` 的待確認好友關係。
+- **說明**：買家想認識其他人時發出邀請，系統建立一筆狀態為 `PENDING` 的待確認好友關係。
 - **對應 API**：`POST /api/social/friends/requests`
 - **Go 實作 (GORM)**：
   ```go
@@ -228,7 +228,7 @@
   ```
 
 ### 17. 標記訊息為已讀 (UPDATE)
-- **說明**：當玩家點開某位好友的聊天室時，系統會一口氣將對方傳給自己且還是未讀的訊息，全部更新為已讀狀態。
+- **說明**：當買家點開某位好友的聊天室時，系統會一口氣將對方傳給自己且還是未讀的訊息，全部更新為已讀狀態。
 - **對應 API**：`GET /api/social/messages/{user_id}` (撈取同時順便標記)
 - **Go 實作 (GORM)**：
   ```go
@@ -239,8 +239,8 @@
   UPDATE messages SET is_read = true WHERE sender_id = 10 AND receiver_id = 5 AND is_read = false;
   ```
 
-### 18. 發布遊戲評論 (INSERT)
-- **說明**：玩家在購買遊戲後發表心路歷程與評價，供其他玩家參考。
+### 18. 發布筆記評論 (INSERT)
+- **說明**：買家在購買筆記後發表心路歷程與評價，供其他買家參考。
 - **對應 API**：`POST /api/social/games/:id/reviews`
 - **Go 實作 (GORM)**：
   ```go
@@ -252,8 +252,8 @@
   VALUES (42, 5, 'POSITIVE', '超好玩', 'VISIBLE');
   ```
 
-### 19. 修改遊戲評論 (UPDATE)
-- **說明**：原本覺得好玩的遊戲後來發現是個坑，玩家可以自由修改評論內容與態度。
+### 19. 修改筆記評論 (UPDATE)
+- **說明**：原本覺得好玩的筆記後來發現是個坑，買家可以自由修改評論內容與態度。
 - **對應 API**：`PUT /api/social/reviews/:id` (雖然目前 API 清單未列出，但若實作則為 UPDATE)
 - **Go 實作 (GORM)**：
   ```go
@@ -264,8 +264,8 @@
   UPDATE reviews SET content = '玩久了有點膩', attitude = 'NEGATIVE' WHERE review_id = 128 AND user_id = 5;
   ```
 
-### 20. 刪除遊戲評論 (UPDATE 軟刪除)
-- **說明**：玩家刪除自己的評論時，為了資料完整性通常採用軟刪除，將 `status` 改為 `HIDDEN` 或 `DELETED`。
+### 20. 刪除筆記評論 (UPDATE 軟刪除)
+- **說明**：買家刪除自己的評論時，為了資料完整性通常採用軟刪除，將 `status` 改為 `HIDDEN` 或 `DELETED`。
 - **對應 API**：`DELETE /api/social/reviews/:id` (如果需要實作的話)
 - **Go 實作 (GORM)**：
   ```go
@@ -277,7 +277,7 @@
   ```
 
 ### 21. 回覆別人的評論 (INSERT)
-- **說明**：俗稱樓中樓，允許玩家對他人的評論進行附議或反駁。
+- **說明**：俗稱樓中樓，允許買家對他人的評論進行附議或反駁。
 - **對應 API**：`POST /api/social/reviews/:id/replies`
 - **Go 實作 (GORM)**：
   ```go
@@ -289,7 +289,7 @@
   ```
 
 ### 22. 刪除回覆 (DELETE)
-- **說明**：玩家刪除自己留下的樓中樓回覆。
+- **說明**：買家刪除自己留下的樓中樓回覆。
 - **對應 API**：`DELETE /api/social/reviews/replies/:reply_id`
 - **Go 實作 (GORM)**：
   ```go
@@ -302,10 +302,10 @@
 
 ---
 
-## 模組四：開發者功能 (Developer)
+## 模組四：賣家功能 (Developer)
 
-### 23. 發行新遊戲草稿 (INSERT)
-- **說明**：開發者建立一款新遊戲的基本資料，此時遊戲會是 `DRAFT` (草稿) 狀態，暫時不會在商店中曝光。
+### 23. 發行新筆記草稿 (INSERT)
+- **說明**：賣家建立一款新筆記的基本資料，此時筆記會是 `DRAFT` (草稿) 狀態，暫時不會在商店中曝光。
 - **對應 API**：`POST /api/developer/games`
 - **Go 實作 (GORM)**：
   ```go
@@ -313,11 +313,11 @@
   ```
 - **原生 SQL 語法**：
   ```sql
-  INSERT INTO games (title, description, price, developer_id, status) VALUES ('新遊戲', '...', 500, 5, 'DRAFT');
+  INSERT INTO games (title, description, price, developer_id, status) VALUES ('新筆記', '...', 500, 5, 'DRAFT');
   ```
 
-### 24. 正式上架或編輯遊戲資訊 (UPDATE)
-- **說明**：補齊資料並加上至少一個標籤後，開發者將遊戲正式公開 (`ACTIVE`)，或者日後更新售價等欄位。
+### 24. 正式上架或編輯筆記資訊 (UPDATE)
+- **說明**：補齊資料並加上至少一個科目後，賣家將筆記正式公開 (`ACTIVE`)，或者日後更新售價等欄位。
 - **對應 API**：`PUT /api/developer/games/:id/publish` 與 `PUT /api/developer/games/:id`
 - **Go 實作 (GORM)**：
   ```go
@@ -329,8 +329,8 @@
   UPDATE games SET title = '新標題', price = 400 WHERE game_id = 42 AND developer_id = 5;
   ```
 
-### 25. 下架自己的遊戲 (UPDATE)
-- **說明**：開發者決定不再販售該遊戲，將狀態改為 `TAKEN_DOWN`。這不會影響已經買過遊戲的玩家。
+### 25. 下架自己的筆記 (UPDATE)
+- **說明**：賣家決定不再販售該筆記，將狀態改為 `TAKEN_DOWN`。這不會影響已經買過筆記的買家。
 - **對應 API**：`DELETE /api/developer/games/:id`
 - **Go 實作 (GORM)**：
   ```go
@@ -341,8 +341,8 @@
   UPDATE games SET status = 'TAKEN_DOWN' WHERE game_id = 42 AND developer_id = 5;
   ```
 
-### 26. 上傳遊戲圖片或檔案 (INSERT)
-- **說明**：上傳圖片預覽或遊戲主檔案時，在資料庫記錄檔案的虛擬路徑與類型。
+### 26. 上傳筆記圖片或檔案 (INSERT)
+- **說明**：上傳圖片預覽或筆記檔案案時，在資料庫記錄檔案的虛擬路徑與類型。
 - **對應 API**：`POST /api/developer/games/:id/media`
 - **Go 實作 (GORM)**：
   ```go
@@ -365,8 +365,8 @@
   DELETE FROM game_media WHERE media_id = 77;
   ```
 
-### 28. 為遊戲新增標籤 (INSERT)
-- **說明**：為了精準觸及受眾，開發者將遊戲與特定標籤綁定，這是建立多對多關係的操作。
+### 28. 為筆記新增科目 (INSERT)
+- **說明**：為了精準觸及受眾，賣家將筆記與特定科目綁定，這是建立多對多關係的操作。
 - **對應 API**：`POST /api/developer/games/:id/tags`
 - **Go 實作 (GORM)**：
   ```go
@@ -377,8 +377,8 @@
   INSERT INTO game_tags (game_id, tag_id) VALUES (42, 3);
   ```
 
-### 29. 建立全域新標籤與移除遊戲標籤 (INSERT / DELETE)
-- **說明**：如果系統目前的標籤不夠用，開發者可以創造新標籤；若標錯了，也能夠從 `game_tags` 中解綁。
+### 29. 建立全域新科目與移除筆記科目 (INSERT / DELETE)
+- **說明**：如果系統目前的科目不夠用，賣家可以創造新科目；若標錯了，也能夠從 `game_tags` 中解綁。
 - **對應 API**：`POST /api/developer/tags` 與 `DELETE /api/developer/games/:id/tags/:tag_id`
 - **Go 實作 (GORM)**：
   ```go
@@ -395,8 +395,8 @@
 
 ## 模組五：管理員與客服 (Admin & CSR)
 
-### 30. 管理員停權/切換玩家身分 (UPDATE)
-- **說明**：系統最高管理員對惡意玩家進行停權處分，或是拔擢某位玩家成為客服人員 (`CSR`)。
+### 30. 管理員停權/切換買家身分 (UPDATE)
+- **說明**：系統最高管理員對惡意買家進行停權處分，或是拔擢某位買家成為客服人員 (`CSR`)。
 - **對應 API**：`PUT /api/admin/users/:id/suspend` 與 `PUT /api/admin/users/:id/role`
 - **Go 實作 (GORM)**：
   ```go
@@ -409,7 +409,7 @@
   ```
 
 ### 31. 管理員強制刪除帳號 (UPDATE 軟刪除 + 級聯操作)
-- **說明**：管理員對帳號施以終極極刑。不僅將帳號改為 `DELETED`，還會自動觸發下述的強制下架與撤銷玩家授權。
+- **說明**：管理員對帳號施以終極極刑。不僅將帳號改為 `DELETED`，還會自動觸發下述的強制下架與撤銷買家授權。
 - **對應 API**：`DELETE /api/admin/users/:id`
 - **Go 實作 (GORM)**：
   ```go
@@ -420,8 +420,8 @@
   UPDATE users SET permission = 'DELETED' WHERE user_id = 10;
   ```
 
-### 32. 管理員強制下架遊戲與終極撤銷 (UPDATE)
-- **說明**：當遊戲嚴重違規時，管理員將之強制下架。與開發者自主下架不同的是，管理員的鐵腕會直接追殺到已購買的玩家，一併將他們的授權改為 `REVOKED`。
+### 32. 管理員強制下架筆記與終極撤銷 (UPDATE)
+- **說明**：當筆記嚴重違規時，管理員將之強制下架。與賣家自主下架不同的是，管理員的鐵腕會直接追殺到已購買的買家，一併將他們的授權改為 `REVOKED`。
 - **對應 API**：`DELETE /api/admin/games/:id`
 - **Go 實作 (GORM)**：
   ```go
@@ -435,7 +435,7 @@
   ```
 
 ### 33. 客服同意或拒絕退款單 (UPDATE)
-- **說明**：客服完成查核後，將退款單狀態改為 `APPROVED` 或 `REJECTED`。若同意退款，則必須將玩家的遊戲授權廢除 (`REVOKED`)。
+- **說明**：客服完成查核後，將退款單狀態改為 `APPROVED` 或 `REJECTED`。若同意退款，則必須將買家的筆記授權廢除 (`REVOKED`)。
 - **對應 API**：`PUT /api/csr/refunds/:id`
 - **Go 實作 (GORM)**：
   ```go

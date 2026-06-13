@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AurorVapor — 遊戲商店</title>
-    <meta name="description" content="探索海量遊戲，享受最優惠的價格。AurorVapor 是你的終極遊戲平台。">
+    <title>AurorNote — 筆記商城</title>
+    <meta name="description" content="探索海量筆記，享受最優惠的價格。AurorNote 是你的終極筆記平台。">
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
@@ -15,12 +15,12 @@
         <section class="section store-hero">
             <div class="featured-game">
                 <div class="featured-content">
-                    <p class="tag is-rounded is-info is-light">AurorVapor Storefront</p>
-                    <h1 class="title">探索你的下一款最愛遊戲</h1>
-                    <p class="subtitle">超過千款遊戲，總有一款等著你</p>
+                    <p class="tag is-rounded is-info is-light">AurorNote Storefront</p>
+                    <h1 class="title">探索你的下一款最愛筆記</h1>
+                    <p class="subtitle">超過千款筆記，總有一款等著你</p>
                     <form class="search-bar field has-addons" id="search-form">
                         <div class="control is-expanded">
-                            <input class="input is-medium" type="text" id="search-input" placeholder="搜尋遊戲名稱、類型、開發者...">
+                            <input class="input is-medium" type="text" id="search-input" placeholder="搜尋筆記名稱、類型、賣家...">
                         </div>
                         <div class="control">
                             <button type="submit" class="button is-primary is-medium">搜尋</button>
@@ -35,13 +35,13 @@
                 <div class="box sidebar-block">
                     <h2 class="title is-6">Tag 瀏覽</h2>
                     <ul class="category-list" id="tag-list">
-                        <li><a href="/pages/store/search.html">所有遊戲</a></li>
+                        <li><a href="/pages/store/search.html">所有筆記</a></li>
                     </ul>
                 </div>
                 <div class="box sidebar-block">
                     <h2 class="title is-6">價格篩選</h2>
                     <ul class="filter-list">
-                        <li><a href="/pages/store/search.html?min_price=0&max_price=0">免費遊玩</a></li>
+                        <li><a href="/pages/store/search.html?min_price=0&max_price=0">免費下載</a></li>
                         <li><a href="/pages/store/search.html?max_price=300">NT$ 300 以下</a></li>
                         <li><a href="/pages/store/search.html?min_price=301&max_price=900">NT$ 301 - 900</a></li>
                     </ul>
@@ -108,7 +108,7 @@
                 renderGames(Array.isArray(games) ? games : (games.data || games.games || []));
             } catch (err) {
                 document.getElementById('game-list').innerHTML =
-                    `<p style="color:var(--accent-red);text-align:center;padding:40px;">無法載入遊戲列表：${err.message}</p>`;
+                    `<p style="color:var(--accent-red);text-align:center;padding:40px;">無法載入筆記列表：${err.message}</p>`;
             }
         }
 

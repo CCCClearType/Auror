@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>客服處理中心 — AurorVapor</title>
+    <title>客服處理中心 — AurorNote</title>
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
@@ -69,7 +69,7 @@
                 item.className = 'library-item';
 
                 const refundId  = req.id || req.refund_id;
-                const username  = req.username || (req.user && req.user.username) || '玩家';
+                const username  = req.username || (req.user && req.user.username) || '買家';
                 const gameTitle = req.game_title || (req.game && req.game.title) || req.title || '';
                 const price     = Number(req.amount || req.price || 0);
                 const reason    = req.reason || req.description || '未填寫';

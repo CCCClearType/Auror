@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>退款申請 — AurorVapor</title>
+    <title>退款申請 — AurorNote</title>
     <link rel="stylesheet" href="/assets/css/style.css">
     <style>
         .refund-card {
@@ -63,7 +63,7 @@
     <main class="history-container">
         <div class="history-header">
             <h1 class="title section-title" style="margin:0;">退款申請</h1>
-            <p style="color:var(--text-secondary); margin-top: 10px;">請從下方擁有的遊戲中選擇，填寫退款理由並送出審核。</p>
+            <p style="color:var(--text-secondary); margin-top: 10px;">請從下方擁有的筆記中選擇，填寫退款理由並送出審核。</p>
         </div>
         <div id="refund-list">
             <p style="color:var(--text-muted);text-align:center;padding:40px;">載入中...</p>
@@ -112,7 +112,7 @@
             if (activeGames.length === 0) {
                 listEl.innerHTML = `
                     <div class="empty-state">
-                        <p>你的遊戲庫空空如也，目前沒有可以退款的遊戲。</p>
+                        <p>你的筆記庫空空如也，目前沒有可以退款的筆記。</p>
                         <a href="/" class="button is-primary" style="margin-top:12px;">前往商店</a>
                     </div>`;
                 return;
@@ -121,7 +121,7 @@
             activeGames.forEach(item => {
                 const game     = item.game || item;
                 const gameId   = game.game_id || game.id || item.game_id;
-                const title    = game.title || item.title || '未知遊戲';
+                const title    = game.title || item.title || '未知筆記';
                 const txItemId = item.transaction_item_id;
                 
                 const acquiredDate = (item.acquired_date || '').slice(0, 10) || '未知日期';
@@ -149,13 +149,13 @@
                      formHtml = `
                         <div style="background:var(--bg-dark); padding: 15px; border-radius: 4px; border: 1px dashed var(--border-color); text-align: center;">
                             <span style="color:var(--text-muted); font-weight: bold;">已退款成功</span>
-                            <p style="color:var(--text-secondary); font-size: 14px; margin-top: 5px;">此遊戲已成功退款。若遊戲仍在庫中，為系統異常。</p>
+                            <p style="color:var(--text-secondary); font-size: 14px; margin-top: 5px;">此筆記已成功退款。若筆記仍在庫中，為系統異常。</p>
                         </div>
                     `;
                 } else {
                     formHtml = `
                         <div class="refund-form">
-                            <textarea class="refund-textarea" id="reason-${txItemId}" placeholder="分享你對這款遊戲的看法...（請輸入申請退款理由）"></textarea>
+                            <textarea class="refund-textarea" id="reason-${txItemId}" placeholder="分享你對這款筆記的看法...（請輸入申請退款理由）"></textarea>
                             <div class="refund-actions">
                                 <button class="button is-light" onclick="submitRefund(${txItemId})">申請退款</button>
                             </div>
@@ -192,7 +192,7 @@
             history.forEach(req => {
                 const date = (req.created_at || '').slice(0, 10);
                 const game = req.game || req.Game || {};
-                const title = req.game_title || req.GameTitle || game.title || game.Title || req.title || '未知遊戲';
+                const title = req.game_title || req.GameTitle || game.title || game.Title || req.title || '未知筆記';
                 
                 let statusHtml = '';
                 if (req.status === 'PENDING') {

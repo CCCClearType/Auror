@@ -32,7 +32,7 @@ func getSocialUser(id uint) socialUserDTO {
 
 func getReviewAuthor(user models.User, fallbackID uint) reviewAuthorDTO {
 	if user.UserID == 0 || user.Permission == "DELETED" || user.Role == "NULL" {
-		return reviewAuthorDTO{ID: fallbackID, Username: "已刪除玩家"}
+		return reviewAuthorDTO{ID: fallbackID, Username: "已刪除買家"}
 	}
 	return reviewAuthorDTO{ID: user.UserID, Username: user.Username}
 }
@@ -40,7 +40,7 @@ func getReviewAuthor(user models.User, fallbackID uint) reviewAuthorDTO {
 func getReviewAuthorByID(userID uint) reviewAuthorDTO {
 	var user models.User
 	if err := database.DB.Where("user_id = ?", userID).First(&user).Error; err != nil {
-		return reviewAuthorDTO{ID: userID, Username: "已刪除玩家"}
+		return reviewAuthorDTO{ID: userID, Username: "已刪除買家"}
 	}
 	return getReviewAuthor(user, userID)
 }
@@ -770,7 +770,7 @@ func GetMyRefunds(c *gin.Context) {
 	var results []RefundWithGameDTO
 	for _, req := range refunds {
 		var item models.TransactionItem
-		title := "未知遊戲"
+		title := "未知筆記"
 		cover := ""
 		if err := database.DB.Preload("Game").Where("item_id = ?", req.TransactionItemID).First(&item).Error; err == nil {
 			title = item.Game.Title

@@ -1,5 +1,5 @@
 // ============================================================
-// api.js — AurorVapor 集中式 API 模組
+// api.js — AurorNote 集中式 API 模組
 // 所有後端呼叫都在此統一管理
 // ============================================================
 
@@ -96,7 +96,7 @@ async function apiUpdateProfile(data) {
 }
 
 // ============================================================
-// 2. 商店與遊戲 (Games)
+// 2. 商店與筆記 (Games)
 // ============================================================
 
 // GET /api/games?q=keyword&tag=tag&developer=name&min_price=0&max_price=1000&sort=popular
@@ -291,7 +291,7 @@ async function apiProcessRefund(refundId, status, rejectReason = "") {
 }
 
 // ============================================================
-// 5. 遊戲庫與願望清單 (Library & Wishlist)
+// 5. 筆記庫與願望清單 (Library & Wishlist)
 // ============================================================
 
 // GET /api/protected/library

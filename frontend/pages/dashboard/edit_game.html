@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>編輯遊戲 — AurorVapor</title>
+    <title>編輯筆記 — AurorNote</title>
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
@@ -12,10 +12,10 @@
     <main>
         <div class="dashboard-header">
             <div>
-                <h1 class="title">編輯遊戲</h1>
+                <h1 class="title">編輯筆記</h1>
                 <p class="subtitle is-6" id="edit-subtitle">載入中...</p>
             </div>
-            <a class="button is-light" href="/pages/dashboard/dev_dashboard">回開發者中心</a>
+            <a class="button is-light" href="/pages/dashboard/dev_dashboard">回賣家中心</a>
         </div>
 
         <div class="edit-game-layout">
@@ -23,11 +23,11 @@
                 <h2 class="title is-4">商店資訊</h2>
                 <form id="edit-game-form">
                     <div class="field form-group">
-                        <label class="label" for="edit-title">遊戲名稱</label>
+                        <label class="label" for="edit-title">筆記名稱</label>
                         <div class="control">
                             <input class="input" type="text" id="edit-title" disabled>
                         </div>
-                        <p class="help">遊戲名稱目前不可在此修改。</p>
+                        <p class="help">筆記名稱目前不可在此修改。</p>
                     </div>
 
                     <div class="field form-group">
@@ -38,9 +38,9 @@
                     </div>
 
                     <div class="field form-group">
-                        <label class="label" for="edit-desc">遊戲介紹</label>
+                        <label class="label" for="edit-desc">筆記介紹</label>
                         <div class="control">
-                            <textarea class="textarea" id="edit-desc" rows="7" placeholder="輸入商店頁會顯示的遊戲介紹"></textarea>
+                            <textarea class="textarea" id="edit-desc" rows="7" placeholder="輸入商店頁會顯示的筆記介紹"></textarea>
                         </div>
                         <div class="box markdown-preview-box mt-3">
                             <h3 class="title is-6">介紹預覽</h3>
@@ -49,7 +49,7 @@
                     </div>
 
                     <div class="field form-group">
-                        <label class="label">遊戲 Tags</label>
+                        <label class="label">筆記 Tags</label>
                         <div class="tags" id="current-tags"><span class="tag">載入中...</span></div>
                         <div class="field has-addons" style="flex-wrap:wrap; gap:8px;">
                             <div class="control">
@@ -78,7 +78,7 @@
                 <h2 class="title is-4">編輯說明</h2>
                 <div class="content has-text-grey-light">
                     <p>定價與介紹會在上方預覽即時更新。</p>
-                    <p>圖片與遊戲本體可在下方素材區即時上傳或刪除。</p>
+                    <p>圖片與筆記本體可在下方素材區即時上傳或刪除。</p>
                     <p>修改定價與介紹後，請按保存才會生效。</p>
                 </div>
             </section>
@@ -86,7 +86,7 @@
 
         <section class="box dashboard-panel mt-5">
             <div class="media-manager-title">
-                <h2 class="title is-4">圖片與遊戲本體</h2>
+                <h2 class="title is-4">圖片與筆記本體</h2>
             </div>
 
             <div id="media-grid-container" class="edit-media-grid">
@@ -98,8 +98,8 @@
                 <div class="edit-upload-row">
                     <div class="select">
                         <select id="mm-media-type">
-                            <option value="media">遊戲圖片</option>
-                            <option value="game_file">遊戲本體</option>
+                            <option value="media">筆記圖片</option>
+                            <option value="game_file">筆記本體</option>
                         </select>
                     </div>
                     <div class="file has-name is-fullwidth" style="flex:1; min-width:220px;">
@@ -111,7 +111,7 @@
                     </div>
                     <button class="button is-primary" id="mm-upload-btn" onclick="doUpload()">上傳</button>
                 </div>
-                <p class="help">圖片會顯示在商店頁；遊戲本體會在玩家擁有授權後才能下載。</p>
+                <p class="help">圖片會顯示在商店頁；筆記本體會在買家擁有授權後才能下載。</p>
                 <div class="notification is-info is-light mt-3" id="mm-progress" style="display:none;">上傳中，請稍候…</div>
             </div>
         </section>
@@ -129,7 +129,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const role = getCurrentRole();
             if (role !== 'DEVELOPER' && role !== 'ADMIN') {
-                alert('存取被拒：您沒有開發者權限');
+                alert('存取被拒：您沒有賣家權限');
                 window.location.href = '/';
                 return;
             }
@@ -137,7 +137,7 @@
             const params = new URLSearchParams(window.location.search);
             currentGameId = Number(params.get('id'));
             if (!currentGameId) {
-                showError('缺少遊戲 ID');
+                showError('缺少筆記 ID');
                 return;
             }
 
@@ -155,7 +155,7 @@
                 currentGame = games.find(g => Number(g.game_id || g.id) === currentGameId);
 
                 if (!currentGame) {
-                    showError('找不到可編輯的遊戲');
+                    showError('找不到可編輯的筆記');
                     return;
                 }
 
@@ -163,7 +163,7 @@
                 const desc = currentGame.desc || currentGame.description || '';
                 const price = Number(currentGame.price || 0);
 
-                document.title = `編輯 ${title} — AurorVapor`;
+                document.title = `編輯 ${title} — AurorNote`;
                 document.getElementById('edit-subtitle').textContent = title;
                 document.getElementById('edit-title').value = title;
                 document.getElementById('edit-price').value = price;
@@ -303,7 +303,7 @@
                 card.innerHTML = `
                     ${thumb}
                     <div class="media-card-info">
-                        <span class="badge ${isImage ? 'badge-img' : 'badge-file'}">${isImage ? '圖片' : '遊戲本體'}</span>
+                        <span class="badge ${isImage ? 'badge-img' : 'badge-file'}">${isImage ? '圖片' : '筆記本體'}</span>
                         <button class="button is-text is-small media-card-del" title="刪除此素材"
                             onclick="deleteMedia(${m.media_id})">刪除</button>
                     </div>

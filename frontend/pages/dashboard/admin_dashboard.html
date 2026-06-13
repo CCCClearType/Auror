@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理員後台 — AurorVapor</title>
+    <title>管理員後台 — AurorNote</title>
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
@@ -25,7 +25,7 @@
             </div>
 
             <div class="box dashboard-panel">
-                <h2 class="title is-4">商店遊戲管理（強制下架）</h2>
+                <h2 class="title is-4">商店筆記管理（強制下架）</h2>
                 <div class="library-list" id="admin-games-list">
                     <p style="color:var(--text-muted);">載入中...</p>
                 </div>
@@ -93,8 +93,8 @@
                     actionHtml = `
                         <div class="select">
                             <select class="role-select" onchange="changeRole(${user.id}, this.value)">
-                                <option value="USERS"     ${user.role==='USERS'     ? 'selected':''}>玩家 (User)</option>
-                                <option value="DEVELOPER" ${user.role==='DEVELOPER' ? 'selected':''}>開發者 (Dev)</option>
+                                <option value="USERS"     ${user.role==='USERS'     ? 'selected':''}>買家 (User)</option>
+                                <option value="DEVELOPER" ${user.role==='DEVELOPER' ? 'selected':''}>賣家 (Dev)</option>
                                 <option value="CSR"       ${user.role==='CSR'       ? 'selected':''}>客服 (CSR)</option>
                                 <option value="ADMIN"     ${user.role==='ADMIN'     ? 'selected':''}>管理員 (Admin)</option>
                             </select>
@@ -160,7 +160,7 @@
             }
         }
 
-        // ─── 遊戲管理 ──────────────────────────────────────────
+        // ─── 筆記管理 ──────────────────────────────────────────
         async function loadGames() {
             try {
                 // GET /api/games
@@ -187,7 +187,7 @@
                 item.innerHTML = `
                     <div class="library-item-info">
                         <h3>${escapeHtml(game.title)}</h3>
-                        <p>開發者：${escapeHtml(developer)} &nbsp;|&nbsp; 價格：${priceHtml} &nbsp;|&nbsp;
+                        <p>賣家：${escapeHtml(developer)} &nbsp;|&nbsp; 價格：${priceHtml} &nbsp;|&nbsp;
                            <span class="tag status-badge status-active">正常販售中</span>
                         </p>
                     </div>
@@ -200,11 +200,11 @@
         }
 
         async function adminTakeDown(gameId) {
-            if (!confirm("確定要以管理員身分強制下架此遊戲嗎？")) return;
+            if (!confirm("確定要以管理員身分強制下架此筆記嗎？")) return;
             try {
                 // DELETE /api/admin/games/{id}
                 await apiAdminDeleteGame(gameId);
-                alert('遊戲已強制下架！');
+                alert('筆記已強制下架！');
                 await loadGames();
             } catch (err) {
                 alert(`下架失敗：${err.message}`);

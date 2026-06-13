@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>搜尋結果 — AurorVapor</title>
+    <title>搜尋結果 — AurorNote</title>
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
@@ -14,7 +14,7 @@
         <section class="section store-hero" style="margin-bottom: 30px; padding: 40px;">
             <form class="search-bar field has-addons" id="search-form">
                 <div class="control is-expanded">
-                    <input class="input is-medium" type="text" id="search-input" placeholder="搜尋遊戲名稱、類型、開發者...">
+                    <input class="input is-medium" type="text" id="search-input" placeholder="搜尋筆記名稱、類型、賣家...">
                 </div>
                 <div class="control">
                     <button type="submit" class="button is-primary is-medium">搜尋</button>
@@ -30,8 +30,8 @@
                     <div class="select is-fullwidth"><select id="filter-tag"><option value="">全部 Tag</option></select></div>
                 </div>
                 <div class="column is-3">
-                    <label class="label" for="filter-developer">開發者</label>
-                    <input class="input" type="text" id="filter-developer" placeholder="開發者名稱">
+                    <label class="label" for="filter-developer">賣家</label>
+                    <input class="input" type="text" id="filter-developer" placeholder="賣家名稱">
                 </div>
                 <div class="column is-2">
                     <label class="label" for="filter-min-price">最低價</label>
@@ -111,12 +111,12 @@
             document.getElementById('search-input').value = keyword;
             
             if (keyword) {
-                document.title = `"${keyword}" 的搜尋結果 — AurorVapor`;
+                document.title = `"${keyword}" 的搜尋結果 — AurorNote`;
             } else if (tag) {
-                document.title = `標籤「${tag}」的遊戲 — AurorVapor`;
+                document.title = `科目「${tag}」的筆記 — AurorNote`;
             } else {
-                document.title = '搜尋遊戲 — AurorVapor';
-                document.getElementById('search-section-title').textContent = '瀏覽所有遊戲';
+                document.title = '搜尋筆記 — AurorNote';
+                document.getElementById('search-section-title').textContent = '瀏覽所有筆記';
                 document.getElementById('search-results-header').innerHTML = '';
             }
 
@@ -131,10 +131,10 @@
                 const filters = [];
                 if (keyword) filters.push(`關鍵字「${escapeHtml(keyword)}」`);
                 if (params.get('tag')) filters.push(`Tag「${escapeHtml(params.get('tag'))}」`);
-                if (params.get('developer')) filters.push(`開發者「${escapeHtml(params.get('developer'))}」`);
+                if (params.get('developer')) filters.push(`賣家「${escapeHtml(params.get('developer'))}」`);
                 if (params.get('min_price') || params.get('max_price')) filters.push(`價格 ${escapeHtml(params.get('min_price') || '0')} - ${escapeHtml(params.get('max_price') || '不限')}`);
                 headerEl.innerHTML = filters.length ? `找到 <strong>${games.length}</strong> 個符合 ${filters.join('、')} 的結果` : '';
-                document.getElementById('search-section-title').textContent = filters.length ? `搜尋結果 (${games.length})` : '瀏覽所有遊戲';
+                document.getElementById('search-section-title').textContent = filters.length ? `搜尋結果 (${games.length})` : '瀏覽所有筆記';
 
                 renderGames(games);
             } catch (err) {

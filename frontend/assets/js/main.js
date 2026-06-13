@@ -1,5 +1,5 @@
 // ============================================================
-// AurorVapor — main.js
+// AurorNote — main.js
 // 全域狀態與共用元件
 // ============================================================
 
@@ -46,7 +46,7 @@ function renderHeader() {
         header.innerHTML = `
             <nav class="navbar va-navbar" role="navigation" aria-label="main navigation">
                 <div class="navbar-brand">
-                    <a href="/" class="navbar-item logo">AurorVapor</a>
+                    <a href="/" class="navbar-item logo">AurorNote</a>
                 </div>
             </nav>`;
         return;
@@ -54,17 +54,17 @@ function renderHeader() {
 
     const currentRole = localStorage.getItem('userRole') || 'GUEST';
     const userDataStr = localStorage.getItem('currentUser');
-    const username = userDataStr ? JSON.parse(userDataStr).username : '玩家';
+    const username = userDataStr ? JSON.parse(userDataStr).username : '買家';
 
     let navItems = `<a class="navbar-item" href="/">商店首頁</a>`;
 
     if (currentRole !== 'GUEST') {
         navItems += `
-            <a class="navbar-item" href="/pages/user/library">遊戲庫</a>
+            <a class="navbar-item" href="/pages/user/library">筆記庫</a>
             <a class="navbar-item" href="/pages/user/social">社群</a>
         `;
         if (currentRole === 'DEVELOPER') {
-            navItems += `<a class="navbar-item has-text-warning" href="/pages/dashboard/dev_dashboard">開發者中心</a>`;
+            navItems += `<a class="navbar-item has-text-warning" href="/pages/dashboard/dev_dashboard">賣家中心</a>`;
         } else if (currentRole === 'CSR') {
             navItems += `<a class="navbar-item has-text-info" href="/pages/dashboard/csr_dashboard">客服中心</a>`;
         } else if (currentRole === 'ADMIN') {
@@ -101,7 +101,7 @@ function renderHeader() {
     header.innerHTML = `
         <nav class="navbar va-navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
-                <a href="/" class="navbar-item logo">AurorVapor</a>
+                <a href="/" class="navbar-item logo">AurorNote</a>
                 <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="global-navbar-menu">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
@@ -134,7 +134,7 @@ function renderHeader() {
 }
 
 // ============================================================
-// 渲染遊戲卡片列表
+// 渲染筆記卡片列表
 // ============================================================
 function renderGames(games) {
     const container = document.getElementById('game-list');
@@ -166,7 +166,7 @@ function renderGames(games) {
     if (games.length === 0) {
         container.innerHTML = `
             <div class="empty-state">
-                <p>找不到符合條件的遊戲</p>
+                <p>找不到符合條件的筆記</p>
                 <a href="/" class="button is-light" style="margin-top:10px;">回首頁</a>
             </div>`;
         return;

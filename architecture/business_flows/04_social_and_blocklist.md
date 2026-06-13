@@ -1,12 +1,12 @@
 # 4. 社交互動與黑名單機制 (Social & Blocklist)
 
-本文件描述平台上的玩家如何互相交流，以及透過黑名單機制建立起防騷擾的防線。
+本文件描述平台上的買家如何互相交流，以及透過黑名單機制建立起防騷擾的防線。
 
 ---
 
 ## 1. 好友邀請與確認 (Friend Requests)
 
-- **起點**：玩家在社群頁面 (`community.html`) 搜尋其他使用者的 Username，點擊「加入好友」。
+- **起點**：買家在社群頁面 (`community.html`) 搜尋其他使用者的 Username，點擊「加入好友」。
 - **流程**：
   1. 呼叫 `POST /api/social/friends/requests` 傳送 `receiver_id`。
   2. **黑名單防護檢查**：後端會去查詢 `blocklist` 資料表，檢查這兩人之中「是否有一方封鎖了另一方」。若有，直接回傳 `403 Forbidden`，並提示「無法發送好友邀請」。
@@ -36,12 +36,12 @@
 
 ## 3. 黑名單與關係解除 (Blocklist & Unfriending)
 
-- **起點**：玩家 A 不想再收到玩家 B 的任何訊息，在社群頁面對 B 點擊「封鎖」。
+- **起點**：買家 A 不想再收到買家 B 的任何訊息，在社群頁面對 B 點擊「封鎖」。
 - **流程**：
   1. 呼叫 `POST /api/social/blocklist`，傳入 B 的 ID。
   2. 系統在 `blocklist` 寫入一筆 `blocker_id = A`, `blocked_id = B` 的紀錄。
   3. **關係保留與介面隱藏 (Soft Block & UI Hide)**：
      - 加入黑名單是一種「軟封鎖」機制，它並不會自動到 `friendships` 刪除好友紀錄。
      - 但為了介面整潔，**已封鎖的使用者會從好友列表 (`GetFriends`) 中被完全隱藏**，僅會出現在黑名單頁籤中。同時未來的私訊與邀請都會被強制攔截。
-  4. **黑名單管理**：玩家可透過 `GET /api/social/blacklist` 查看黑名單列表，若欲解除封鎖，可呼叫 `DELETE /api/social/blacklist/:user_id`。
+  4. **黑名單管理**：買家可透過 `GET /api/social/blacklist` 查看黑名單列表，若欲解除封鎖，可呼叫 `DELETE /api/social/blacklist/:user_id`。
 - **終點**：B 將無法搜尋到 A、無法加 A 好友、無法傳訊息給 A，達到防止騷擾的防護效果。
