@@ -1,21 +1,15 @@
 services:
   frontend:
-    image: caddy:2-alpine
+    image: ${DOCKER_USERNAME}/auror_frontend:latest
     container_name: auror_frontend
     restart: always
     depends_on:
       - backend
     ports:
-      - 3000:80
-    volumes:
-      - ./frontend/Caddyfile:/etc/caddy/Caddyfile:ro
-      - ./frontend/index.html:/srv/index.html:ro
-      - ./frontend/assets:/srv/assets:ro
-      - ./frontend/pages:/srv/pages:ro
+      - 80:80
 
   backend:
-    build:
-      context: ./backend
+    image: ${DOCKER_USERNAME}/auror_backend:latest
     container_name: auror_backend
     restart: always
     depends_on:
@@ -29,7 +23,7 @@ services:
       DB_NAME: auror_vapor
 
   db:
-    image: postgres
+    image: ${DOCKER_USERNAME}/auror_db:latest
     restart: always
     shm_size: 128mb
     container_name: auror_db
@@ -37,22 +31,8 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: auror_vapor
-
-    ports:
-      - 5432:5432
-
-    volumes:
-      - ./db:/docker-entrypoint-initdb.d/
-
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d auror_vapor"]
       interval: 5s
       timeout: 5s
       retries: 10
-  
-  adminer:
-    image: adminer
-    restart: always
-    container_name: adminer
-    ports:
-      - 8080:8080
