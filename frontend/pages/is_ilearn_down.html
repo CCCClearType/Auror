@@ -511,6 +511,7 @@
                                     borderDash: [5, 5],
                                     backgroundColor: 'transparent',
                                     tension: 0.3,
+                                    spanGaps: true,
                                     pointBackgroundColor: ctx => buckets[ctx.dataIndex] && buckets[ctx.dataIndex].isDown ? 'rgba(255, 92, 117, 1)' : 'rgba(255, 206, 86, 0.8)',
                                     pointBorderColor: ctx => buckets[ctx.dataIndex] && buckets[ctx.dataIndex].isDown ? 'rgba(255, 92, 117, 1)' : 'rgba(255, 206, 86, 0.8)',
                                     pointRadius: ctx => buckets[ctx.dataIndex] && buckets[ctx.dataIndex].isDown ? 4 : 0,
