@@ -458,12 +458,16 @@
                             },
                             y: { 
                                 type: 'linear', display: true, position: 'left',
+                                min: 0,
+                                suggestedMax: 10,
                                 grid: { color: 'rgba(255,255,255,0.05)' }, 
-                                ticks: { color: '#8f98a0', stepSize: 1 },
+                                ticks: { color: '#8f98a0', stepSize: 1, precision: 0 },
                                 title: { display: true, text: 'Reports', color: '#8f98a0' }
                             },
                             y1: { 
                                 type: 'linear', display: true, position: 'right',
+                                min: 0,
+                                suggestedMax: 500,
                                 grid: { drawOnChartArea: false }, 
                                 ticks: { color: '#8f98a0' },
                                 title: { display: true, text: 'Latency (ms)', color: '#8f98a0' }
