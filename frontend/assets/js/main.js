@@ -56,7 +56,10 @@ function renderHeader() {
     const userDataStr = localStorage.getItem('currentUser');
     const username = userDataStr ? JSON.parse(userDataStr).username : '買家';
 
-    let navItems = `<a class="navbar-item" href="/">商店首頁</a>`;
+    let navItems = `
+        <a class="navbar-item" href="/">商店首頁</a>
+        <a class="navbar-item" href="/pages/is_ilearn_down.html" style="color: var(--accent-blue);">iLearn Status</a>
+    `;
 
     if (currentRole !== 'GUEST') {
         navItems += `

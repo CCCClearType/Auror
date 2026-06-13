@@ -37,6 +37,25 @@ func main() {
 	// Fix existing TAKEN_DOWN notes to have REVOKED licenses
 	database.DB.Exec("UPDATE note_licenses SET status = 'REVOKED' FROM notes WHERE note_licenses.note_id = notes.note_id AND notes.status = 'TAKEN_DOWN'")
 
+	// Create iLearn status history tables
+	database.DB.Exec(`
+		CREATE TABLE IF NOT EXISTS ilearn_pings (
+			id SERIAL PRIMARY KEY,
+			checked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			latency_ms INT,
+			status VARCHAR(10)
+		)
+	`)
+	database.DB.Exec(`
+		CREATE TABLE IF NOT EXISTS ilearn_reports (
+			id SERIAL PRIMARY KEY,
+			reported_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		)
+	`)
+
+	// Start the ping job in background
+	go utils.StartIlearnPingJob()
+
 	// Setup Gin router
 	r := routes.SetupRouter()
 

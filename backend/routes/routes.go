@@ -30,6 +30,10 @@ func SetupRouter() *gin.Engine {
 		api.GET("/notes", controllers.GetNotes)
 		api.GET("/notes/:id", controllers.GetNoteByID)
 		api.GET("/notes/:id/reviews", controllers.GetReviews)
+		
+		api.GET("/ilearn-status", controllers.CheckIlearnStatus)
+		api.POST("/ilearn-reports", controllers.SubmitIlearnReport)
+		api.GET("/ilearn-history", controllers.GetIlearnHistory)
 
 		// ==========================================
 		// Phase 3: Protected Routes (Require JWT Token)

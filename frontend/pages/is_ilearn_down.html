@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Is iLearn Down?</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        .status-container {
+            min-height: calc(100vh - 64px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #1a1e24 0%, #0d1117 100%);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* Glassmorphism card */
+        .status-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 3rem;
+            width: 95%;
+            max-width: 900px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            z-index: 2;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .status-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        .status-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #8f98a0;
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .status-indicator {
+            font-size: 6rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            line-height: 1;
+            letter-spacing: -2px;
+            text-shadow: 0 0 20px rgba(0,0,0,0.5);
+            transition: color 0.5s ease;
+        }
+
+        .status-up {
+            color: #2ea043;
+            text-shadow: 0 0 30px rgba(46, 160, 67, 0.3);
+        }
+
+        .status-down {
+            color: #f85149;
+            text-shadow: 0 0 30px rgba(248, 81, 73, 0.3);
+        }
+        
+        .status-loading {
+            color: #58a6ff;
+            animation: pulse 1.5s infinite;
+        }
+
+        .status-latency {
+            font-size: 1.2rem;
+            color: #8f98a0;
+            margin-top: 1.5rem;
+            font-family: monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* Background glow effect */
+        .glow-circle {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(88,166,255,0.05) 0%, rgba(0,0,0,0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            pointer-events: none;
+            transition: background 0.5s ease;
+        }
+
+        .glow-up {
+            background: radial-gradient(circle, rgba(46,160,67,0.08) 0%, rgba(0,0,0,0) 70%);
+        }
+
+        .glow-down {
+            background: radial-gradient(circle, rgba(248,81,73,0.08) 0%, rgba(0,0,0,0) 70%);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; text-shadow: 0 0 20px rgba(88,166,255,0.5); }
+            100% { opacity: 0.6; }
+        }
+
+        /* Refresh button */
+        .refresh-btn {
+            margin-top: 2rem;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #c9d1d9;
+            border-radius: 30px;
+            padding: 10px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .refresh-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.4);
+            color: #fff;
+        }
+
+        .refresh-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Chart container */
+        .chart-section {
+            margin-top: 1rem;
+            width: 100%;
+            height: 350px;
+            position: relative;
+        }
+
+        /* Time Filters */
+        .time-filters {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .filter-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #8f98a0;
+            padding: 6px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        .filter-btn.active {
+            background: rgba(54, 162, 235, 0.2);
+            border-color: rgba(54, 162, 235, 0.8);
+            color: #58a6ff;
+            font-weight: bold;
+        }
+        
+        .report-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .report-btn {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 24px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
+        }
+        .report-btn:hover {
+            background: #f44336;
+            transform: translateY(-2px);
+        }
+        .report-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <header id="global-header"></header>
+
+    <main class="status-container">
+        <div class="glow-circle" id="bg-glow"></div>
+        
+        <div class="status-card">
+            <h1 class="status-title">Is iLearn Down?</h1>
+            
+            <div id="status-display" class="status-indicator status-loading">
+                CHECKING...
+            </div>
+            
+            <div id="latency-display" class="status-latency" style="opacity: 0;">
+                Latency: -- ms
+            </div>
+
+            <div>
+                <button id="refresh-btn" class="refresh-btn">Refresh Status</button>
+            </div>
+
+            <div class="time-filters">
+                <button class="filter-btn" data-hours="12">12 Hours</button>
+                <button class="filter-btn active" data-hours="24">1 Day</button>
+                <button class="filter-btn" data-hours="72">3 Days</button>
+                <button class="filter-btn" data-hours="168">7 Days</button>
+            </div>
+
+            <div class="chart-section">
+                <canvas id="historyChart"></canvas>
+            </div>
+
+            <div class="report-section">
+                <button id="report-btn" class="report-btn">I have a problem with iLearn</button>
+                <p style="margin-top: 10px; color: #8f98a0; font-size: 0.9rem;">Help us track iLearn outages</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="/assets/js/api.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script>
+        let currentHours = 24;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkStatus();
+            loadHistoryChart(currentHours);
+
+            document.getElementById('refresh-btn').addEventListener('click', () => {
+                checkStatus();
+                loadHistoryChart(currentHours);
+            });
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    currentHours = parseInt(e.target.dataset.hours);
+                    loadHistoryChart(currentHours);
+                });
+            });
+
+            const btn = document.getElementById('report-btn');
+            
+            // Check if user already reported today via Cookie
+            if (document.cookie.includes('ilearn_reported=true')) {
+                btn.disabled = true;
+                btn.innerText = 'You already reported today';
+                btn.style.background = '#30363d';
+                btn.style.boxShadow = 'none';
+            } else {
+                btn.addEventListener('click', async () => {
+                    btn.disabled = true;
+                    btn.innerText = 'Submitting...';
+                    try {
+                        await fetch('/api/ilearn-reports', { method: 'POST' });
+                        btn.innerText = 'Reported!';
+                        btn.style.background = '#2ea043';
+                        // Set cookie to expire in 24 hours (86400 seconds)
+                        document.cookie = "ilearn_reported=true; max-age=86400; path=/";
+                        loadHistoryChart(currentHours);
+                    } catch(err) {
+                        btn.innerText = 'Error';
+                        setTimeout(() => {
+                            btn.disabled = false;
+                            btn.innerText = 'I have a problem with iLearn';
+                            btn.style.background = '#d32f2f';
+                        }, 3000);
+                    }
+                });
+            }
+        });
+
+        let chartInstance = null;
+
+        async function loadHistoryChart(hours = 24) {
+            try {
+                const res = await fetch(`/api/ilearn-history?hours=${hours}`);
+                const data = await res.json();
+                
+                // Group data by 15-minute buckets
+                const buckets = [];
+                const now = new Date();
+                const startTime = new Date(now.getTime() - hours * 60 * 60 * 1000);
+                const bucketSize = 15 * 60 * 1000;
+                
+                // create buckets
+                for (let t = startTime.getTime(); t <= now.getTime(); t += bucketSize) {
+                    buckets.push({
+                        time: new Date(t),
+                        reportCount: 0,
+                        pingLatency: 0,
+                        pingCount: 0
+                    });
+                }
+
+                // Fill reports
+                (data.reports || []).forEach(r => {
+                    const t = new Date(r.reported_at).getTime();
+                    const bucket = buckets.find(b => Math.abs(b.time.getTime() - t) <= (bucketSize / 2));
+                    if (bucket) bucket.reportCount++;
+                });
+
+                // Fill pings (average latency per bucket)
+                (data.pings || []).forEach(p => {
+                    const t = new Date(p.checked_at).getTime();
+                    const bucket = buckets.find(b => Math.abs(b.time.getTime() - t) <= (bucketSize / 2));
+                    if (bucket && p.latency_ms > 0) {
+                        bucket.pingLatency += p.latency_ms;
+                        bucket.pingCount++;
+                    }
+                });
+
+                const labels = buckets.map(b => {
+                    if (hours > 24) {
+                        return b.time.toLocaleDateString([], {month: 'short', day: 'numeric'}) + ' ' + b.time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    }
+                    return b.time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                });
+                const reportData = buckets.map(b => b.reportCount);
+                const pingData = buckets.map(b => b.pingCount > 0 ? (b.pingLatency / b.pingCount) : 0);
+
+                const ctx = document.getElementById('historyChart').getContext('2d');
+                if (chartInstance) chartInstance.destroy();
+
+                chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'User Reports',
+                                data: reportData,
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                backgroundColor: 'rgba(54, 162, 235, 0.4)',
+                                fill: true,
+                                tension: 0.3,
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: 'Server Latency (ms)',
+                                data: pingData,
+                                borderColor: 'rgba(255, 206, 86, 0.8)',
+                                borderDash: [5, 5],
+                                backgroundColor: 'transparent',
+                                tension: 0.3,
+                                yAxisID: 'y1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: {
+                            legend: { labels: { color: '#8f98a0' } }
+                        },
+                        scales: {
+                            x: { 
+                                grid: { color: 'rgba(255,255,255,0.05)' }, 
+                                ticks: { 
+                                    color: '#8f98a0', 
+                                    maxTicksLimit: 12,
+                                    maxRotation: 45,
+                                    minRotation: 0 
+                                } 
+                            },
+                            y: { 
+                                type: 'linear', display: true, position: 'left',
+                                grid: { color: 'rgba(255,255,255,0.05)' }, 
+                                ticks: { color: '#8f98a0', stepSize: 1 },
+                                title: { display: true, text: 'Reports', color: '#8f98a0' }
+                            },
+                            y1: { 
+                                type: 'linear', display: true, position: 'right',
+                                grid: { drawOnChartArea: false }, 
+                                ticks: { color: '#8f98a0' },
+                                title: { display: true, text: 'Latency (ms)', color: '#8f98a0' }
+                            }
+                        }
+                    }
+                });
+            } catch(e) {
+                console.error("Failed to load history", e);
+            }
+        }
+
+        async function checkStatus() {
+            const display = document.getElementById('status-display');
+            const latency = document.getElementById('latency-display');
+            const glow = document.getElementById('bg-glow');
+            const btn = document.getElementById('refresh-btn');
+            
+            // Reset to loading state
+            display.className = 'status-indicator status-loading';
+            display.innerText = 'CHECKING...';
+            latency.style.opacity = '0';
+            glow.className = 'glow-circle';
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+
+            try {
+                const response = await fetch('/api/ilearn-status');
+                const data = await response.json();
+                
+                if (data.status === 'UP') {
+                    display.className = 'status-indicator status-up';
+                    display.innerText = 'NO';
+                    glow.className = 'glow-circle glow-up';
+                } else {
+                    display.className = 'status-indicator status-down';
+                    display.innerText = 'YES';
+                    glow.className = 'glow-circle glow-down';
+                }
+                
+                latency.innerText = `Latency: ${data.latency_ms} ms`;
+                if(data.error) {
+                    latency.innerText += ` | ${data.error}`;
+                }
+                latency.style.opacity = '1';
+                
+            } catch (error) {
+                display.className = 'status-indicator status-down';
+                display.innerText = 'ERROR';
+                latency.innerText = `Fetch Error: ${error.message}`;
+                latency.style.opacity = '1';
+            } finally {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            }
+        }
+    </script>
+</body>
+</html>
