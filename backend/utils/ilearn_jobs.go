@@ -7,9 +7,9 @@ import (
 	"time"
 )
 
-// StartIlearnPingJob checks iLearn status every 5 minutes and saves it to DB
+// StartIlearnPingJob checks iLearn status every 30 seconds and saves it to DB
 func StartIlearnPingJob() {
-	ticker := time.NewTicker(5 * time.Minute)
+	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
 
 	// Run once immediately
