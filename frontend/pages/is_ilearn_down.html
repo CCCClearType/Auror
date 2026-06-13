@@ -391,39 +391,27 @@
                 const res = await fetch(`/api/ilearn-history?hours=${hours}`);
                 const data = await res.json();
                 
-                // Determine bucket size based on selected time range (High resolution for real-time feel)
-                let bucketSizeMinutes = 2; // Default for 6 hours
-                if (hours === 12) bucketSizeMinutes = 3;
-                else if (hours === 24) bucketSizeMinutes = 5; 
-                else if (hours === 72) bucketSizeMinutes = 15; 
-                else if (hours >= 168) bucketSizeMinutes = 30; 
-                
-                // Group data by buckets aligned to exact boundaries
-                const buckets = [];
+                // Generate empty buckets
+                let buckets = [];
                 const now = new Date();
-                const bucketSize = bucketSizeMinutes * 60 * 1000;
                 
-                // Snap the current time down to the nearest bucket boundary
+                // Determine bucket size based on selected time range
+                let bucketSizeMinutes = 2;
+                if (hours === 12) bucketSizeMinutes = 5;
+                else if (hours === 24) bucketSizeMinutes = 15; 
+                else if (hours === 72) bucketSizeMinutes = 60; 
+                else if (hours >= 168) bucketSizeMinutes = 1440; 
+                
+                const bucketSize = bucketSizeMinutes * 60 * 1000;
                 const roundedNow = new Date(Math.floor(now.getTime() / bucketSize) * bucketSize);
                 const startTime = new Date(roundedNow.getTime() - hours * 60 * 60 * 1000);
                 
                 for (let t = startTime.getTime(); t <= roundedNow.getTime(); t += bucketSize) {
-                    buckets.push({
-                        time: new Date(t),
-                        reportCount: 0,
-                        pingLatency: 0,
-                        pingCount: 0
-                    });
+                    buckets.push({ time: new Date(t), reportCount: 0, pingLatency: 0, pingCount: 0, isDown: false });
                 }
                 
-                // Add a real-time "Now" bucket at the very end to immediately show newest reports
-                buckets.push({
-                    time: now,
-                    reportCount: 0,
-                    pingLatency: 0,
-                    pingCount: 0,
-                    isNow: true
-                });
+                // Add a "Now" bucket at the very end to capture immediate real-time reports
+                buckets.push({ time: now, reportCount: 0, pingLatency: 0, pingCount: 0, isDown: false, isNow: true });
 
                 function assignToClosestBucket(t, callback) {
                     let closestBucket = buckets[0];
@@ -451,6 +439,9 @@
                     let dateStr = p.checked_at.replace(/(\+|\-)\d{2}:\d{2}$/, '').replace(/Z$/, '') + 'Z';
                     const t = new Date(dateStr).getTime();
                     assignToClosestBucket(t, b => {
+                        if (p.status === 'DOWN') {
+                            b.isDown = true;
+                        }
                         if (p.latency_ms > 0) {
                             b.pingLatency += p.latency_ms;
                             b.pingCount++;
@@ -473,7 +464,10 @@
                     return [timeStr, dateStr];
                 });
                 const reportData = buckets.map(b => b.reportCount);
-                const pingData = buckets.map(b => b.pingCount > 0 ? (b.pingLatency / b.pingCount) : 0);
+                const pingData = buckets.map(b => {
+                    if (b.isDown) return 0;
+                    return b.pingCount > 0 ? (b.pingLatency / b.pingCount) : 0;
+                });
 
                 const ctx = document.getElementById('historyChart').getContext('2d');
                 if (chartInstance) chartInstance.destroy();
@@ -502,10 +496,27 @@
                                 borderDash: [5, 5],
                                 backgroundColor: 'transparent',
                                 tension: 0.3,
-                                pointRadius: 0,
-                                pointHoverRadius: 5,
+                                pointBackgroundColor: ctx => buckets[ctx.dataIndex] && buckets[ctx.dataIndex].isDown ? 'rgba(255, 92, 117, 1)' : 'rgba(255, 206, 86, 0.8)',
+                                pointBorderColor: ctx => buckets[ctx.dataIndex] && buckets[ctx.dataIndex].isDown ? 'rgba(255, 92, 117, 1)' : 'rgba(255, 206, 86, 0.8)',
+                                pointRadius: ctx => buckets[ctx.dataIndex] && buckets[ctx.dataIndex].isDown ? 4 : 0,
+                                pointHoverRadius: 6,
                                 pointHitRadius: 10,
-                                yAxisID: 'y1'
+                                yAxisID: 'y1',
+                                segment: {
+                                    borderColor: ctx => {
+                                        // If this segment connects to a DOWN point, make it red and solid
+                                        if (buckets[ctx.p1DataIndex] && buckets[ctx.p1DataIndex].isDown) {
+                                            return 'rgba(255, 92, 117, 1)';
+                                        }
+                                        return 'rgba(255, 206, 86, 0.8)';
+                                    },
+                                    borderDash: ctx => {
+                                        if (buckets[ctx.p1DataIndex] && buckets[ctx.p1DataIndex].isDown) {
+                                            return [];
+                                        }
+                                        return [5, 5];
+                                    }
+                                }
                             }
                         ]
                     },
@@ -521,9 +532,16 @@
                                 grid: { color: 'rgba(255,255,255,0.05)' }, 
                                 ticks: { 
                                     color: '#8f98a0', 
-                                    maxTicksLimit: 12,
-                                    maxRotation: 45,
-                                    minRotation: 0 
+                                    maxTicksLimit: 8,
+                                    maxRotation: 0,
+                                    minRotation: 0,
+                                    callback: function(value, index, values) {
+                                        const label = this.getLabelForValue(value);
+                                        if (hours >= 168 && Array.isArray(label)) {
+                                            return label[1]; // Only return the date part for 7 Days
+                                        }
+                                        return label;
+                                    }
                                 } 
                             },
                             y: { 
