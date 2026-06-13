@@ -267,8 +267,9 @@
             </div>
 
             <div class="time-filters">
-                <button class="filter-btn" data-hours="12">12 Hours</button>
-                <button class="filter-btn active" data-hours="24">1 Day</button>
+                <button class="filter-btn" data-hours="6">6 Hours</button>
+                <button class="filter-btn active" data-hours="12">12 Hours</button>
+                <button class="filter-btn" data-hours="24">1 Day</button>
                 <button class="filter-btn" data-hours="72">3 Days</button>
                 <button class="filter-btn" data-hours="168">7 Days</button>
             </div>
@@ -391,8 +392,9 @@
                 const data = await res.json();
                 
                 // Determine bucket size based on selected time range (High resolution for real-time feel)
-                let bucketSizeMinutes = 2; // Default for 12 hours
-                if (hours === 24) bucketSizeMinutes = 5; 
+                let bucketSizeMinutes = 2; // Default for 6 hours
+                if (hours === 12) bucketSizeMinutes = 3;
+                else if (hours === 24) bucketSizeMinutes = 5; 
                 else if (hours === 72) bucketSizeMinutes = 15; 
                 else if (hours >= 168) bucketSizeMinutes = 30; 
                 
@@ -488,6 +490,9 @@
                                 backgroundColor: 'rgba(54, 162, 235, 0.4)',
                                 fill: true,
                                 tension: 0.3,
+                                pointRadius: 0,
+                                pointHoverRadius: 5,
+                                pointHitRadius: 10,
                                 yAxisID: 'y'
                             },
                             {
@@ -497,6 +502,9 @@
                                 borderDash: [5, 5],
                                 backgroundColor: 'transparent',
                                 tension: 0.3,
+                                pointRadius: 0,
+                                pointHoverRadius: 5,
+                                pointHitRadius: 10,
                                 yAxisID: 'y1'
                             }
                         ]
