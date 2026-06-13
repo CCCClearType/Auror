@@ -417,14 +417,19 @@
 
                 // Fill reports
                 (data.reports || []).forEach(r => {
-                    const t = new Date(r.reported_at).getTime();
+                    // Force the raw timestamp to be treated as UTC by stripping any erroneous local timezone offset
+                    let dateStr = r.reported_at.replace(/(\+|\-)\d{2}:\d{2}$/, '').replace(/Z$/, '') + 'Z';
+                    
+                    const t = new Date(dateStr).getTime();
                     const bucket = buckets.find(b => Math.abs(b.time.getTime() - t) <= (bucketSize / 2));
                     if (bucket) bucket.reportCount++;
                 });
 
                 // Fill pings (average latency per bucket)
                 (data.pings || []).forEach(p => {
-                    const t = new Date(p.checked_at).getTime();
+                    let dateStr = p.checked_at.replace(/(\+|\-)\d{2}:\d{2}$/, '').replace(/Z$/, '') + 'Z';
+                    
+                    const t = new Date(dateStr).getTime();
                     const bucket = buckets.find(b => Math.abs(b.time.getTime() - t) <= (bucketSize / 2));
                     if (bucket && p.latency_ms > 0) {
                         bucket.pingLatency += p.latency_ms;
