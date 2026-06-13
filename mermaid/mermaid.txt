@@ -132,6 +132,18 @@ erDiagram
         DATETIME created_at
     }
 
+    ILEARN_PINGS {
+        INT id PK
+        DATETIME checked_at
+        INT latency_ms
+        VARCHAR status "UP | DOWN"
+    }
+
+    ILEARN_REPORTS {
+        INT id PK
+        DATETIME reported_at
+    }
+
 erDiagram
     USERS ||--o{ GAMES : develops
 
