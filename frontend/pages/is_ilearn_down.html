@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW" data-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,7 +33,7 @@
             z-index: 2;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        
+
         .status-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.4);
@@ -53,7 +54,7 @@
             margin-bottom: 1rem;
             line-height: 1;
             letter-spacing: -2px;
-            text-shadow: 0 0 20px rgba(0,0,0,0.5);
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             transition: color 0.5s ease;
         }
 
@@ -66,7 +67,7 @@
             color: #f85149;
             text-shadow: 0 0 30px rgba(248, 81, 73, 0.3);
         }
-        
+
         .status-loading {
             color: #58a6ff;
             animation: pulse 1.5s infinite;
@@ -77,7 +78,7 @@
             color: #8f98a0;
             margin-top: 1.5rem;
             font-family: monospace;
-            background: rgba(0,0,0,0.3);
+            background: rgba(0, 0, 0, 0.3);
             padding: 8px 16px;
             border-radius: 20px;
             display: inline-block;
@@ -89,7 +90,7 @@
             width: 600px;
             height: 600px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(88,166,255,0.05) 0%, rgba(0,0,0,0) 70%);
+            background: radial-gradient(circle, rgba(88, 166, 255, 0.05) 0%, rgba(0, 0, 0, 0) 70%);
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -99,24 +100,33 @@
         }
 
         .glow-up {
-            background: radial-gradient(circle, rgba(46,160,67,0.08) 0%, rgba(0,0,0,0) 70%);
+            background: radial-gradient(circle, rgba(46, 160, 67, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
         }
 
         .glow-down {
-            background: radial-gradient(circle, rgba(248,81,73,0.08) 0%, rgba(0,0,0,0) 70%);
+            background: radial-gradient(circle, rgba(248, 81, 73, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
         }
 
         @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; text-shadow: 0 0 20px rgba(88,166,255,0.5); }
-            100% { opacity: 0.6; }
+            0% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+                text-shadow: 0 0 20px rgba(88, 166, 255, 0.5);
+            }
+
+            100% {
+                opacity: 0.6;
+            }
         }
 
         /* Refresh button */
         .refresh-btn {
             margin-top: 2rem;
             background: transparent;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: #c9d1d9;
             border-radius: 30px;
             padding: 10px 24px;
@@ -127,8 +137,8 @@
         }
 
         .refresh-btn:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: rgba(255,255,255,0.4);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
             color: #fff;
         }
 
@@ -151,9 +161,10 @@
             justify-content: center;
             gap: 10px;
         }
+
         .filter-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: #8f98a0;
             padding: 6px 16px;
             border-radius: 20px;
@@ -161,21 +172,23 @@
             font-size: 0.9rem;
             transition: all 0.2s;
         }
+
         .filter-btn:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
         }
+
         .filter-btn.active {
             background: rgba(54, 162, 235, 0.2);
             border-color: rgba(54, 162, 235, 0.8);
             color: #58a6ff;
             font-weight: bold;
         }
-        
+
         .report-section {
             margin-top: 2rem;
             padding-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
         }
 
@@ -191,10 +204,12 @@
             transition: background 0.3s, transform 0.2s;
             box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
         }
+
         .report-btn:hover {
             background: #f44336;
             transform: translateY(-2px);
         }
+
         .report-btn:active {
             transform: scale(0.95);
         }
@@ -219,9 +234,11 @@
             user-select: none;
             touch-action: none;
         }
+
         .cool-clock:active {
             cursor: grabbing;
         }
+
         .cool-clock .time {
             font-size: 2.2rem;
             font-weight: 700;
@@ -231,6 +248,7 @@
             margin: 0;
             line-height: 1;
         }
+
         .cool-clock .timezone {
             font-size: 0.75rem;
             color: #8f98a0;
@@ -242,6 +260,7 @@
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
 
     <!-- Standard Navigation Header -->
@@ -254,41 +273,55 @@
             <div class="timezone">Taiwan Time (UTC+8)</div>
         </div>
 
-        <div class="container is-flex is-justify-content-center is-align-items-center" style="min-height: calc(100vh - 60px);">
-        
-        <div class="glow-circle" id="bg-glow"></div>
-        <div class="status-card">
-            <h1 class="status-title">Is iLearn Down?</h1>
-            
-            <div id="status-display" class="status-indicator status-loading">
-                CHECKING...
-            </div>
-            
-            <div id="latency-display" class="status-latency" style="opacity: 0;">
-                Latency: -- ms
-            </div>
+        <div class="container is-flex is-justify-content-center is-align-items-center"
+            style="min-height: calc(100vh - 60px);">
 
-            <div>
-                <button id="refresh-btn" class="refresh-btn">Refresh Status</button>
-            </div>
+            <div class="glow-circle" id="bg-glow"></div>
+            <div class="status-card">
+                <h1 class="status-title">Is iLearn Down?</h1>
 
-            <div class="time-filters">
-                <button class="filter-btn" data-hours="6">6 Hours</button>
-                <button class="filter-btn active" data-hours="12">12 Hours</button>
-                <button class="filter-btn" data-hours="24">1 Day</button>
-                <button class="filter-btn" data-hours="72">3 Days</button>
-                <button class="filter-btn" data-hours="168">7 Days</button>
-            </div>
+                <div id="status-display" class="status-indicator status-loading">
+                    CHECKING...
+                </div>
 
-            <div class="chart-section">
-                <canvas id="historyChart"></canvas>
-            </div>
+                <div id="latency-display" class="status-latency" style="opacity: 0;">
+                    Latency: -- ms
+                </div>
 
-            <div class="report-section">
-                <button id="report-btn" class="report-btn">I have a problem with iLearn</button>
-                <p style="margin-top: 10px; color: #8f98a0; font-size: 0.9rem;">Help us track iLearn outages</p>
+                <div>
+                    <button id="refresh-btn" class="refresh-btn">Refresh Status</button>
+                </div>
+
+                <div class="time-filters">
+                    <button class="filter-btn" data-hours="6">6 Hours</button>
+                    <button class="filter-btn active" data-hours="12">12 Hours</button>
+                    <button class="filter-btn" data-hours="24">1 Day</button>
+                    <button class="filter-btn" data-hours="72">3 Days</button>
+                    <button class="filter-btn" data-hours="168">7 Days</button>
+                </div>
+
+                <div class="chart-section">
+                    <canvas id="historyChart"></canvas>
+                </div>
+
+                <div class="report-section">
+                    <button id="report-btn" class="report-btn">I have a problem with iLearn</button>
+                    <p style="margin-top: 10px; color: #8f98a0; font-size: 0.9rem;">Help us track iLearn outages</p>
+
+                    <div class="latency-info"
+                        style="margin-top: 30px; text-align: left; padding: 15px 20px; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px solid rgba(255, 206, 86, 0.2);">
+                        <h4
+                            style="color: rgba(255, 206, 86, 0.9); margin-bottom: 8px; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; font-weight: 600;">
+                            <span style="font-size: 1.2rem;">:D</span> About Server Latency
+                        </h4>
+                        <p style="color: #8f98a0; font-size: 0.85rem; margin: 0; line-height: 1.6;">
+                            Our background worker automatically tests the iLearn connection every 30 seconds. To prevent
+                            false alarms from network jitter, it sends 5 consecutive pings and averages the successful
+                            results. A red indicator appears at 0 ms only when all connection attempts fail completely.
+                        </p>
+                    </div>
+                </div>
             </div>
-        </div>
     </main>
 
     <script src="/assets/js/api.js"></script>
@@ -333,19 +366,19 @@
 
             const btn = document.getElementById('report-btn');
             const COOLDOWN_SECONDS = 30; // Reduced to 30 seconds for better UX
-            
+
             function updateReportButtonState() {
                 let unlockTime = localStorage.getItem('ilearn_report_unlock');
                 const now = Date.now();
                 const hasCookie = document.cookie.includes('ilearn_reported=true');
-                
+
                 // Only create a new timer if cookie exists AND there is NO unlockTime at all.
                 // Do NOT reset if now >= unlockTime, otherwise it causes an infinite loop!
                 if (hasCookie && !unlockTime) {
                     unlockTime = now + (COOLDOWN_SECONDS * 1000);
                     localStorage.setItem('ilearn_report_unlock', unlockTime);
                 }
-                
+
                 if (unlockTime && now < parseInt(unlockTime)) {
                     const remainingSeconds = Math.ceil((parseInt(unlockTime) - now) / 1000);
                     btn.disabled = true;
@@ -373,23 +406,23 @@
 
             btn.addEventListener('click', async () => {
                 if (btn.disabled) return;
-                
+
                 btn.disabled = true;
                 btn.innerText = 'Submitting...';
                 try {
                     await fetch('/api/ilearn-reports', { method: 'POST' });
                     btn.innerText = 'Reported!';
                     btn.style.background = '#2ea043';
-                    
+
                     // Set cookie and localStorage
                     const expiresDate = new Date(Date.now() + COOLDOWN_SECONDS * 1000).toUTCString();
                     document.cookie = `ilearn_reported=true; expires=${expiresDate}; max-age=${COOLDOWN_SECONDS}; path=/`;
                     localStorage.setItem('ilearn_report_unlock', Date.now() + (COOLDOWN_SECONDS * 1000));
-                    
+
                     loadHistoryChart(currentHours);
-                    
+
                     setTimeout(updateReportButtonState, 2000);
-                } catch(err) {
+                } catch (err) {
                     btn.innerText = 'Error';
                     setTimeout(updateReportButtonState, 3000);
                 }
@@ -402,26 +435,26 @@
             try {
                 const res = await fetch(`/api/ilearn-history?hours=${hours}`);
                 const data = await res.json();
-                
+
                 // Generate empty buckets
                 let buckets = [];
                 const now = new Date();
-                
+
                 // Determine bucket size based on selected time range
                 let bucketSizeMinutes = 2;
                 if (hours === 12) bucketSizeMinutes = 5;
-                else if (hours === 24) bucketSizeMinutes = 15; 
-                else if (hours === 72) bucketSizeMinutes = 360; 
+                else if (hours === 24) bucketSizeMinutes = 15;
+                else if (hours === 72) bucketSizeMinutes = 360;
                 else if (hours >= 168) bucketSizeMinutes = 1440;
-                
+
                 const bucketSize = bucketSizeMinutes * 60 * 1000;
                 const roundedNow = new Date(Math.floor(now.getTime() / bucketSize) * bucketSize);
                 const startTime = new Date(roundedNow.getTime() - hours * 60 * 60 * 1000);
-                
+
                 for (let t = startTime.getTime(); t <= roundedNow.getTime(); t += bucketSize) {
                     buckets.push({ time: new Date(t), reportCount: 0, pingLatency: 0, pingCount: 0, isDown: false });
                 }
-                
+
                 // Add a "Now" bucket at the very end to capture immediate real-time reports
                 buckets.push({ time: now, reportCount: 0, pingLatency: 0, pingCount: 0, isDown: false, isNow: true });
 
@@ -462,16 +495,16 @@
                 });
 
                 const labels = buckets.map(b => {
-                    const tzOpts = { timeZone: 'Asia/Taipei', hour12: false, hour: '2-digit', minute:'2-digit' };
-                    
+                    const tzOpts = { timeZone: 'Asia/Taipei', hour12: false, hour: '2-digit', minute: '2-digit' };
+
                     if (b.isNow) {
                         return ['Now', b.time.toLocaleTimeString('en-US', tzOpts)];
                     }
-                    
+
                     const dateOpts = { timeZone: 'Asia/Taipei', month: 'numeric', day: 'numeric' };
                     const timeStr = b.time.toLocaleTimeString('en-US', tzOpts);
                     const dateStr = b.time.toLocaleDateString('en-US', dateOpts); // Produces "6/13" format
-                    
+
                     // Return array to render multi-line labels in Chart.js
                     return [timeStr, dateStr];
                 });
@@ -541,42 +574,42 @@
                             legend: { labels: { color: '#8f98a0' } }
                         },
                         scales: {
-                            x: { 
-                                grid: { color: 'rgba(255,255,255,0.05)' }, 
-                                ticks: { 
-                                    color: '#8f98a0', 
+                            x: {
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                ticks: {
+                                    color: '#8f98a0',
                                     maxTicksLimit: 8,
                                     maxRotation: 0,
                                     minRotation: 0,
-                                    callback: function(value, index, values) {
+                                    callback: function (value, index, values) {
                                         const label = this.getLabelForValue(value);
                                         if (hours >= 168 && Array.isArray(label)) {
                                             return label[1]; // Only return the date part for 7 Days
                                         }
                                         return label;
                                     }
-                                } 
+                                }
                             },
-                            y: { 
+                            y: {
                                 type: 'linear', display: true, position: 'left',
                                 min: 0,
                                 suggestedMax: 10,
-                                grid: { color: 'rgba(255,255,255,0.05)' }, 
+                                grid: { color: 'rgba(255,255,255,0.05)' },
                                 ticks: { color: '#8f98a0', stepSize: 1, precision: 0 },
                                 title: { display: true, text: 'Reports', color: '#8f98a0' }
                             },
-                            y1: { 
+                            y1: {
                                 type: 'linear', display: hours < 72, position: 'right',
                                 min: 0,
                                 suggestedMax: 500,
-                                grid: { drawOnChartArea: false }, 
+                                grid: { drawOnChartArea: false },
                                 ticks: { color: '#8f98a0' },
                                 title: { display: hours < 72, text: 'Latency (ms)', color: '#8f98a0' }
                             }
                         }
                     }
                 });
-            } catch(e) {
+            } catch (e) {
                 console.error("Failed to load history", e);
             }
         }
@@ -586,7 +619,7 @@
             const latency = document.getElementById('latency-display');
             const glow = document.getElementById('bg-glow');
             const btn = document.getElementById('refresh-btn');
-            
+
             // Reset to loading state
             display.className = 'status-indicator status-loading';
             display.innerText = 'CHECKING...';
@@ -598,7 +631,7 @@
             try {
                 const response = await fetch('/api/ilearn-status');
                 const data = await response.json();
-                
+
                 if (data.status === 'UP') {
                     display.className = 'status-indicator status-up';
                     display.innerText = 'NO';
@@ -608,13 +641,13 @@
                     display.innerText = 'YES';
                     glow.className = 'glow-circle glow-down';
                 }
-                
+
                 latency.innerText = `Latency: ${data.latency_ms} ms`;
-                if(data.error) {
+                if (data.error) {
                     latency.innerText += ` | ${data.error}`;
                 }
                 latency.style.opacity = '1';
-                
+
             } catch (error) {
                 display.className = 'status-indicator status-down';
                 display.innerText = 'ERROR';
@@ -665,7 +698,7 @@
         function dragEnd(e) {
             if (!isDragging) return;
             isDragging = false;
-            
+
             // Start physics simulation
             applyPhysics();
         }
@@ -673,7 +706,7 @@
         function drag(e) {
             if (isDragging) {
                 e.preventDefault();
-                
+
                 const clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
                 const clientY = e.type === "touchmove" ? e.touches[0].clientY : e.clientY;
 
@@ -683,7 +716,7 @@
                 // Calculate velocity based on movement
                 velocityX = clientX - lastX;
                 velocityY = clientY - lastY;
-                
+
                 lastX = clientX;
                 lastY = clientY;
 
@@ -698,7 +731,7 @@
             // override the CSS top/left to handle absolute positioning properly
             el.style.left = xPos + "px";
             el.style.top = yPos + "px";
-            el.style.transform = "none"; 
+            el.style.transform = "none";
             el.style.right = "auto";
             el.style.bottom = "auto";
         }
@@ -749,4 +782,5 @@
         document.addEventListener("mousemove", drag);
     </script>
 </body>
+
 </html>
