@@ -230,7 +230,7 @@
                 html += `<button class="button is-light" onclick="showToast('請先登入！', 'error')">加入願望清單</button>`;
             } else {
                 if (isOwned) {
-                    html += `<button class="button is-primary" onclick="playNote(${noteData.note_id || noteData.id})">啟動</button>`;
+
                     html += `<button class="button is-light" onclick="downloadNote(${noteData.note_id || noteData.id})">下載</button>`;
                 } else {
                     if (isTakenDown) {
@@ -592,19 +592,7 @@
             }
         }
 
-        async function playNote(noteId) {
-            try {
-                const result = await authFetch(`/api/protected/library/${noteId}/play`);
-                const data   = await result.json();
-                if (data && data.launch_url) {
-                    window.open(data.launch_url, '_blank');
-                } else {
-                    showToast('筆記啟動中...', 'success');
-                }
-            } catch (err) {
-                showToast(`啟動失敗：${err.message}`, 'error');
-            }
-        }
+
 
         async function downloadNote(noteId) {
             try {

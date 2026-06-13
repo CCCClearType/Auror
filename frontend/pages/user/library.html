@@ -86,7 +86,7 @@
                         </div>
                     </div>
                     <div class="lib-note-actions">
-                        <button class="button is-primary btn-play" onclick="playNote(${noteId})">啟動</button>
+
                         <button class="button is-light btn-download" onclick="downloadNote(${noteId})">下載</button>
                         <button class="button is-light btn-review" onclick="window.location.href='/pages/store/note_detail?id=${noteId}'">評價</button>
                     </div>
@@ -95,21 +95,7 @@
             });
         }
 
-        async function playNote(noteId) {
-            try {
-                // GET /api/protected/library/{note_id}/play
-                const result = await authFetch(`/api/protected/library/${noteId}/play`);
-                const data   = await result.json();
-                // 後端可回傳筆記啟動 URL 或 token
-                if (data && data.launch_url) {
-                    window.open(data.launch_url, '_blank');
-                } else {
-                    showToast('筆記啟動中...', 'success');
-                }
-            } catch (err) {
-                showToast(`啟動失敗：${err.message}`, 'error');
-            }
-        }
+
 
         async function downloadNote(noteId) {
             try {

@@ -19,3 +19,29 @@ SELECT
     END,
     'media'
 FROM inserted_notes;
+
+-- ==========================================
+-- 11. Randomize prices for existing test data (between 31 and 400)
+-- ==========================================
+UPDATE notes
+SET price = FLOOR(RANDOM() * 370 + 31)
+WHERE title NOT IN ('物理搖擺實驗數據分析筆記', '流體力學水上飛行動力分析', '機翼空氣動力學模擬筆記');
+
+
+-- ==========================================
+-- 12. Ensure all notes have at least 1~3 random tags
+-- ==========================================
+INSERT INTO note_tags (note_id, tag_id)
+SELECT n.note_id, t.tag_id
+FROM notes n
+CROSS JOIN LATERAL (
+    SELECT tag_id
+    FROM tags
+    ORDER BY RANDOM()
+    LIMIT FLOOR(RANDOM() * 3 + 1)
+) t
+WHERE NOT EXISTS (
+    SELECT 1 FROM note_tags nt WHERE nt.note_id = n.note_id
+)
+ON CONFLICT DO NOTHING;
+

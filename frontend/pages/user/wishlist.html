@@ -70,7 +70,7 @@
                 const noteId  = note.note_id || note.id || item.note_id;
                 const title   = note.title || item.title || '';
                 const price   = Number(note.price || item.price || 0);
-                const releaseDate = note.release_date || note.releaseDate || item.release_date || '未定';
+
                 const coverUrl = getNoteCoverUrl(note);
                 const coverHtml = coverUrl
                     ? `<img src="${escapeHtml(coverUrl)}" alt="${escapeHtml(title)} 封面" style="width:120px;height:68px;object-fit:cover;border-radius:8px;">`
@@ -113,8 +113,7 @@
                             </h3>
                         </a>
                         <p style="color:var(--text-secondary);font-size:14px;">
-                            定價：<strong style="color:var(--accent-cyan);font-size:1.1rem;">NT$ ${price.toLocaleString()}</strong> &nbsp;|&nbsp; 
-                            發售日：${releaseDate}
+                            定價：<strong style="color:var(--accent-cyan);font-size:1.1rem;">NT$ ${price.toLocaleString()}</strong>
                         </p>
                     </div>
                     <div class="library-item-actions">
