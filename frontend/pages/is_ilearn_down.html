@@ -390,11 +390,11 @@
                 const res = await fetch(`/api/ilearn-history?hours=${hours}`);
                 const data = await res.json();
                 
-                // Determine bucket size based on selected time range to prevent density issues
-                let bucketSizeMinutes = 15;
-                if (hours === 24) bucketSizeMinutes = 30;
-                else if (hours === 72) bucketSizeMinutes = 120; // 2 hours
-                else if (hours >= 168) bucketSizeMinutes = 240; // 4 hours
+                // Determine bucket size based on selected time range (High resolution for real-time feel)
+                let bucketSizeMinutes = 2; // Default for 12 hours
+                if (hours === 24) bucketSizeMinutes = 5; 
+                else if (hours === 72) bucketSizeMinutes = 15; 
+                else if (hours >= 168) bucketSizeMinutes = 30; 
                 
                 // Group data by buckets aligned to exact boundaries
                 const buckets = [];
@@ -405,7 +405,6 @@
                 const roundedNow = new Date(Math.floor(now.getTime() / bucketSize) * bucketSize);
                 const startTime = new Date(roundedNow.getTime() - hours * 60 * 60 * 1000);
                 
-                // create buckets
                 for (let t = startTime.getTime(); t <= roundedNow.getTime(); t += bucketSize) {
                     buckets.push({
                         time: new Date(t),
@@ -414,33 +413,57 @@
                         pingCount: 0
                     });
                 }
+                
+                // Add a real-time "Now" bucket at the very end to immediately show newest reports
+                buckets.push({
+                    time: now,
+                    reportCount: 0,
+                    pingLatency: 0,
+                    pingCount: 0,
+                    isNow: true
+                });
 
-                // Fill reports
+                function assignToClosestBucket(t, callback) {
+                    let closestBucket = buckets[0];
+                    let minDiff = Infinity;
+                    for (let b of buckets) {
+                        const diff = Math.abs(b.time.getTime() - t);
+                        if (diff < minDiff) {
+                            minDiff = diff;
+                            closestBucket = b;
+                        }
+                    }
+                    callback(closestBucket);
+                }
+
+                // Fill reports (every single report is counted independently)
                 (data.reports || []).forEach(r => {
                     // Force the raw timestamp to be treated as UTC by stripping any erroneous local timezone offset
                     let dateStr = r.reported_at.replace(/(\+|\-)\d{2}:\d{2}$/, '').replace(/Z$/, '') + 'Z';
-                    
                     const t = new Date(dateStr).getTime();
-                    const bucket = buckets.find(b => Math.abs(b.time.getTime() - t) <= (bucketSize / 2));
-                    if (bucket) bucket.reportCount++;
+                    assignToClosestBucket(t, b => b.reportCount++);
                 });
 
                 // Fill pings (average latency per bucket)
                 (data.pings || []).forEach(p => {
                     let dateStr = p.checked_at.replace(/(\+|\-)\d{2}:\d{2}$/, '').replace(/Z$/, '') + 'Z';
-                    
                     const t = new Date(dateStr).getTime();
-                    const bucket = buckets.find(b => Math.abs(b.time.getTime() - t) <= (bucketSize / 2));
-                    if (bucket && p.latency_ms > 0) {
-                        bucket.pingLatency += p.latency_ms;
-                        bucket.pingCount++;
-                    }
+                    assignToClosestBucket(t, b => {
+                        if (p.latency_ms > 0) {
+                            b.pingLatency += p.latency_ms;
+                            b.pingCount++;
+                        }
+                    });
                 });
 
                 const labels = buckets.map(b => {
                     const tzOpts = { timeZone: 'Asia/Taipei', hour12: false, hour: '2-digit', minute:'2-digit' };
-                    const dateOpts = { timeZone: 'Asia/Taipei', month: 'numeric', day: 'numeric' };
                     
+                    if (b.isNow) {
+                        return ['Now', b.time.toLocaleTimeString('en-US', tzOpts)];
+                    }
+                    
+                    const dateOpts = { timeZone: 'Asia/Taipei', month: 'numeric', day: 'numeric' };
                     const timeStr = b.time.toLocaleTimeString('en-US', tzOpts);
                     const dateStr = b.time.toLocaleDateString('en-US', dateOpts); // Produces "6/13" format
                     
