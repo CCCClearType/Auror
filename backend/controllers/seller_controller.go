@@ -15,9 +15,10 @@ import (
 )
 
 type UploadNoteInput struct {
-	Title string  `json:"title" binding:"required"`
-	Price float64 `json:"price" binding:"min=0"`
-	Desc  string  `json:"desc"`
+	Title    string  `json:"title" binding:"required"`
+	Semester string  `json:"semester" binding:"required"`
+	Price    float64 `json:"price" binding:"min=0"`
+	Desc     string  `json:"desc"`
 }
 
 type UpdateNoteInput struct {
@@ -56,8 +57,9 @@ func UploadNote(c *gin.Context) {
 	}
 
 	note := models.Note{
-		SellerID: sellerID,
+		SellerID:    sellerID,
 		Title:       input.Title,
+		Semester:    input.Semester,
 		Description: input.Desc,
 		Price:       input.Price,
 		Status:      "DRAFT",
