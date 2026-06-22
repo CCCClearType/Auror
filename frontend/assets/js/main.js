@@ -176,7 +176,11 @@ function renderNotes(notes) {
     }
 
     container.innerHTML = '';
-    notes.forEach(note => {
+
+    const groupSelect = document.getElementById('filter-group');
+    const groupBy = groupSelect ? groupSelect.value : '';
+
+    const createNoteCard = (note) => {
         const card = document.createElement('div');
         card.className = 'note-list-card card';
 
@@ -235,9 +239,58 @@ function renderNotes(notes) {
             const noteId = note.note_id || note.id;
             window.location.href = `/pages/store/note_detail?id=${noteId}`;
         });
+        return card;
+    };
 
-        container.appendChild(card);
-    });
+    if (groupBy === 'semester') {
+        const groups = {};
+        const others = [];
+        notes.forEach(note => {
+            const semesterTag = (note.tags || []).find(t => (t.tag_type || 'GENERAL') === 'SEMESTER');
+            if (semesterTag) {
+                const sName = typeof semesterTag === 'string' ? semesterTag : (semesterTag.tag_name || semesterTag.name || '');
+                if (!groups[sName]) groups[sName] = [];
+                groups[sName].push(note);
+            } else {
+                others.push(note);
+            }
+        });
+
+        const sortedSemesters = Object.keys(groups).sort((a, b) => b.localeCompare(a));
+        sortedSemesters.forEach(sem => {
+            const semHeader = document.createElement('h2');
+            semHeader.className = 'title is-5 mt-5 mb-3';
+            semHeader.style.gridColumn = '1 / -1';
+            semHeader.style.color = '#66c0f4';
+            semHeader.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
+            semHeader.style.paddingBottom = '0.5rem';
+            semHeader.innerHTML = `<span class="icon"><i class="fas fa-calendar-alt"></i></span> 學期：${escapeHtml(sem)} <span class="tag is-rounded is-light ml-2" style="background:rgba(255,255,255,0.1);color:#fff;border:none;">${groups[sem].length} 篇</span>`;
+            container.appendChild(semHeader);
+            
+            groups[sem].forEach(note => {
+                container.appendChild(createNoteCard(note));
+            });
+        });
+
+        if (others.length > 0) {
+            const semHeader = document.createElement('h2');
+            semHeader.className = 'title is-5 mt-5 mb-3';
+            semHeader.style.gridColumn = '1 / -1';
+            semHeader.style.color = '#a0a0a0';
+            semHeader.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
+            semHeader.style.paddingBottom = '0.5rem';
+            semHeader.innerHTML = `<span class="icon"><i class="fas fa-box"></i></span> 未分類 <span class="tag is-rounded is-light ml-2" style="background:rgba(255,255,255,0.1);color:#fff;border:none;">${others.length} 篇</span>`;
+            container.appendChild(semHeader);
+            
+            others.forEach(note => {
+                container.appendChild(createNoteCard(note));
+            });
+        }
+    } else {
+        notes.forEach(note => {
+            container.appendChild(createNoteCard(note));
+        });
+    }
 }
 
 // ============================================================
