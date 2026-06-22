@@ -5,7 +5,6 @@ type Note struct {
 	NoteID        uint        `gorm:"primaryKey;column:note_id" json:"note_id"`
 	SellerID   uint        `gorm:"not null" json:"seller_id"`
 	Title         string      `gorm:"not null" json:"title"`
-	Semester      string      `gorm:"not null" json:"semester"`
 	Description   string      `gorm:"column:description" json:"desc"`
 	Price         float64     `gorm:"not null;default:0.00" json:"price"`
 	OverallRating float64     `gorm:"default:0.00" json:"overall_rating"`

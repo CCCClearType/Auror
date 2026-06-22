@@ -16,7 +16,6 @@ import (
 
 type UploadNoteInput struct {
 	Title    string  `json:"title" binding:"required"`
-	Semester string  `json:"semester" binding:"required"`
 	Price    float64 `json:"price" binding:"min=0"`
 	Desc     string  `json:"desc"`
 }
@@ -59,7 +58,6 @@ func UploadNote(c *gin.Context) {
 	note := models.Note{
 		SellerID:    sellerID,
 		Title:       input.Title,
-		Semester:    input.Semester,
 		Description: input.Desc,
 		Price:       input.Price,
 		Status:      "DRAFT",
@@ -97,6 +95,22 @@ func PublishNote(c *gin.Context) {
 
 	if len(note.Tags) < 1 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Note must have at least 1 tag to be published"})
+		return
+	}
+
+	hasSemester := false
+	hasSubject := false
+	for _, t := range note.Tags {
+		if t.TagType == "SEMESTER" {
+			hasSemester = true
+		}
+		if t.TagType == "SUBJECT" {
+			hasSubject = true
+		}
+	}
+
+	if !hasSemester || !hasSubject {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Note must have at least 1 semester tag and 1 subject tag"})
 		return
 	}
 
@@ -373,6 +387,7 @@ func GetTags(c *gin.Context) {
 func CreateTag(c *gin.Context) {
 	var input struct {
 		TagName string `json:"tag_name" binding:"required"`
+		TagType string `json:"tag_type"`
 	}
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -391,7 +406,12 @@ func CreateTag(c *gin.Context) {
 		return
 	}
 
-	tag := models.Tag{TagName: tagName}
+	tagType := "GENERAL"
+	if input.TagType != "" {
+		tagType = strings.ToUpper(input.TagType)
+	}
+
+	tag := models.Tag{TagName: tagName, TagType: tagType}
 	if err := database.DB.Create(&tag).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create tag (might already exist)"})
 		return

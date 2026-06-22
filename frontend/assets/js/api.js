@@ -179,10 +179,10 @@ async function apiUpdateNote(id, price, desc) {
     return parseResponse(res);
 }
 
-async function apiCreateTag(tagName) {
+async function apiCreateTag(tagName, tagType = 'GENERAL') {
     const res = await authFetch('/api/seller/tags', {
         method: 'POST',
-        body: JSON.stringify({ tag_name: tagName })
+        body: JSON.stringify({ tag_name: tagName, tag_type: tagType })
     });
     return parseResponse(res);
 }
