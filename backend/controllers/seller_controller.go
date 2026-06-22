@@ -400,7 +400,7 @@ func GetNoteStats(c *gin.Context) {
 // GetTags handles GET /api/tags (Public)
 func GetTags(c *gin.Context) {
 	var tags []models.Tag
-	if err := database.DB.Find(&tags).Error; err != nil {
+	if err := database.DB.Order("tag_name DESC").Find(&tags).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch tags"})
 		return
 	}
@@ -433,6 +433,11 @@ func CreateTag(c *gin.Context) {
 	tagType := "GENERAL"
 	if input.TagType != "" {
 		tagType = strings.ToUpper(input.TagType)
+	}
+
+	if tagType == "SEMESTER" {
+		c.JSON(http.StatusForbidden, gin.H{"error": "學期標籤由系統統一管理，無法自行新增！"})
+		return
 	}
 
 	tag := models.Tag{TagName: tagName, TagType: tagType}

@@ -82,9 +82,15 @@
                 <div class="column is-2">
                     <label class="label" for="filter-sort">排序</label>
                     <div class="select is-fullwidth"><select id="filter-sort">
-
                         <option value="price_asc">價格由低到高</option>
                         <option value="price_desc">價格由高到低</option>
+                    </select></div>
+                </div>
+                <div class="column is-2">
+                    <label class="label" for="filter-group">分群</label>
+                    <div class="select is-fullwidth"><select id="filter-group">
+                        <option value="">無</option>
+                        <option value="semester">依照學期分群</option>
                     </select></div>
                 </div>
             </div>
@@ -109,6 +115,7 @@
             document.getElementById('filter-min-price').value = params.get('min_price') || '';
             document.getElementById('filter-max-price').value = params.get('max_price') || '';
             document.getElementById('filter-sort').value = params.get('sort') || 'price_asc';
+            document.getElementById('filter-group').value = params.get('group') || '';
 
             const hideOwnedWrapper = document.getElementById('hide-owned-wrapper');
             const hideOwnedToggle = document.getElementById('filter-hide-owned');
@@ -235,6 +242,7 @@
             const minPrice = document.getElementById('filter-min-price').value;
             const maxPrice = document.getElementById('filter-max-price').value;
             const sort = document.getElementById('filter-sort').value;
+            const group = document.getElementById('filter-group').value;
             const hideOwnedToggle = document.getElementById('filter-hide-owned');
             
             if (keyword) params.set('q', keyword);
