@@ -169,7 +169,7 @@
 
                 if (currentActiveTab === 'friends') {
                     div.onclick = () => openChat(userId, username);
-                    actionHtml = `<button class="button is-danger is-light is-small" onclick="event.stopPropagation(); blockUser(${userId}, decodeURIComponent('${encodeURIComponent(username)}'))">封鎖</button>`;
+                    actionHtml = `<button class="button is-danger is-light is-small" onclick='event.stopPropagation(); blockUser(${userId}, ${escapeHtml(JSON.stringify(username))})'>封鎖</button>`;
                 } 
                 else if (currentActiveTab === 'requests') {
                     const requestId = item.friendship_id || item.id || userId;

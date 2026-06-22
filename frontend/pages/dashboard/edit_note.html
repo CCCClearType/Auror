@@ -357,6 +357,11 @@
                 return;
             }
 
+            if (fileInput.files[0].size > 40 * 1024 * 1024) {
+                alert('上傳的檔案大小不能超過 40MB');
+                return;
+            }
+
             const formData = new FormData();
             formData.append('file', fileInput.files[0]);
             formData.append('media_type', typeSelect.value);

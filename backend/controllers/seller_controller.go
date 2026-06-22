@@ -196,10 +196,22 @@ func UploadMedia(c *gin.Context) {
 		return
 	}
 
+	// Limit request body to slightly more than 40MB to accommodate multipart form overhead
+	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 41<<20)
+
 	// Parse the uploaded file
 	fileHeader, err := c.FormFile("file")
 	if err != nil {
+		if err.Error() == "http: request body too large" {
+			c.JSON(http.StatusRequestEntityTooLarge, gin.H{"error": "檔案大小超過 40MB 限制"})
+			return
+		}
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing file field"})
+		return
+	}
+
+	if fileHeader.Size > 40*1024*1024 {
+		c.JSON(http.StatusRequestEntityTooLarge, gin.H{"error": "檔案大小超過 40MB 限制"})
 		return
 	}
 
