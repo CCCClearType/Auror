@@ -134,16 +134,35 @@
             cursor: pointer;
             transition: all 0.2s ease;
             font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+            min-width: 170px;
         }
 
-        .refresh-btn:hover {
+        .refresh-btn:hover:not(:disabled) {
             background: rgba(255, 255, 255, 0.1);
             border-color: rgba(255, 255, 255, 0.4);
             color: #fff;
         }
 
-        .refresh-btn:active {
+        .refresh-btn:active:not(:disabled) {
             transform: scale(0.95);
+        }
+
+        .refresh-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .refresh-btn .cooldown-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #58a6ff, #2ea043);
+            border-radius: 0 0 30px 30px;
+            transition: width 0.1s linear;
         }
 
         /* Chart container */
@@ -315,9 +334,10 @@
                             <span style="font-size: 1.2rem;">:D</span> About Server Latency
                         </h4>
                         <p style="color: #8f98a0; font-size: 0.85rem; margin: 0; line-height: 1.6;">
-                            Our background worker automatically tests the iLearn connection every 30 seconds. To prevent
+                            Our background worker automatically tests the iLearn connection every 60 seconds. To prevent
                             false alarms from network jitter, it sends 5 consecutive pings and averages the successful
                             results. A red indicator appears at 0 ms only when all connection attempts fail completely.
+                            The Refresh button has a 15-second cooldown to avoid putting excessive load on iLearn servers.
                         </p>
                     </div>
                 </div>
@@ -344,15 +364,40 @@
             updateClock();
             setInterval(updateClock, 1000);
 
-            // Auto-refresh data every 30 seconds
+            // Auto-refresh data every 60 seconds (be kind to iLearn servers)
             setInterval(() => {
                 checkStatus();
                 loadHistoryChart(currentHours);
-            }, 30000);
+            }, 60000);
 
-            document.getElementById('refresh-btn').addEventListener('click', () => {
+            // Refresh button with 15-second cooldown
+            const REFRESH_COOLDOWN = 15; // seconds
+            let refreshCooldownTimer = null;
+            const refreshBtn = document.getElementById('refresh-btn');
+
+            function startRefreshCooldown() {
+                let remaining = REFRESH_COOLDOWN;
+                refreshBtn.disabled = true;
+                refreshBtn.innerHTML = `冷卻中 (${remaining}s) <span class="cooldown-bar" style="width:100%"></span>`;
+
+                refreshCooldownTimer = setInterval(() => {
+                    remaining--;
+                    const pct = (remaining / REFRESH_COOLDOWN) * 100;
+                    refreshBtn.innerHTML = `冷卻中 (${remaining}s) <span class="cooldown-bar" style="width:${pct}%"></span>`;
+                    if (remaining <= 0) {
+                        clearInterval(refreshCooldownTimer);
+                        refreshCooldownTimer = null;
+                        refreshBtn.disabled = false;
+                        refreshBtn.innerHTML = 'Refresh Status';
+                    }
+                }, 1000);
+            }
+
+            refreshBtn.addEventListener('click', () => {
+                if (refreshBtn.disabled) return;
                 checkStatus();
                 loadHistoryChart(currentHours);
+                startRefreshCooldown();
             });
 
             document.querySelectorAll('.filter-btn').forEach(btn => {

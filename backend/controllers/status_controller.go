@@ -9,44 +9,33 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// CheckIlearnStatus pings the FCU iLearn website and returns its status
+// CheckIlearnStatus returns the most recent cached ping result from the background job.
+// This avoids live-pinging iLearn on every user request, preventing rate-limit issues.
 func CheckIlearnStatus(c *gin.Context) {
-	targetURL := "https://ilearn.fcu.edu.tw/index.php"
-
-	req, _ := http.NewRequest("GET", targetURL, nil)
-	// 加入瀏覽器的 User-Agent 避免被學校的防火牆擋下造成 EOF
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-
-	client := http.Client{
-		Timeout: 5 * time.Second,
+	type LatestPing struct {
+		LatencyMs int    `json:"latency_ms"`
+		Status    string `json:"status"`
 	}
+	var latest LatestPing
+	result := database.DB.Raw("SELECT latency_ms, status FROM ilearn_pings ORDER BY checked_at DESC LIMIT 1").Scan(&latest)
 
-	start := time.Now()
-	resp, err := client.Do(req)
-	latency := time.Since(start).Milliseconds()
-
-	if err != nil {
+	if result.Error != nil || result.RowsAffected == 0 {
 		c.JSON(http.StatusOK, gin.H{
-			"status":     "DOWN",
-			"error":      err.Error(),
-			"latency_ms": latency,
+			"status":     "UNKNOWN",
+			"error":      "No ping data yet — background worker may still be starting up",
+			"latency_ms": 0,
 		})
 		return
 	}
-	defer resp.Body.Close()
 
-	if resp.StatusCode >= 200 && resp.StatusCode < 400 {
-		c.JSON(http.StatusOK, gin.H{
-			"status":     "UP",
-			"latency_ms": latency,
-		})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"status":      "DOWN",
-			"error":       "HTTP " + resp.Status,
-			"latency_ms":  latency,
-		})
+	resp := gin.H{
+		"status":     latest.Status,
+		"latency_ms": latest.LatencyMs,
 	}
+	if latest.Status == "DOWN" {
+		resp["error"] = "All ping attempts failed"
+	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // SubmitIlearnReport handles a user reporting an issue
