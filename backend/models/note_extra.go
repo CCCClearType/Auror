@@ -16,4 +16,5 @@ type NoteMedia struct {
 	NoteID    uint   `gorm:"not null;column:note_id" json:"note_id"`
 	FileURL   string `gorm:"not null;column:file_url" json:"file_url"`
 	MediaType string `gorm:"default:media;column:media_type" json:"media_type"`
+	FileSize  int64  `gorm:"-" json:"file_size"`
 }
