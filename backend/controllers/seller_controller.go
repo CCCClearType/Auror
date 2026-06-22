@@ -423,6 +423,11 @@ func CreateTag(c *gin.Context) {
 		tagType = strings.ToUpper(input.TagType)
 	}
 
+	if tagType == "SEMESTER" {
+		c.JSON(http.StatusForbidden, gin.H{"error": "學期標籤由系統統一管理，無法自行新增！"})
+		return
+	}
+
 	tag := models.Tag{TagName: tagName, TagType: tagType}
 	if err := database.DB.Create(&tag).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create tag (might already exist)"})
