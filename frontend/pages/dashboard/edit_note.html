@@ -51,27 +51,43 @@
                     <div class="field form-group">
                         <label class="label">筆記 Tags</label>
                         <div class="tags" id="current-tags"><span class="tag">載入中...</span></div>
-                        <div class="field has-addons" style="flex-wrap:wrap; gap:8px;">
-                            <div class="control">
-                                <div class="select">
-                                    <select id="tag-select"><option value="">選擇既有 tag</option></select>
+                        <div class="columns is-variable is-2 mt-2">
+                            <div class="column is-5">
+                                <label class="label is-small has-text-grey-light">從現有標籤中選擇</label>
+                                <div class="field has-addons">
+                                    <div class="control is-expanded">
+                                        <div class="select is-fullwidth">
+                                            <select id="tag-select"><option value="">選擇既有 tag</option></select>
+                                        </div>
+                                    </div>
+                                    <div class="control">
+                                        <button class="button is-light" type="button" id="add-existing-tag-btn">加入</button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="control"><button class="button is-light" type="button" id="add-existing-tag-btn">加入</button></div>
-                            <div class="control">
-                                <div class="select">
-                                    <select id="new-tag-type">
-                                        <option value="GENERAL">一般</option>
-                                        <option value="SEMESTER">學期</option>
-                                        <option value="SUBJECT">科目</option>
-                                        <option value="TEACHER">老師</option>
-                                        <option value="DEPARTMENT">系所</option>
-                                        <option value="COURSE_TYPE">課程屬性</option>
-                                    </select>
+                            <div class="column is-7">
+                                <label class="label is-small has-text-grey-light">建立全新標籤</label>
+                                <div class="field has-addons">
+                                    <div class="control">
+                                        <div class="select">
+                                            <select id="new-tag-type">
+                                                <option value="GENERAL">一般</option>
+                                                <option value="SEMESTER">學期</option>
+                                                <option value="SUBJECT">科目</option>
+                                                <option value="TEACHER">老師</option>
+                                                <option value="DEPARTMENT">系所</option>
+                                                <option value="COURSE_TYPE">課程屬性</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control is-expanded">
+                                        <input class="input" type="text" id="new-tag-input" placeholder="新增 tag 名稱">
+                                    </div>
+                                    <div class="control">
+                                        <button class="button is-primary" type="button" id="create-tag-btn">建立並加入</button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="control is-expanded" style="min-width:150px;"><input class="input" type="text" id="new-tag-input" placeholder="新增 tag 名稱"></div>
-                            <div class="control"><button class="button is-primary" type="button" id="create-tag-btn">建立並加入</button></div>
                         </div>
                         <article class="message is-warning mt-4">
                             <div class="message-body py-2 px-3" style="font-size: 0.9rem;">
@@ -220,20 +236,59 @@
                 container.innerHTML = '<span class="tag">尚未設定 tag</span>';
                 return;
             }
-            container.innerHTML = tags.map(tag => {
-                let colorClass = 'is-light';
-                if (tag.tag_type === 'SEMESTER') colorClass = 'is-link';
-                else if (tag.tag_type === 'SUBJECT') colorClass = 'is-success';
-                else if (tag.tag_type === 'TEACHER') colorClass = 'is-primary is-light';
-                else if (tag.tag_type === 'DEPARTMENT') colorClass = 'is-warning';
-                else if (tag.tag_type === 'COURSE_TYPE') colorClass = 'is-danger';
-                
-                return `
-                <span class="tag ${colorClass} is-medium">
-                    ${escapeHtml(tag.tag_name || tag.name || '')}
-                    <button class="delete is-small" type="button" aria-label="remove" onclick="removeNoteTag(${Number(tag.tag_id)})"></button>
-                </span>
-            `}).join('');
+            
+            const groupedTags = {
+                SUBJECT: [],
+                SEMESTER: [],
+                DEPARTMENT: [],
+                COURSE_TYPE: [],
+                TEACHER: [],
+                GENERAL: []
+            };
+
+            tags.forEach(t => {
+                const type = (typeof t === 'object') ? (t.tag_type || 'GENERAL') : 'GENERAL';
+                if (groupedTags[type]) {
+                    groupedTags[type].push(t);
+                } else {
+                    groupedTags['GENERAL'].push(t);
+                }
+            });
+
+            const order = ['SUBJECT', 'SEMESTER', 'DEPARTMENT', 'COURSE_TYPE', 'TEACHER', 'GENERAL'];
+            
+            container.innerHTML = '';
+            
+            order.forEach(type => {
+                if (groupedTags[type].length > 0) {
+                    const row = document.createElement('div');
+                    row.style.display = 'flex';
+                    row.style.flexWrap = 'wrap';
+                    row.style.gap = '6px';
+                    row.style.marginBottom = '8px';
+                    
+                    groupedTags[type].forEach(tag => {
+                        let bg = 'rgba(255, 255, 255, 0.1)';
+                        let color = '#c6d4df';
+                        if (tag.tag_type === 'SEMESTER') { bg = 'rgba(103, 193, 245, 0.2)'; color = '#66c0f4'; }
+                        else if (tag.tag_type === 'SUBJECT') { bg = 'rgba(163, 224, 115, 0.2)'; color = '#a3e073'; }
+                        else if (tag.tag_type === 'TEACHER') { bg = 'rgba(0, 209, 178, 0.2)'; color = '#00d1b2'; }
+                        else if (tag.tag_type === 'DEPARTMENT') { bg = 'rgba(255, 221, 87, 0.2)'; color = '#ffdd57'; }
+                        else if (tag.tag_type === 'COURSE_TYPE') { bg = 'rgba(241, 70, 104, 0.2)'; color = '#f14668'; }
+                        
+                        const tagName = escapeHtml(tag.tag_name || tag.name || '');
+                        const tagId = Number(tag.tag_id);
+                        
+                        row.innerHTML += `
+                        <span class="tag is-medium" style="background: ${bg}; color: ${color}; border: none; border-radius: 4px;">
+                            ${tagName}
+                            <button class="delete is-small" type="button" aria-label="remove" onclick="removeNoteTag(${tagId})"></button>
+                        </span>
+                        `;
+                    });
+                    container.appendChild(row);
+                }
+            });
         }
 
         async function addExistingTag() {
