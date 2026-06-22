@@ -182,7 +182,13 @@ function renderNotes(notes) {
 
         const tagsHtml = (note.tags || []).map(t => {
             const tagName = typeof t === 'string' ? t : (t.tag_name || t.name || t);
-            return `<span class="tag is-rounded">${escapeHtml(String(tagName))}</span>`;
+            let colorClass = 'is-light';
+            if (typeof t === 'object') {
+                if (t.tag_type === 'SEMESTER') colorClass = 'is-link';
+                else if (t.tag_type === 'SUBJECT') colorClass = 'is-success';
+                else if (t.tag_type === 'TEACHER') colorClass = 'is-primary is-light';
+            }
+            return `<span class="tag is-rounded ${colorClass}">${escapeHtml(String(tagName))}</span>`;
         }).join('');
         const priceHtml = note.price === 0
             ? `<span class="note-list-price free">免費</span>`

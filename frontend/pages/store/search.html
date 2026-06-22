@@ -25,11 +25,23 @@
         <div class="notification is-info is-light search-results-header" id="search-results-header"></div>
         <section class="box dashboard-panel" style="margin-bottom: 24px;">
             <div class="columns is-variable is-3 is-multiline">
-                <div class="column is-3">
-                    <label class="label" for="filter-tag">Tag</label>
-                    <div class="select is-fullwidth"><select id="filter-tag"><option value="">全部 Tag</option></select></div>
+                <div class="column is-2">
+                    <label class="label" for="filter-semester">學期</label>
+                    <div class="select is-fullwidth"><select id="filter-semester"><option value="">全部學期</option></select></div>
                 </div>
                 <div class="column is-3">
+                    <label class="label" for="filter-subject">科目</label>
+                    <div class="select is-fullwidth"><select id="filter-subject"><option value="">全部科目</option></select></div>
+                </div>
+                <div class="column is-3">
+                    <label class="label" for="filter-teacher">老師</label>
+                    <div class="select is-fullwidth"><select id="filter-teacher"><option value="">全部老師</option></select></div>
+                </div>
+                <div class="column is-2">
+                    <label class="label" for="filter-tag">一般標籤</label>
+                    <div class="select is-fullwidth"><select id="filter-tag"><option value="">全部標籤</option></select></div>
+                </div>
+                <div class="column is-2">
                     <label class="label" for="filter-seller">賣家</label>
                     <input class="input" type="text" id="filter-seller" placeholder="賣家名稱">
                 </div>
@@ -78,7 +90,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
             const params  = new URLSearchParams(window.location.search);
-            await loadTagOptions(params.get('tag') || '');
+            await loadTagOptions(params.get('semester') || '', params.get('subject') || '', params.get('teacher') || '', params.get('tag') || '');
             document.getElementById('filter-seller').value = params.get('seller') || '';
             document.getElementById('filter-min-price').value = params.get('min_price') || '';
             document.getElementById('filter-max-price').value = params.get('max_price') || '';
@@ -107,6 +119,9 @@
             const params  = new URLSearchParams(window.location.search);
             const keyword = params.get('q') || '';
             const tag = params.get('tag') || '';
+            const semester = params.get('semester') || '';
+            const subject = params.get('subject') || '';
+            const teacher = params.get('teacher') || '';
 
             document.getElementById('search-input').value = keyword;
             
@@ -130,7 +145,10 @@
                 const headerEl = document.getElementById('search-results-header');
                 const filters = [];
                 if (keyword) filters.push(`關鍵字「${escapeHtml(keyword)}」`);
-                if (params.get('tag')) filters.push(`Tag「${escapeHtml(params.get('tag'))}」`);
+                if (params.get('semester')) filters.push(`學期「${escapeHtml(params.get('semester'))}」`);
+                if (params.get('subject')) filters.push(`科目「${escapeHtml(params.get('subject'))}」`);
+                if (params.get('teacher')) filters.push(`老師「${escapeHtml(params.get('teacher'))}」`);
+                if (params.get('tag')) filters.push(`標籤「${escapeHtml(params.get('tag'))}」`);
                 if (params.get('seller')) filters.push(`賣家「${escapeHtml(params.get('seller'))}」`);
                 if (params.get('min_price') || params.get('max_price')) filters.push(`價格 ${escapeHtml(params.get('min_price') || '0')} - ${escapeHtml(params.get('max_price') || '不限')}`);
                 headerEl.innerHTML = filters.length ? `找到 <strong>${notes.length}</strong> 個符合 ${filters.join('、')} 的結果` : '';
@@ -143,19 +161,35 @@
             }
         }
 
-        async function loadTagOptions(selectedTag) {
+        async function loadTagOptions(selectedSem, selectedSub, selectedTea, selectedTag) {
             try {
                 const result = await apiGetTags();
                 const tags = Array.isArray(result) ? result : (result.data || []);
-                const select = document.getElementById('filter-tag');
+                const semSelect = document.getElementById('filter-semester');
+                const subSelect = document.getElementById('filter-subject');
+                const teaSelect = document.getElementById('filter-teacher');
+                const tagSelect = document.getElementById('filter-tag');
+                
                 tags.forEach(tag => {
                     const name = tag.tag_name || tag.name;
                     if (!name) return;
                     const option = document.createElement('option');
                     option.value = name;
                     option.textContent = name;
-                    option.selected = name === selectedTag;
-                    select.appendChild(option);
+                    
+                    if (tag.tag_type === 'SEMESTER') {
+                        option.selected = name === selectedSem;
+                        semSelect.appendChild(option);
+                    } else if (tag.tag_type === 'SUBJECT') {
+                        option.selected = name === selectedSub;
+                        subSelect.appendChild(option);
+                    } else if (tag.tag_type === 'TEACHER') {
+                        option.selected = name === selectedTea;
+                        teaSelect.appendChild(option);
+                    } else {
+                        option.selected = name === selectedTag;
+                        tagSelect.appendChild(option);
+                    }
                 });
             } catch (_) {}
         }
@@ -165,13 +199,20 @@
             event.stopImmediatePropagation();
             const params = new URLSearchParams();
             const keyword = document.getElementById('search-input').value.trim();
+            const semester = document.getElementById('filter-semester').value;
+            const subject = document.getElementById('filter-subject').value;
+            const teacher = document.getElementById('filter-teacher').value;
             const tag = document.getElementById('filter-tag').value;
             const seller = document.getElementById('filter-seller').value.trim();
             const minPrice = document.getElementById('filter-min-price').value;
             const maxPrice = document.getElementById('filter-max-price').value;
             const sort = document.getElementById('filter-sort').value;
             const hideOwnedToggle = document.getElementById('filter-hide-owned');
+            
             if (keyword) params.set('q', keyword);
+            if (semester) params.set('semester', semester);
+            if (subject) params.set('subject', subject);
+            if (teacher) params.set('teacher', teacher);
             if (tag) params.set('tag', tag);
             if (seller) params.set('seller', seller);
             if (minPrice !== '') params.set('min_price', minPrice);
