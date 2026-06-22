@@ -180,18 +180,44 @@ function renderNotes(notes) {
         const card = document.createElement('div');
         card.className = 'note-list-card card';
 
-        const tagsHtml = (note.tags || []).map(t => {
-            const tagName = typeof t === 'string' ? t : (t.tag_name || t.name || t);
-            let colorClass = 'is-light';
-            if (typeof t === 'object') {
-                if (t.tag_type === 'SEMESTER') colorClass = 'is-link';
-                else if (t.tag_type === 'SUBJECT') colorClass = 'is-success';
-                else if (t.tag_type === 'TEACHER') colorClass = 'is-primary is-light';
-                else if (t.tag_type === 'DEPARTMENT') colorClass = 'is-warning';
-                else if (t.tag_type === 'COURSE_TYPE') colorClass = 'is-danger';
+        const groupedTags = {
+            SUBJECT: [],
+            SEMESTER: [],
+            DEPARTMENT: [],
+            COURSE_TYPE: [],
+            TEACHER: [],
+            GENERAL: []
+        };
+        (note.tags || []).forEach(t => {
+            const type = t.tag_type || 'GENERAL';
+            if (groupedTags[type]) {
+                groupedTags[type].push(t);
+            } else {
+                groupedTags['GENERAL'].push(t);
             }
-            return `<span class="tag is-rounded ${colorClass}">${escapeHtml(String(tagName))}</span>`;
-        }).join('');
+        });
+
+        let tagsHtml = '';
+        const order = ['SUBJECT', 'SEMESTER', 'DEPARTMENT', 'COURSE_TYPE', 'TEACHER', 'GENERAL'];
+        const colorMap = {
+            SUBJECT: 'is-success',
+            SEMESTER: 'is-link',
+            DEPARTMENT: 'is-warning',
+            COURSE_TYPE: 'is-danger',
+            TEACHER: 'is-primary is-light',
+            GENERAL: 'is-light'
+        };
+
+        order.forEach(type => {
+            if (groupedTags[type].length > 0) {
+                tagsHtml += `<div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px;">`;
+                groupedTags[type].forEach(t => {
+                    const tagName = typeof t === 'string' ? t : (t.tag_name || t.name || t);
+                    tagsHtml += `<span class="tag is-rounded ${colorMap[type]}">${escapeHtml(String(tagName))}</span>`;
+                });
+                tagsHtml += `</div>`;
+            }
+        });
         const priceHtml = note.price === 0
             ? `<span class="note-list-price free">免費</span>`
             : `<span class="note-list-price">NT$ ${note.price.toLocaleString()}</span>`;
