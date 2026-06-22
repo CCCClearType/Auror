@@ -1587,3 +1587,27 @@ label,
     background: #fff;
     color: #555;
 }
+
+/* Custom Tag Colors */
+.tag.type-SEMESTER { background: rgba(103, 193, 245, 0.2) !important; color: #66c0f4 !important; border: none !important; }
+.tag.type-SUBJECT { background: rgba(163, 224, 115, 0.2) !important; color: #a3e073 !important; border: none !important; }
+.tag.type-TEACHER { background: rgba(0, 209, 178, 0.2) !important; color: #00d1b2 !important; border: none !important; }
+.tag.type-DEPARTMENT { background: rgba(255, 221, 87, 0.2) !important; color: #ffdd57 !important; border: none !important; }
+.tag.type-COURSE_TYPE { background: rgba(241, 70, 104, 0.2) !important; color: #f14668 !important; border: none !important; }
+.tag.type-GENERAL { background: rgba(155, 89, 182, 0.2) !important; color: #d291bc !important; border: none !important; }
+
+/* Dropdown Option Colors */
+option.type-SEMESTER { color: #66c0f4 !important; font-weight: bold; }
+option.type-SUBJECT { color: #a3e073 !important; font-weight: bold; }
+option.type-TEACHER { color: #00d1b2 !important; font-weight: bold; }
+option.type-DEPARTMENT { color: #ffdd57 !important; font-weight: bold; }
+option.type-COURSE_TYPE { color: #f14668 !important; font-weight: bold; }
+option.type-GENERAL { color: #d291bc !important; font-weight: bold; }
+
+/* Sidebar Link Colors */
+.sidebar-tag.type-SEMESTER { color: #66c0f4 !important; }
+.sidebar-tag.type-SUBJECT { color: #a3e073 !important; }
+.sidebar-tag.type-TEACHER { color: #00d1b2 !important; }
+.sidebar-tag.type-DEPARTMENT { color: #ffdd57 !important; }
+.sidebar-tag.type-COURSE_TYPE { color: #f14668 !important; }
+.sidebar-tag.type-GENERAL { color: #d291bc !important; }
