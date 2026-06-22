@@ -33,9 +33,6 @@
                 </div>
 
                 <div style="margin-bottom: auto;">
-                    <div style="margin-bottom: 8px;">
-                        <span id="detail-semester" class="tag" style="font-weight: bold; background-color: #005080; border: 1px solid #1072aa; color: white; height: 24px; padding: 0 10px;">--</span>
-                    </div>
                     <div id="detail-tags" class="note-list-tags" style="margin: 0; display: flex; flex-wrap: wrap; gap: 4px;"></div>
                 </div>
 
@@ -97,9 +94,7 @@
                 const devEl = document.getElementById('detail-dev-name');
                 if (devEl) devEl.textContent = devName;
                 
-                const semesterEl = document.getElementById('detail-semester');
-                if (semesterEl) semesterEl.textContent = note.note.semester || note.semester || '未知學期';
-                
+
                 updateDetailRating(note.note || note);
                 
                 const price = Number(note.note.price || note.price || 0);
@@ -140,8 +135,19 @@
                     const span = document.createElement('span');
                     span.className = 'tag';
                     span.style.borderRadius = '2px';
-                    span.style.background = 'rgba(103, 193, 245, 0.2)';
-                    span.style.color = '#66c0f4';
+                    
+                    let bg = 'rgba(255, 255, 255, 0.1)';
+                    let color = '#c6d4df';
+                    if (typeof t === 'object') {
+                        if (t.tag_type === 'SEMESTER') { bg = 'rgba(103, 193, 245, 0.2)'; color = '#66c0f4'; }
+                        else if (t.tag_type === 'SUBJECT') { bg = 'rgba(163, 224, 115, 0.2)'; color = '#a3e073'; }
+                        else if (t.tag_type === 'TEACHER') { bg = 'rgba(0, 209, 178, 0.2)'; color = '#00d1b2'; }
+                        else if (t.tag_type === 'DEPARTMENT') { bg = 'rgba(255, 221, 87, 0.2)'; color = '#ffdd57'; }
+                        else if (t.tag_type === 'COURSE_TYPE') { bg = 'rgba(241, 70, 104, 0.2)'; color = '#f14668'; }
+                    }
+
+                    span.style.background = bg;
+                    span.style.color = color;
                     span.style.border = 'none';
                     span.style.padding = '0 7px';
                     span.style.height = '22px';

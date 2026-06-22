@@ -163,10 +163,10 @@ async function apiGetSellerNotes() {
     return parseResponse(res);
 }
 
-async function apiCreateNote(title, semester, price, desc) {
+async function apiCreateNote(title, price, desc) {
     const res = await authFetch('/api/seller/notes', {
         method: 'POST',
-        body: JSON.stringify({ title, semester, price, desc })
+        body: JSON.stringify({ title, price, desc })
     });
     return parseResponse(res);
 }
