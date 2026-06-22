@@ -73,7 +73,11 @@
                             <div class="control is-expanded" style="min-width:150px;"><input class="input" type="text" id="new-tag-input" placeholder="新增 tag 名稱"></div>
                             <div class="control"><button class="button is-primary" type="button" id="create-tag-btn">建立並加入</button></div>
                         </div>
-                        <p class="help">Tags 會用於首頁瀏覽與搜尋篩選。發佈前必須至少包含一個「學期」與「科目」標籤。</p>
+                        <article class="message is-warning mt-4">
+                            <div class="message-body py-2 px-3" style="font-size: 0.9rem;">
+                                <strong>⚠️ 必填標籤提醒：</strong> 為了讓買家能快速找到您的筆記，<strong>【學期】</strong>與<strong>【科目】</strong>標籤是<strong>必選的</strong>！缺少這兩個標籤將無法正式發佈上架。
+                            </div>
+                        </article>
                     </div>
 
                     <div id="edit-error" class="notification is-danger is-light" style="display:none;"></div>
