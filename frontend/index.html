@@ -161,7 +161,7 @@
                             const name = tag.tag_name || tag.name;
                             const item = document.createElement('li');
                             const param = queryParamMap[type];
-                            item.innerHTML = `<a href="/pages/store/search.html?${param}=${encodeURIComponent(name)}" style="padding-left: 8px;">${escapeHtml(name)}</a>`;
+                            item.innerHTML = `<a href="/pages/store/search.html?${param}=${encodeURIComponent(name)}" class="sidebar-tag type-${type}" style="padding-left: 8px;">${escapeHtml(name)}</a>`;
                             list.appendChild(item);
                         });
                     }

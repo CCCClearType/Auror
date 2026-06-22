@@ -219,11 +219,14 @@
                 const option = document.createElement('option');
                 option.value = tag.tag_id;
                 let typeLabel = '';
-                if(tag.tag_type === 'SEMESTER') typeLabel = ' [學期]';
-                if(tag.tag_type === 'SUBJECT') typeLabel = ' [科目]';
-                if(tag.tag_type === 'TEACHER') typeLabel = ' [老師]';
-                if(tag.tag_type === 'DEPARTMENT') typeLabel = ' [系所]';
-                if(tag.tag_type === 'COURSE_TYPE') typeLabel = ' [課程屬性]';
+                const type = tag.tag_type || 'GENERAL';
+                option.className = `type-${type}`;
+                if(type === 'SEMESTER') typeLabel = ' [學期]';
+                if(type === 'SUBJECT') typeLabel = ' [科目]';
+                if(type === 'TEACHER') typeLabel = ' [老師]';
+                if(type === 'DEPARTMENT') typeLabel = ' [系所]';
+                if(type === 'COURSE_TYPE') typeLabel = ' [課程屬性]';
+                if(type === 'GENERAL') typeLabel = ' [一般]';
                 option.textContent = tag.tag_name + typeLabel;
                 select.appendChild(option);
             });
@@ -268,19 +271,12 @@
                     row.style.marginBottom = '8px';
                     
                     groupedTags[type].forEach(tag => {
-                        let bg = 'rgba(255, 255, 255, 0.1)';
-                        let color = '#c6d4df';
-                        if (tag.tag_type === 'SEMESTER') { bg = 'rgba(103, 193, 245, 0.2)'; color = '#66c0f4'; }
-                        else if (tag.tag_type === 'SUBJECT') { bg = 'rgba(163, 224, 115, 0.2)'; color = '#a3e073'; }
-                        else if (tag.tag_type === 'TEACHER') { bg = 'rgba(0, 209, 178, 0.2)'; color = '#00d1b2'; }
-                        else if (tag.tag_type === 'DEPARTMENT') { bg = 'rgba(255, 221, 87, 0.2)'; color = '#ffdd57'; }
-                        else if (tag.tag_type === 'COURSE_TYPE') { bg = 'rgba(241, 70, 104, 0.2)'; color = '#f14668'; }
-                        
                         const tagName = escapeHtml(tag.tag_name || tag.name || '');
                         const tagId = Number(tag.tag_id);
+                        const tagType = tag.tag_type || 'GENERAL';
                         
                         row.innerHTML += `
-                        <span class="tag is-medium" style="background: ${bg}; color: ${color}; border: none; border-radius: 4px;">
+                        <span class="tag is-medium type-${tagType}">
                             ${tagName}
                             <button class="delete is-small" type="button" aria-label="remove" onclick="removeNoteTag(${tagId})"></button>
                         </span>
