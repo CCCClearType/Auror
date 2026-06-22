@@ -27,17 +27,41 @@ INSERT INTO notes (seller_id, title, semester, description, price, overall_ratin
 -- ==========================================
 INSERT INTO tags (tag_name, tag_type) VALUES
 ('資料結構', 'SUBJECT'), ('演算法', 'SUBJECT'), ('材料與生活', 'SUBJECT'), ('微積分', 'SUBJECT'),
-('113-1', 'SEMESTER'), ('112-2', 'SEMESTER'), ('112-1', 'SEMESTER'),
+('108-1', 'SEMESTER'), ('108-2', 'SEMESTER'),
+('109-1', 'SEMESTER'), ('109-2', 'SEMESTER'),
+('110-1', 'SEMESTER'), ('110-2', 'SEMESTER'),
+('111-1', 'SEMESTER'), ('111-2', 'SEMESTER'),
+('112-1', 'SEMESTER'), ('112-2', 'SEMESTER'),
+('113-1', 'SEMESTER'), ('113-2', 'SEMESTER'),
+('114-1', 'SEMESTER'), ('114-2', 'SEMESTER'),
+('115-1', 'SEMESTER'), ('115-2', 'SEMESTER'),
 ('資訊工程學系', 'DEPARTMENT'), ('電機工程學系', 'DEPARTMENT'), ('企業管理學系', 'DEPARTMENT'), ('通識教育中心', 'DEPARTMENT'),
 ('必修', 'COURSE_TYPE'), ('選修', 'COURSE_TYPE'), ('通識', 'COURSE_TYPE'), ('體育', 'COURSE_TYPE');
 
-INSERT INTO note_tags (note_id, tag_id) VALUES
-(1, 1), (1, 2), (2, 1), (3, 3), (4, 4), -- Subject tags
-(1, 5), (2, 5), (3, 6), (4, 7),         -- Semester tags
-(1, 8), (1, 12),                        -- Note 1: 資訊工程學系, 必修
-(2, 8), (2, 12),                        -- Note 2: 資訊工程學系, 必修
-(3, 11), (3, 14),                       -- Note 3: 通識教育中心, 通識
-(4, 9), (4, 12);                        -- Note 4: 電機工程學系, 必修
+-- Note 1: 資料結構 + 演算法, 113-1, 資訊工程學系, 必修
+INSERT INTO note_tags (note_id, tag_id) SELECT 1, tag_id FROM tags WHERE tag_name = '資料結構' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 1, tag_id FROM tags WHERE tag_name = '演算法' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 1, tag_id FROM tags WHERE tag_name = '113-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 1, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 1, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
+
+-- Note 2: 資料結構, 113-1, 資訊工程學系, 必修
+INSERT INTO note_tags (note_id, tag_id) SELECT 2, tag_id FROM tags WHERE tag_name = '資料結構' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 2, tag_id FROM tags WHERE tag_name = '113-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 2, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 2, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
+
+-- Note 3: 材料與生活, 112-2, 通識教育中心, 通識
+INSERT INTO note_tags (note_id, tag_id) SELECT 3, tag_id FROM tags WHERE tag_name = '材料與生活' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 3, tag_id FROM tags WHERE tag_name = '112-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 3, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 3, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
+
+-- Note 4: 微積分, 112-1, 電機工程學系, 必修
+INSERT INTO note_tags (note_id, tag_id) SELECT 4, tag_id FROM tags WHERE tag_name = '微積分' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 4, tag_id FROM tags WHERE tag_name = '112-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 4, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 4, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
 
 -- ==========================================
 -- 4. 寫入 note_media 資料

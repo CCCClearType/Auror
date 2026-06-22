@@ -2257,162 +2257,26 @@ INSERT INTO tags (tag_name, tag_type) VALUES
 ('吳卓強', 'TEACHER'),
 ('許銀雄', 'TEACHER');
 
--- Insert Semester Note Tags for Super Data
-INSERT INTO note_tags (note_id, tag_id) VALUES
-(101, 5),
-(102, 5),
-(103, 5),
-(104, 5),
-(105, 5),
-(106, 5),
-(107, 5),
-(108, 5),
-(109, 5),
-(110, 5),
-(111, 5),
-(112, 5),
-(113, 5),
-(114, 5),
-(115, 5),
-(116, 5),
-(117, 5),
-(118, 5),
-(119, 5),
-(120, 5),
-(121, 5),
-(122, 5),
-(123, 5),
-(124, 5),
-(125, 5),
-(126, 5),
-(127, 5),
-(128, 5),
-(129, 5),
-(130, 5),
-(131, 5),
-(132, 5),
-(133, 5),
-(134, 5),
-(135, 5),
-(136, 5),
-(137, 5),
-(138, 5),
-(139, 5),
-(140, 5),
-(141, 5),
-(142, 5),
-(143, 5),
-(144, 5),
-(145, 5),
-(146, 5),
-(147, 5),
-(148, 5),
-(149, 5),
-(150, 5),
-(151, 5),
-(152, 5),
-(153, 5),
-(154, 5),
-(155, 5),
-(156, 5),
-(157, 5),
-(158, 5),
-(159, 5),
-(160, 5),
-(161, 5),
-(162, 5),
-(163, 5),
-(164, 5),
-(165, 5),
-(166, 5),
-(167, 5),
-(168, 5),
-(169, 5),
-(170, 5),
-(171, 5),
-(172, 5),
-(173, 5),
-(174, 5),
-(175, 5),
-(176, 5),
-(177, 5),
-(178, 5),
-(179, 5),
-(180, 5),
-(181, 5),
-(182, 5),
-(183, 5),
-(184, 5),
-(185, 5),
-(186, 5),
-(187, 5),
-(188, 5),
-(189, 5),
-(190, 5),
-(191, 5),
-(192, 5),
-(193, 5),
-(194, 5),
-(195, 5),
-(196, 5),
-(197, 5),
-(198, 5),
-(199, 5),
-(200, 5),
-(201, 5),
-(202, 5),
-(203, 5),
-(204, 5),
-(205, 5),
-(206, 5),
-(207, 5),
-(208, 5),
-(209, 5),
-(210, 5),
-(211, 5),
-(212, 5),
-(213, 5),
-(214, 5),
-(215, 5),
-(216, 5),
-(217, 5),
-(218, 5),
-(219, 5),
-(220, 5),
-(221, 5),
-(222, 5),
-(223, 5),
-(224, 5),
-(225, 5),
-(226, 5),
-(227, 5),
-(228, 5),
-(229, 5),
-(230, 5),
-(231, 5),
-(232, 5),
-(233, 5),
-(234, 5),
-(235, 5),
-(236, 5),
-(237, 5),
-(238, 5),
-(239, 5),
-(240, 5),
-(241, 5),
-(242, 5),
-(243, 5),
-(244, 5),
-(245, 5),
-(246, 5),
-(247, 5),
-(248, 5),
-(249, 5),
-(250, 5);
-
 -- ===========================================================================
 
--- PATCH: Automatically assign tags
+
+-- PATCH: System-managed semester tags + per-note tag assignments
+INSERT INTO tags (tag_name, tag_type) VALUES ('108-1', 'SEMESTER') ON CONFLICT DO NOTHING;
+INSERT INTO tags (tag_name, tag_type) VALUES ('108-2', 'SEMESTER') ON CONFLICT DO NOTHING;
+INSERT INTO tags (tag_name, tag_type) VALUES ('109-1', 'SEMESTER') ON CONFLICT DO NOTHING;
+INSERT INTO tags (tag_name, tag_type) VALUES ('109-2', 'SEMESTER') ON CONFLICT DO NOTHING;
+INSERT INTO tags (tag_name, tag_type) VALUES ('110-1', 'SEMESTER') ON CONFLICT DO NOTHING;
+INSERT INTO tags (tag_name, tag_type) VALUES ('110-2', 'SEMESTER') ON CONFLICT DO NOTHING;
+INSERT INTO tags (tag_name, tag_type) VALUES ('111-1', 'SEMESTER') ON CONFLICT DO NOTHING;
+INSERT INTO tags (tag_name, tag_type) VALUES ('111-2', 'SEMESTER') ON CONFLICT DO NOTHING;
+INSERT INTO tags (tag_name, tag_type) VALUES ('112-1', 'SEMESTER') ON CONFLICT DO NOTHING;
+INSERT INTO tags (tag_name, tag_type) VALUES ('112-2', 'SEMESTER') ON CONFLICT DO NOTHING;
+INSERT INTO tags (tag_name, tag_type) VALUES ('113-1', 'SEMESTER') ON CONFLICT DO NOTHING;
+INSERT INTO tags (tag_name, tag_type) VALUES ('113-2', 'SEMESTER') ON CONFLICT DO NOTHING;
+INSERT INTO tags (tag_name, tag_type) VALUES ('114-1', 'SEMESTER') ON CONFLICT DO NOTHING;
+INSERT INTO tags (tag_name, tag_type) VALUES ('114-2', 'SEMESTER') ON CONFLICT DO NOTHING;
+INSERT INTO tags (tag_name, tag_type) VALUES ('115-1', 'SEMESTER') ON CONFLICT DO NOTHING;
+INSERT INTO tags (tag_name, tag_type) VALUES ('115-2', 'SEMESTER') ON CONFLICT DO NOTHING;
 INSERT INTO tags (tag_id, tag_name, tag_type) VALUES (100, '資料結構', 'SUBJECT') ON CONFLICT DO NOTHING;
 INSERT INTO tags (tag_id, tag_name, tag_type) VALUES (101, '演算法', 'SUBJECT') ON CONFLICT DO NOTHING;
 INSERT INTO tags (tag_id, tag_name, tag_type) VALUES (102, '計算機結構', 'SUBJECT') ON CONFLICT DO NOTHING;
@@ -2423,11 +2287,6 @@ INSERT INTO tags (tag_id, tag_name, tag_type) VALUES (106, '軟體工程', 'SUBJ
 INSERT INTO tags (tag_id, tag_name, tag_type) VALUES (107, '人工智慧', 'SUBJECT') ON CONFLICT DO NOTHING;
 INSERT INTO tags (tag_id, tag_name, tag_type) VALUES (108, '機器學習', 'SUBJECT') ON CONFLICT DO NOTHING;
 INSERT INTO tags (tag_id, tag_name, tag_type) VALUES (109, '密碼學', 'SUBJECT') ON CONFLICT DO NOTHING;
-INSERT INTO tags (tag_name, tag_type) VALUES ('113-1', 'SEMESTER') ON CONFLICT DO NOTHING;
-INSERT INTO tags (tag_name, tag_type) VALUES ('112-2', 'SEMESTER') ON CONFLICT DO NOTHING;
-INSERT INTO tags (tag_name, tag_type) VALUES ('112-1', 'SEMESTER') ON CONFLICT DO NOTHING;
-INSERT INTO tags (tag_name, tag_type) VALUES ('114-1', 'SEMESTER') ON CONFLICT DO NOTHING;
-INSERT INTO tags (tag_name, tag_type) VALUES ('114-2', 'SEMESTER') ON CONFLICT DO NOTHING;
 INSERT INTO tags (tag_name, tag_type) VALUES ('資訊工程學系', 'DEPARTMENT') ON CONFLICT DO NOTHING;
 INSERT INTO tags (tag_name, tag_type) VALUES ('電機工程學系', 'DEPARTMENT') ON CONFLICT DO NOTHING;
 INSERT INTO tags (tag_name, tag_type) VALUES ('企業管理學系', 'DEPARTMENT') ON CONFLICT DO NOTHING;
@@ -2444,711 +2303,708 @@ INSERT INTO tags (tag_name, tag_type) VALUES ('陳德生', 'TEACHER') ON CONFLIC
 INSERT INTO tags (tag_name, tag_type) VALUES ('吳宗憲', 'TEACHER') ON CONFLICT DO NOTHING;
 INSERT INTO tags (tag_name, tag_type) VALUES ('黃健明', 'TEACHER') ON CONFLICT DO NOTHING;
 INSERT INTO tags (tag_name, tag_type) VALUES ('薛念林', 'TEACHER') ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 101, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 101, tag_id FROM tags WHERE tag_name = '作業系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 101, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 101, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 101, tag_id FROM tags WHERE tag_name = '李明哲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 102, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 102, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 102, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 102, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 103, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 103, tag_id FROM tags WHERE tag_name = '演算法' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 103, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 103, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 104, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 104, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 104, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 104, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 104, tag_id FROM tags WHERE tag_name = '林智維' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 105, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 105, tag_id FROM tags WHERE tag_name = '計算機網路' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 105, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 105, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 105, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 106, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 106, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 106, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 106, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 106, tag_id FROM tags WHERE tag_name = '陳德生' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 107, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 107, tag_id FROM tags WHERE tag_name = '計算機結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 107, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 107, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 107, tag_id FROM tags WHERE tag_name = '吳宗憲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 108, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 108, tag_id FROM tags WHERE tag_name = '人工智慧' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 108, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 108, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 109, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 109, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 109, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 109, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 109, tag_id FROM tags WHERE tag_name = '李明哲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 110, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 110, tag_id FROM tags WHERE tag_name = '計算機結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 110, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 110, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 111, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 111, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 111, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 111, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 112, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 112, tag_id FROM tags WHERE tag_name = '人工智慧' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 112, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 112, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 112, tag_id FROM tags WHERE tag_name = '張家銘' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 113, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 113, tag_id FROM tags WHERE tag_name = '演算法' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 113, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 113, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 114, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 114, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 114, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 114, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 115, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 115, tag_id FROM tags WHERE tag_name = '資料庫系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 115, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 115, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 115, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 116, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 116, tag_id FROM tags WHERE tag_name = '人工智慧' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 116, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 116, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 116, tag_id FROM tags WHERE tag_name = '陳德生' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 117, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 117, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 117, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 117, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 118, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 118, tag_id FROM tags WHERE tag_name = '資料結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 118, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 118, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 118, tag_id FROM tags WHERE tag_name = '林智維' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 119, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 119, tag_id FROM tags WHERE tag_name = '密碼學' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 119, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 119, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 119, tag_id FROM tags WHERE tag_name = '張家銘' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 120, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 120, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 120, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 120, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 121, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 121, tag_id FROM tags WHERE tag_name = '演算法' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 121, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 121, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 122, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 122, tag_id FROM tags WHERE tag_name = '人工智慧' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 122, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 122, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 122, tag_id FROM tags WHERE tag_name = '張家銘' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 123, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 123, tag_id FROM tags WHERE tag_name = '演算法' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 123, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 123, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 123, tag_id FROM tags WHERE tag_name = '李明哲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 124, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 124, tag_id FROM tags WHERE tag_name = '作業系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 124, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 124, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 124, tag_id FROM tags WHERE tag_name = '林智維' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 125, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 125, tag_id FROM tags WHERE tag_name = '人工智慧' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 125, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 125, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 125, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 126, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 126, tag_id FROM tags WHERE tag_name = '演算法' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 126, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 126, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 126, tag_id FROM tags WHERE tag_name = '王大明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 127, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 127, tag_id FROM tags WHERE tag_name = '計算機網路' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 127, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 127, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 128, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 128, tag_id FROM tags WHERE tag_name = '演算法' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 128, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 128, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 129, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 129, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 129, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 129, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 129, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 130, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 130, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 130, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 130, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 131, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 131, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 131, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 131, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 131, tag_id FROM tags WHERE tag_name = '陳德生' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 132, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 132, tag_id FROM tags WHERE tag_name = '計算機網路' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 132, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 132, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 133, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 133, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 133, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 133, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 133, tag_id FROM tags WHERE tag_name = '林智維' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 134, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 134, tag_id FROM tags WHERE tag_name = '計算機結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 134, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 134, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 134, tag_id FROM tags WHERE tag_name = '吳宗憲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 135, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 135, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 135, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 135, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 135, tag_id FROM tags WHERE tag_name = '王大明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 136, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 136, tag_id FROM tags WHERE tag_name = '密碼學' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 136, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 136, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 136, tag_id FROM tags WHERE tag_name = '王大明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 137, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 137, tag_id FROM tags WHERE tag_name = '密碼學' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 137, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 137, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 138, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 138, tag_id FROM tags WHERE tag_name = '計算機網路' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 138, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 138, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 139, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 139, tag_id FROM tags WHERE tag_name = '密碼學' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 139, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 139, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 139, tag_id FROM tags WHERE tag_name = '吳宗憲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 140, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 140, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 140, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 140, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 140, tag_id FROM tags WHERE tag_name = '吳宗憲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 141, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 141, tag_id FROM tags WHERE tag_name = '資料結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 141, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 141, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 141, tag_id FROM tags WHERE tag_name = '吳宗憲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 142, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 142, tag_id FROM tags WHERE tag_name = '人工智慧' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 142, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 142, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 142, tag_id FROM tags WHERE tag_name = '李明哲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 143, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 143, tag_id FROM tags WHERE tag_name = '資料庫系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 143, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 143, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 143, tag_id FROM tags WHERE tag_name = '張家銘' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 144, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 144, tag_id FROM tags WHERE tag_name = '密碼學' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 144, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 144, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 145, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 145, tag_id FROM tags WHERE tag_name = '計算機網路' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 145, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 145, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 145, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 146, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 146, tag_id FROM tags WHERE tag_name = '演算法' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 146, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 146, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 146, tag_id FROM tags WHERE tag_name = '李明哲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 147, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 147, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 147, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 147, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 147, tag_id FROM tags WHERE tag_name = '李明哲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 148, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 148, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 148, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 148, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 148, tag_id FROM tags WHERE tag_name = '薛念林' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 149, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 149, tag_id FROM tags WHERE tag_name = '計算機網路' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 149, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 149, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 149, tag_id FROM tags WHERE tag_name = '吳宗憲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 150, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 150, tag_id FROM tags WHERE tag_name = '人工智慧' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 150, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 150, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 150, tag_id FROM tags WHERE tag_name = '陳德生' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 151, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 151, tag_id FROM tags WHERE tag_name = '演算法' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 151, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 151, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 151, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 152, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 152, tag_id FROM tags WHERE tag_name = '密碼學' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 152, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 152, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 152, tag_id FROM tags WHERE tag_name = '王大明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 153, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 153, tag_id FROM tags WHERE tag_name = '密碼學' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 153, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 153, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 154, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 154, tag_id FROM tags WHERE tag_name = '計算機結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 154, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 154, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 154, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 155, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 155, tag_id FROM tags WHERE tag_name = '作業系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 155, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 155, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 155, tag_id FROM tags WHERE tag_name = '吳宗憲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 156, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 156, tag_id FROM tags WHERE tag_name = '資料結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 156, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 156, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 157, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 157, tag_id FROM tags WHERE tag_name = '作業系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 157, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 157, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 157, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 158, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 158, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 158, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 158, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 158, tag_id FROM tags WHERE tag_name = '張家銘' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 159, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 159, tag_id FROM tags WHERE tag_name = '作業系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 159, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 159, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 160, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 160, tag_id FROM tags WHERE tag_name = '計算機結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 160, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 160, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 161, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 161, tag_id FROM tags WHERE tag_name = '計算機網路' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 161, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 161, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 161, tag_id FROM tags WHERE tag_name = '王大明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 162, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 162, tag_id FROM tags WHERE tag_name = '計算機網路' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 162, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 162, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 162, tag_id FROM tags WHERE tag_name = '林智維' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 163, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 163, tag_id FROM tags WHERE tag_name = '作業系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 163, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 163, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 163, tag_id FROM tags WHERE tag_name = '李明哲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 164, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 164, tag_id FROM tags WHERE tag_name = '資料結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 164, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 164, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 165, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 165, tag_id FROM tags WHERE tag_name = '演算法' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 165, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 165, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 165, tag_id FROM tags WHERE tag_name = '吳宗憲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 166, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 166, tag_id FROM tags WHERE tag_name = '人工智慧' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 166, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 166, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 166, tag_id FROM tags WHERE tag_name = '張家銘' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 167, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 167, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 167, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 167, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 167, tag_id FROM tags WHERE tag_name = '張家銘' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 168, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 168, tag_id FROM tags WHERE tag_name = '密碼學' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 168, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 168, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 168, tag_id FROM tags WHERE tag_name = '李明哲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 169, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 169, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 169, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 169, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 169, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 170, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 170, tag_id FROM tags WHERE tag_name = '人工智慧' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 170, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 170, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 171, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 171, tag_id FROM tags WHERE tag_name = '演算法' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 171, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 171, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 171, tag_id FROM tags WHERE tag_name = '李明哲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 172, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 172, tag_id FROM tags WHERE tag_name = '計算機結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 172, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 172, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 173, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 173, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 173, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 173, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 173, tag_id FROM tags WHERE tag_name = '李明哲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 174, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 174, tag_id FROM tags WHERE tag_name = '資料結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 174, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 174, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 175, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 175, tag_id FROM tags WHERE tag_name = '計算機網路' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 175, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 175, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 175, tag_id FROM tags WHERE tag_name = '李明哲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 176, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 176, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 176, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 176, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 176, tag_id FROM tags WHERE tag_name = '林智維' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 177, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 177, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 177, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 177, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 177, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 178, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 178, tag_id FROM tags WHERE tag_name = '作業系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 178, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 178, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 179, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 179, tag_id FROM tags WHERE tag_name = '作業系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 179, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 179, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 179, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 180, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 180, tag_id FROM tags WHERE tag_name = '密碼學' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 180, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 180, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 180, tag_id FROM tags WHERE tag_name = '薛念林' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 181, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 181, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 181, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 181, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 181, tag_id FROM tags WHERE tag_name = '林智維' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 182, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 182, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 182, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 182, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 182, tag_id FROM tags WHERE tag_name = '吳宗憲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 183, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 183, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 183, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 183, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 183, tag_id FROM tags WHERE tag_name = '張家銘' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 184, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 184, tag_id FROM tags WHERE tag_name = '作業系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 184, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 184, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 185, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 185, tag_id FROM tags WHERE tag_name = '演算法' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 185, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 185, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 185, tag_id FROM tags WHERE tag_name = '張家銘' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 186, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 186, tag_id FROM tags WHERE tag_name = '計算機網路' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 186, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 186, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 187, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 187, tag_id FROM tags WHERE tag_name = '人工智慧' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 187, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 187, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 187, tag_id FROM tags WHERE tag_name = '陳德生' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 188, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 188, tag_id FROM tags WHERE tag_name = '計算機結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 188, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 188, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 188, tag_id FROM tags WHERE tag_name = '薛念林' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 189, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 189, tag_id FROM tags WHERE tag_name = '人工智慧' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 189, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 189, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 189, tag_id FROM tags WHERE tag_name = '王大明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 190, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 190, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 190, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 190, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 190, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 191, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 191, tag_id FROM tags WHERE tag_name = '作業系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 191, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 191, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 191, tag_id FROM tags WHERE tag_name = '薛念林' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 192, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 192, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 192, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 192, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 192, tag_id FROM tags WHERE tag_name = '王大明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 193, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 193, tag_id FROM tags WHERE tag_name = '演算法' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 193, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 193, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 193, tag_id FROM tags WHERE tag_name = '陳德生' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 194, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 194, tag_id FROM tags WHERE tag_name = '計算機結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 194, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 194, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 195, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 195, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 195, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 195, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 195, tag_id FROM tags WHERE tag_name = '薛念林' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 196, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 196, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 196, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 196, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 197, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 197, tag_id FROM tags WHERE tag_name = '作業系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 197, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 197, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 197, tag_id FROM tags WHERE tag_name = '陳德生' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 198, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 198, tag_id FROM tags WHERE tag_name = '計算機網路' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 198, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 198, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 198, tag_id FROM tags WHERE tag_name = '張家銘' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 199, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 199, tag_id FROM tags WHERE tag_name = '資料庫系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 199, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 199, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 199, tag_id FROM tags WHERE tag_name = '王大明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 200, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 200, tag_id FROM tags WHERE tag_name = '作業系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 200, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 200, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 200, tag_id FROM tags WHERE tag_name = '王大明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 201, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 201, tag_id FROM tags WHERE tag_name = '計算機結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 201, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 201, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 202, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 202, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 202, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 202, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 202, tag_id FROM tags WHERE tag_name = '林智維' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 203, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 203, tag_id FROM tags WHERE tag_name = '密碼學' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 203, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 203, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 203, tag_id FROM tags WHERE tag_name = '吳宗憲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 204, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 204, tag_id FROM tags WHERE tag_name = '資料庫系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 204, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 204, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 204, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 205, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 205, tag_id FROM tags WHERE tag_name = '密碼學' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 205, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 205, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 206, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 206, tag_id FROM tags WHERE tag_name = '密碼學' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 206, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 206, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 207, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 207, tag_id FROM tags WHERE tag_name = '密碼學' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 207, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 207, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 207, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 208, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 208, tag_id FROM tags WHERE tag_name = '作業系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 208, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 208, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 209, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 209, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 209, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 209, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 209, tag_id FROM tags WHERE tag_name = '陳德生' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 210, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 210, tag_id FROM tags WHERE tag_name = '密碼學' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 210, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 210, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 210, tag_id FROM tags WHERE tag_name = '張家銘' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 211, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 211, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 211, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 211, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 211, tag_id FROM tags WHERE tag_name = '吳宗憲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 212, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 212, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 212, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 212, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 212, tag_id FROM tags WHERE tag_name = '張家銘' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 213, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 213, tag_id FROM tags WHERE tag_name = '人工智慧' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 213, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 213, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 214, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 214, tag_id FROM tags WHERE tag_name = '資料庫系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 214, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 214, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 214, tag_id FROM tags WHERE tag_name = '張家銘' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 215, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 215, tag_id FROM tags WHERE tag_name = '人工智慧' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 215, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 215, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 215, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 216, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 216, tag_id FROM tags WHERE tag_name = '資料結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 216, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 216, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 216, tag_id FROM tags WHERE tag_name = '吳宗憲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 217, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 217, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 217, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 217, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 217, tag_id FROM tags WHERE tag_name = '王大明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 218, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 218, tag_id FROM tags WHERE tag_name = '資料庫系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 218, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 218, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 218, tag_id FROM tags WHERE tag_name = '林智維' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 219, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 219, tag_id FROM tags WHERE tag_name = '演算法' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 219, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 219, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 219, tag_id FROM tags WHERE tag_name = '吳宗憲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 220, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 220, tag_id FROM tags WHERE tag_name = '資料庫系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 220, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 220, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 221, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 221, tag_id FROM tags WHERE tag_name = '資料庫系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 221, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 221, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 221, tag_id FROM tags WHERE tag_name = '陳德生' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 222, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 222, tag_id FROM tags WHERE tag_name = '計算機結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 222, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 222, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 222, tag_id FROM tags WHERE tag_name = '吳宗憲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 223, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 223, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 223, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 223, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 223, tag_id FROM tags WHERE tag_name = '張家銘' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 224, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 224, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 224, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 224, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 224, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 225, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 225, tag_id FROM tags WHERE tag_name = '密碼學' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 225, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 225, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 226, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 226, tag_id FROM tags WHERE tag_name = '計算機網路' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 226, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 226, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 226, tag_id FROM tags WHERE tag_name = '李明哲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 227, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 227, tag_id FROM tags WHERE tag_name = '作業系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 227, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 227, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 227, tag_id FROM tags WHERE tag_name = '林智維' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 228, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 228, tag_id FROM tags WHERE tag_name = '作業系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 228, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 228, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 229, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 229, tag_id FROM tags WHERE tag_name = '演算法' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 229, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 229, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 229, tag_id FROM tags WHERE tag_name = '王大明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 230, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 230, tag_id FROM tags WHERE tag_name = '計算機結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 230, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 230, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 230, tag_id FROM tags WHERE tag_name = '薛念林' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 231, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 231, tag_id FROM tags WHERE tag_name = '作業系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 231, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 231, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 231, tag_id FROM tags WHERE tag_name = '王大明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 232, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 232, tag_id FROM tags WHERE tag_name = '資料庫系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 232, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 232, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 232, tag_id FROM tags WHERE tag_name = '薛念林' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 233, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 233, tag_id FROM tags WHERE tag_name = '演算法' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 233, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 233, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 233, tag_id FROM tags WHERE tag_name = '吳宗憲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 234, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 234, tag_id FROM tags WHERE tag_name = '計算機結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 234, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 234, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 234, tag_id FROM tags WHERE tag_name = '王大明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 235, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 235, tag_id FROM tags WHERE tag_name = '人工智慧' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 235, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 235, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 235, tag_id FROM tags WHERE tag_name = '薛念林' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 236, tag_id FROM tags WHERE tag_name = '114-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 236, tag_id FROM tags WHERE tag_name = '作業系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 236, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 236, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 236, tag_id FROM tags WHERE tag_name = '李明哲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 237, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 237, tag_id FROM tags WHERE tag_name = '軟體工程' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 237, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 237, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 237, tag_id FROM tags WHERE tag_name = '李明哲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 238, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 238, tag_id FROM tags WHERE tag_name = '密碼學' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 238, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 238, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 239, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 239, tag_id FROM tags WHERE tag_name = '計算機網路' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 239, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 239, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 239, tag_id FROM tags WHERE tag_name = '張家銘' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 240, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 240, tag_id FROM tags WHERE tag_name = '資料庫系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 240, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 240, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 240, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 241, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 241, tag_id FROM tags WHERE tag_name = '人工智慧' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 241, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 241, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 242, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 242, tag_id FROM tags WHERE tag_name = '計算機網路' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 242, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 242, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 242, tag_id FROM tags WHERE tag_name = '薛念林' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 243, tag_id FROM tags WHERE tag_name = '112-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 243, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 243, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 243, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 243, tag_id FROM tags WHERE tag_name = '王大明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 244, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 244, tag_id FROM tags WHERE tag_name = '人工智慧' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 244, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 244, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 244, tag_id FROM tags WHERE tag_name = '王大明' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 245, tag_id FROM tags WHERE tag_name = '114-2' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 245, tag_id FROM tags WHERE tag_name = '密碼學' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 245, tag_id FROM tags WHERE tag_name = '資訊工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 245, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 245, tag_id FROM tags WHERE tag_name = '張家銘' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 246, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 246, tag_id FROM tags WHERE tag_name = '機器學習' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 246, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 246, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 247, tag_id FROM tags WHERE tag_name = '113-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 247, tag_id FROM tags WHERE tag_name = '演算法' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 247, tag_id FROM tags WHERE tag_name = '應用數學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 247, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 247, tag_id FROM tags WHERE tag_name = '陳德生' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 248, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 248, tag_id FROM tags WHERE tag_name = '資料庫系統' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 248, tag_id FROM tags WHERE tag_name = '電機工程學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 248, tag_id FROM tags WHERE tag_name = '選修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 249, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 249, tag_id FROM tags WHERE tag_name = '人工智慧' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 249, tag_id FROM tags WHERE tag_name = '通識教育中心' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 249, tag_id FROM tags WHERE tag_name = '必修' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 249, tag_id FROM tags WHERE tag_name = '李明哲' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 250, tag_id FROM tags WHERE tag_name = '112-1' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 250, tag_id FROM tags WHERE tag_name = '計算機結構' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 250, tag_id FROM tags WHERE tag_name = '企業管理學系' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 250, tag_id FROM tags WHERE tag_name = '通識' ON CONFLICT DO NOTHING;
-INSERT INTO note_tags (note_id, tag_id) SELECT 250, tag_id FROM tags WHERE tag_name = '黃健明' ON CONFLICT DO NOTHING;
+
+-- Remove any pre-existing SEMESTER tags for super data notes
+DELETE FROM note_tags WHERE note_id >= 101 AND tag_id IN (SELECT tag_id FROM tags WHERE tag_type = 'SEMESTER');
+
+INSERT INTO note_tags (note_id, tag_id) SELECT 101, tag_id FROM tags WHERE tag_name = '109-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 101, tag_id FROM tags WHERE tag_name = '資料庫系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 101, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 101, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 102, tag_id FROM tags WHERE tag_name = '114-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 102, tag_id FROM tags WHERE tag_name = '密碼學' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 102, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 102, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 102, tag_id FROM tags WHERE tag_name = '王大明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 103, tag_id FROM tags WHERE tag_name = '108-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 103, tag_id FROM tags WHERE tag_name = '作業系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 103, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 103, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 103, tag_id FROM tags WHERE tag_name = '王大明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 104, tag_id FROM tags WHERE tag_name = '111-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 104, tag_id FROM tags WHERE tag_name = '軟體工程' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 104, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 104, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 105, tag_id FROM tags WHERE tag_name = '113-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 105, tag_id FROM tags WHERE tag_name = '計算機網路' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 105, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 105, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 106, tag_id FROM tags WHERE tag_name = '110-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 106, tag_id FROM tags WHERE tag_name = '資料結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 106, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 106, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 106, tag_id FROM tags WHERE tag_name = '李明哲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 107, tag_id FROM tags WHERE tag_name = '110-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 107, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 107, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 107, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 107, tag_id FROM tags WHERE tag_name = '陳德生' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 108, tag_id FROM tags WHERE tag_name = '109-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 108, tag_id FROM tags WHERE tag_name = '密碼學' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 108, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 108, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 108, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 109, tag_id FROM tags WHERE tag_name = '111-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 109, tag_id FROM tags WHERE tag_name = '密碼學' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 109, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 109, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 109, tag_id FROM tags WHERE tag_name = '李明哲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 110, tag_id FROM tags WHERE tag_name = '112-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 110, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 110, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 110, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 110, tag_id FROM tags WHERE tag_name = '張家銘' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 111, tag_id FROM tags WHERE tag_name = '109-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 111, tag_id FROM tags WHERE tag_name = '演算法' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 111, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 111, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 111, tag_id FROM tags WHERE tag_name = '王大明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 112, tag_id FROM tags WHERE tag_name = '112-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 112, tag_id FROM tags WHERE tag_name = '密碼學' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 112, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 112, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 113, tag_id FROM tags WHERE tag_name = '113-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 113, tag_id FROM tags WHERE tag_name = '軟體工程' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 113, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 113, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 113, tag_id FROM tags WHERE tag_name = '王大明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 114, tag_id FROM tags WHERE tag_name = '111-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 114, tag_id FROM tags WHERE tag_name = '演算法' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 114, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 114, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 114, tag_id FROM tags WHERE tag_name = '王大明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 115, tag_id FROM tags WHERE tag_name = '109-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 115, tag_id FROM tags WHERE tag_name = '資料庫系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 115, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 115, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 115, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 116, tag_id FROM tags WHERE tag_name = '115-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 116, tag_id FROM tags WHERE tag_name = '資料庫系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 116, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 116, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 116, tag_id FROM tags WHERE tag_name = '林智維' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 117, tag_id FROM tags WHERE tag_name = '110-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 117, tag_id FROM tags WHERE tag_name = '計算機結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 117, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 117, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 117, tag_id FROM tags WHERE tag_name = '林智維' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 118, tag_id FROM tags WHERE tag_name = '113-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 118, tag_id FROM tags WHERE tag_name = '演算法' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 118, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 118, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 119, tag_id FROM tags WHERE tag_name = '112-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 119, tag_id FROM tags WHERE tag_name = '密碼學' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 119, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 119, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 120, tag_id FROM tags WHERE tag_name = '113-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 120, tag_id FROM tags WHERE tag_name = '軟體工程' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 120, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 120, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 120, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 121, tag_id FROM tags WHERE tag_name = '108-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 121, tag_id FROM tags WHERE tag_name = '計算機網路' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 121, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 121, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 121, tag_id FROM tags WHERE tag_name = '黃健明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 122, tag_id FROM tags WHERE tag_name = '109-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 122, tag_id FROM tags WHERE tag_name = '計算機結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 122, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 122, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 122, tag_id FROM tags WHERE tag_name = '張家銘' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 123, tag_id FROM tags WHERE tag_name = '110-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 123, tag_id FROM tags WHERE tag_name = '演算法' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 123, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 123, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 123, tag_id FROM tags WHERE tag_name = '林智維' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 124, tag_id FROM tags WHERE tag_name = '111-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 124, tag_id FROM tags WHERE tag_name = '計算機結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 124, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 124, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 125, tag_id FROM tags WHERE tag_name = '113-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 125, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 125, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 125, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 126, tag_id FROM tags WHERE tag_name = '111-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 126, tag_id FROM tags WHERE tag_name = '演算法' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 126, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 126, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 126, tag_id FROM tags WHERE tag_name = '李明哲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 127, tag_id FROM tags WHERE tag_name = '113-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 127, tag_id FROM tags WHERE tag_name = '作業系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 127, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 127, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 127, tag_id FROM tags WHERE tag_name = '李明哲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 128, tag_id FROM tags WHERE tag_name = '112-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 128, tag_id FROM tags WHERE tag_name = '計算機結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 128, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 128, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 128, tag_id FROM tags WHERE tag_name = '李明哲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 129, tag_id FROM tags WHERE tag_name = '113-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 129, tag_id FROM tags WHERE tag_name = '計算機網路' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 129, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 129, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 129, tag_id FROM tags WHERE tag_name = '王大明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 130, tag_id FROM tags WHERE tag_name = '108-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 130, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 130, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 130, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 130, tag_id FROM tags WHERE tag_name = '黃健明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 131, tag_id FROM tags WHERE tag_name = '112-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 131, tag_id FROM tags WHERE tag_name = '密碼學' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 131, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 131, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 131, tag_id FROM tags WHERE tag_name = '陳德生' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 132, tag_id FROM tags WHERE tag_name = '115-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 132, tag_id FROM tags WHERE tag_name = '資料庫系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 132, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 132, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 133, tag_id FROM tags WHERE tag_name = '111-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 133, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 133, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 133, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 133, tag_id FROM tags WHERE tag_name = '林智維' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 134, tag_id FROM tags WHERE tag_name = '114-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 134, tag_id FROM tags WHERE tag_name = '計算機結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 134, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 134, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 134, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 135, tag_id FROM tags WHERE tag_name = '113-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 135, tag_id FROM tags WHERE tag_name = '密碼學' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 135, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 135, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 136, tag_id FROM tags WHERE tag_name = '112-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 136, tag_id FROM tags WHERE tag_name = '軟體工程' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 136, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 136, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 137, tag_id FROM tags WHERE tag_name = '110-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 137, tag_id FROM tags WHERE tag_name = '演算法' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 137, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 137, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 137, tag_id FROM tags WHERE tag_name = '吳宗憲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 138, tag_id FROM tags WHERE tag_name = '112-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 138, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 138, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 138, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 139, tag_id FROM tags WHERE tag_name = '114-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 139, tag_id FROM tags WHERE tag_name = '資料庫系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 139, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 139, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 140, tag_id FROM tags WHERE tag_name = '111-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 140, tag_id FROM tags WHERE tag_name = '軟體工程' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 140, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 140, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 141, tag_id FROM tags WHERE tag_name = '115-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 141, tag_id FROM tags WHERE tag_name = '資料庫系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 141, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 141, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 142, tag_id FROM tags WHERE tag_name = '115-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 142, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 142, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 142, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 142, tag_id FROM tags WHERE tag_name = '張家銘' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 143, tag_id FROM tags WHERE tag_name = '111-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 143, tag_id FROM tags WHERE tag_name = '演算法' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 143, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 143, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 143, tag_id FROM tags WHERE tag_name = '王大明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 144, tag_id FROM tags WHERE tag_name = '112-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 144, tag_id FROM tags WHERE tag_name = '作業系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 144, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 144, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 145, tag_id FROM tags WHERE tag_name = '113-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 145, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 145, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 145, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 145, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 146, tag_id FROM tags WHERE tag_name = '115-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 146, tag_id FROM tags WHERE tag_name = '資料結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 146, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 146, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 147, tag_id FROM tags WHERE tag_name = '115-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 147, tag_id FROM tags WHERE tag_name = '作業系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 147, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 147, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 147, tag_id FROM tags WHERE tag_name = '李明哲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 148, tag_id FROM tags WHERE tag_name = '114-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 148, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 148, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 148, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 148, tag_id FROM tags WHERE tag_name = '李明哲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 149, tag_id FROM tags WHERE tag_name = '108-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 149, tag_id FROM tags WHERE tag_name = '計算機結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 149, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 149, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 150, tag_id FROM tags WHERE tag_name = '110-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 150, tag_id FROM tags WHERE tag_name = '資料庫系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 150, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 150, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 150, tag_id FROM tags WHERE tag_name = '吳宗憲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 151, tag_id FROM tags WHERE tag_name = '115-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 151, tag_id FROM tags WHERE tag_name = '計算機結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 151, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 151, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 151, tag_id FROM tags WHERE tag_name = '張家銘' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 152, tag_id FROM tags WHERE tag_name = '109-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 152, tag_id FROM tags WHERE tag_name = '資料結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 152, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 152, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 152, tag_id FROM tags WHERE tag_name = '李明哲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 153, tag_id FROM tags WHERE tag_name = '108-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 153, tag_id FROM tags WHERE tag_name = '資料庫系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 153, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 153, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 153, tag_id FROM tags WHERE tag_name = '黃健明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 154, tag_id FROM tags WHERE tag_name = '110-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 154, tag_id FROM tags WHERE tag_name = '軟體工程' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 154, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 154, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 155, tag_id FROM tags WHERE tag_name = '110-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 155, tag_id FROM tags WHERE tag_name = '軟體工程' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 155, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 155, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 155, tag_id FROM tags WHERE tag_name = '王大明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 156, tag_id FROM tags WHERE tag_name = '112-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 156, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 156, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 156, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 156, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 157, tag_id FROM tags WHERE tag_name = '110-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 157, tag_id FROM tags WHERE tag_name = '資料庫系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 157, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 157, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 157, tag_id FROM tags WHERE tag_name = '李明哲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 158, tag_id FROM tags WHERE tag_name = '110-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 158, tag_id FROM tags WHERE tag_name = '計算機網路' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 158, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 158, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 158, tag_id FROM tags WHERE tag_name = '吳宗憲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 159, tag_id FROM tags WHERE tag_name = '113-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 159, tag_id FROM tags WHERE tag_name = '作業系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 159, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 159, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 159, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 160, tag_id FROM tags WHERE tag_name = '113-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 160, tag_id FROM tags WHERE tag_name = '計算機結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 160, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 160, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 160, tag_id FROM tags WHERE tag_name = '陳德生' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 161, tag_id FROM tags WHERE tag_name = '115-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 161, tag_id FROM tags WHERE tag_name = '計算機網路' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 161, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 161, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 161, tag_id FROM tags WHERE tag_name = '王大明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 162, tag_id FROM tags WHERE tag_name = '110-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 162, tag_id FROM tags WHERE tag_name = '計算機結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 162, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 162, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 162, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 163, tag_id FROM tags WHERE tag_name = '114-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 163, tag_id FROM tags WHERE tag_name = '資料庫系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 163, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 163, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 163, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 164, tag_id FROM tags WHERE tag_name = '109-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 164, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 164, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 164, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 164, tag_id FROM tags WHERE tag_name = '李明哲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 165, tag_id FROM tags WHERE tag_name = '115-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 165, tag_id FROM tags WHERE tag_name = '資料結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 165, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 165, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 166, tag_id FROM tags WHERE tag_name = '111-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 166, tag_id FROM tags WHERE tag_name = '作業系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 166, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 166, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 166, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 167, tag_id FROM tags WHERE tag_name = '114-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 167, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 167, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 167, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 167, tag_id FROM tags WHERE tag_name = '陳德生' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 168, tag_id FROM tags WHERE tag_name = '111-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 168, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 168, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 168, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 168, tag_id FROM tags WHERE tag_name = '吳宗憲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 169, tag_id FROM tags WHERE tag_name = '114-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 169, tag_id FROM tags WHERE tag_name = '資料庫系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 169, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 169, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 170, tag_id FROM tags WHERE tag_name = '111-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 170, tag_id FROM tags WHERE tag_name = '軟體工程' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 170, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 170, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 170, tag_id FROM tags WHERE tag_name = '黃健明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 171, tag_id FROM tags WHERE tag_name = '114-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 171, tag_id FROM tags WHERE tag_name = '演算法' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 171, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 171, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 172, tag_id FROM tags WHERE tag_name = '113-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 172, tag_id FROM tags WHERE tag_name = '作業系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 172, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 172, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 173, tag_id FROM tags WHERE tag_name = '108-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 173, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 173, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 173, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 174, tag_id FROM tags WHERE tag_name = '115-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 174, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 174, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 174, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 174, tag_id FROM tags WHERE tag_name = '張家銘' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 175, tag_id FROM tags WHERE tag_name = '112-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 175, tag_id FROM tags WHERE tag_name = '計算機網路' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 175, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 175, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 175, tag_id FROM tags WHERE tag_name = '李明哲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 176, tag_id FROM tags WHERE tag_name = '108-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 176, tag_id FROM tags WHERE tag_name = '資料結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 176, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 176, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 176, tag_id FROM tags WHERE tag_name = '吳宗憲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 177, tag_id FROM tags WHERE tag_name = '113-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 177, tag_id FROM tags WHERE tag_name = '密碼學' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 177, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 177, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 177, tag_id FROM tags WHERE tag_name = '張家銘' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 178, tag_id FROM tags WHERE tag_name = '110-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 178, tag_id FROM tags WHERE tag_name = '演算法' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 178, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 178, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 179, tag_id FROM tags WHERE tag_name = '112-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 179, tag_id FROM tags WHERE tag_name = '作業系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 179, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 179, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 179, tag_id FROM tags WHERE tag_name = '李明哲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 180, tag_id FROM tags WHERE tag_name = '115-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 180, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 180, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 180, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 181, tag_id FROM tags WHERE tag_name = '111-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 181, tag_id FROM tags WHERE tag_name = '計算機結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 181, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 181, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 181, tag_id FROM tags WHERE tag_name = '王大明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 182, tag_id FROM tags WHERE tag_name = '110-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 182, tag_id FROM tags WHERE tag_name = '作業系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 182, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 182, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 183, tag_id FROM tags WHERE tag_name = '115-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 183, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 183, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 183, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 183, tag_id FROM tags WHERE tag_name = '張家銘' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 184, tag_id FROM tags WHERE tag_name = '109-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 184, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 184, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 184, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 184, tag_id FROM tags WHERE tag_name = '張家銘' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 185, tag_id FROM tags WHERE tag_name = '113-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 185, tag_id FROM tags WHERE tag_name = '資料結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 185, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 185, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 185, tag_id FROM tags WHERE tag_name = '陳德生' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 186, tag_id FROM tags WHERE tag_name = '115-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 186, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 186, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 186, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 186, tag_id FROM tags WHERE tag_name = '張家銘' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 187, tag_id FROM tags WHERE tag_name = '111-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 187, tag_id FROM tags WHERE tag_name = '資料結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 187, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 187, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 187, tag_id FROM tags WHERE tag_name = '王大明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 188, tag_id FROM tags WHERE tag_name = '111-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 188, tag_id FROM tags WHERE tag_name = '計算機結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 188, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 188, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 188, tag_id FROM tags WHERE tag_name = '張家銘' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 189, tag_id FROM tags WHERE tag_name = '111-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 189, tag_id FROM tags WHERE tag_name = '軟體工程' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 189, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 189, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 190, tag_id FROM tags WHERE tag_name = '114-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 190, tag_id FROM tags WHERE tag_name = '演算法' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 190, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 190, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 190, tag_id FROM tags WHERE tag_name = '陳德生' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 191, tag_id FROM tags WHERE tag_name = '108-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 191, tag_id FROM tags WHERE tag_name = '資料結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 191, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 191, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 191, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 192, tag_id FROM tags WHERE tag_name = '110-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 192, tag_id FROM tags WHERE tag_name = '作業系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 192, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 192, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 193, tag_id FROM tags WHERE tag_name = '112-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 193, tag_id FROM tags WHERE tag_name = '軟體工程' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 193, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 193, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 193, tag_id FROM tags WHERE tag_name = '林智維' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 194, tag_id FROM tags WHERE tag_name = '112-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 194, tag_id FROM tags WHERE tag_name = '資料結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 194, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 194, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 194, tag_id FROM tags WHERE tag_name = '李明哲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 195, tag_id FROM tags WHERE tag_name = '113-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 195, tag_id FROM tags WHERE tag_name = '計算機網路' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 195, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 195, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 195, tag_id FROM tags WHERE tag_name = '吳宗憲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 196, tag_id FROM tags WHERE tag_name = '113-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 196, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 196, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 196, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 196, tag_id FROM tags WHERE tag_name = '黃健明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 197, tag_id FROM tags WHERE tag_name = '113-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 197, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 197, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 197, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 197, tag_id FROM tags WHERE tag_name = '林智維' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 198, tag_id FROM tags WHERE tag_name = '109-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 198, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 198, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 198, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 198, tag_id FROM tags WHERE tag_name = '李明哲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 199, tag_id FROM tags WHERE tag_name = '115-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 199, tag_id FROM tags WHERE tag_name = '計算機網路' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 199, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 199, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 199, tag_id FROM tags WHERE tag_name = '吳宗憲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 200, tag_id FROM tags WHERE tag_name = '108-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 200, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 200, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 200, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 201, tag_id FROM tags WHERE tag_name = '110-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 201, tag_id FROM tags WHERE tag_name = '密碼學' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 201, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 201, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 202, tag_id FROM tags WHERE tag_name = '110-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 202, tag_id FROM tags WHERE tag_name = '密碼學' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 202, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 202, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 202, tag_id FROM tags WHERE tag_name = '李明哲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 203, tag_id FROM tags WHERE tag_name = '113-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 203, tag_id FROM tags WHERE tag_name = '軟體工程' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 203, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 203, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 203, tag_id FROM tags WHERE tag_name = '陳德生' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 204, tag_id FROM tags WHERE tag_name = '115-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 204, tag_id FROM tags WHERE tag_name = '計算機結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 204, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 204, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 204, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 205, tag_id FROM tags WHERE tag_name = '110-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 205, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 205, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 205, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 205, tag_id FROM tags WHERE tag_name = '吳宗憲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 206, tag_id FROM tags WHERE tag_name = '111-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 206, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 206, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 206, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 206, tag_id FROM tags WHERE tag_name = '陳德生' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 207, tag_id FROM tags WHERE tag_name = '112-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 207, tag_id FROM tags WHERE tag_name = '軟體工程' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 207, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 207, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 208, tag_id FROM tags WHERE tag_name = '115-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 208, tag_id FROM tags WHERE tag_name = '演算法' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 208, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 208, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 208, tag_id FROM tags WHERE tag_name = '張家銘' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 209, tag_id FROM tags WHERE tag_name = '113-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 209, tag_id FROM tags WHERE tag_name = '軟體工程' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 209, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 209, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 209, tag_id FROM tags WHERE tag_name = '陳德生' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 210, tag_id FROM tags WHERE tag_name = '109-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 210, tag_id FROM tags WHERE tag_name = '資料庫系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 210, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 210, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 211, tag_id FROM tags WHERE tag_name = '108-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 211, tag_id FROM tags WHERE tag_name = '密碼學' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 211, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 211, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 212, tag_id FROM tags WHERE tag_name = '115-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 212, tag_id FROM tags WHERE tag_name = '計算機網路' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 212, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 212, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 213, tag_id FROM tags WHERE tag_name = '113-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 213, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 213, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 213, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 213, tag_id FROM tags WHERE tag_name = '黃健明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 214, tag_id FROM tags WHERE tag_name = '112-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 214, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 214, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 214, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 215, tag_id FROM tags WHERE tag_name = '108-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 215, tag_id FROM tags WHERE tag_name = '計算機結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 215, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 215, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 215, tag_id FROM tags WHERE tag_name = '黃健明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 216, tag_id FROM tags WHERE tag_name = '113-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 216, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 216, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 216, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 216, tag_id FROM tags WHERE tag_name = '王大明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 217, tag_id FROM tags WHERE tag_name = '112-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 217, tag_id FROM tags WHERE tag_name = '計算機結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 217, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 217, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 217, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 218, tag_id FROM tags WHERE tag_name = '114-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 218, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 218, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 218, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 219, tag_id FROM tags WHERE tag_name = '111-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 219, tag_id FROM tags WHERE tag_name = '計算機結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 219, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 219, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 219, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 220, tag_id FROM tags WHERE tag_name = '108-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 220, tag_id FROM tags WHERE tag_name = '演算法' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 220, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 220, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 220, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 221, tag_id FROM tags WHERE tag_name = '110-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 221, tag_id FROM tags WHERE tag_name = '作業系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 221, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 221, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 221, tag_id FROM tags WHERE tag_name = '王大明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 222, tag_id FROM tags WHERE tag_name = '111-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 222, tag_id FROM tags WHERE tag_name = '資料結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 222, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 222, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 223, tag_id FROM tags WHERE tag_name = '108-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 223, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 223, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 223, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 223, tag_id FROM tags WHERE tag_name = '李明哲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 224, tag_id FROM tags WHERE tag_name = '115-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 224, tag_id FROM tags WHERE tag_name = '資料結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 224, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 224, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 224, tag_id FROM tags WHERE tag_name = '王大明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 225, tag_id FROM tags WHERE tag_name = '111-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 225, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 225, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 225, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 226, tag_id FROM tags WHERE tag_name = '109-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 226, tag_id FROM tags WHERE tag_name = '密碼學' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 226, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 226, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 227, tag_id FROM tags WHERE tag_name = '108-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 227, tag_id FROM tags WHERE tag_name = '資料庫系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 227, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 227, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 228, tag_id FROM tags WHERE tag_name = '109-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 228, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 228, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 228, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 228, tag_id FROM tags WHERE tag_name = '林智維' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 229, tag_id FROM tags WHERE tag_name = '112-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 229, tag_id FROM tags WHERE tag_name = '作業系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 229, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 229, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 229, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 230, tag_id FROM tags WHERE tag_name = '114-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 230, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 230, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 230, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 231, tag_id FROM tags WHERE tag_name = '115-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 231, tag_id FROM tags WHERE tag_name = '計算機網路' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 231, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 231, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 232, tag_id FROM tags WHERE tag_name = '108-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 232, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 232, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 232, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 233, tag_id FROM tags WHERE tag_name = '112-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 233, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 233, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 233, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 233, tag_id FROM tags WHERE tag_name = '吳宗憲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 234, tag_id FROM tags WHERE tag_name = '113-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 234, tag_id FROM tags WHERE tag_name = '資料庫系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 234, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 234, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 235, tag_id FROM tags WHERE tag_name = '108-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 235, tag_id FROM tags WHERE tag_name = '資料庫系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 235, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 235, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 235, tag_id FROM tags WHERE tag_name = '黃健明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 236, tag_id FROM tags WHERE tag_name = '109-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 236, tag_id FROM tags WHERE tag_name = '計算機結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 236, tag_id FROM tags WHERE tag_name = '電機工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 236, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 236, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 237, tag_id FROM tags WHERE tag_name = '112-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 237, tag_id FROM tags WHERE tag_name = '密碼學' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 237, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 237, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 238, tag_id FROM tags WHERE tag_name = '110-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 238, tag_id FROM tags WHERE tag_name = '密碼學' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 238, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 238, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 238, tag_id FROM tags WHERE tag_name = '吳宗憲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 239, tag_id FROM tags WHERE tag_name = '114-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 239, tag_id FROM tags WHERE tag_name = '計算機網路' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 239, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 239, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 240, tag_id FROM tags WHERE tag_name = '113-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 240, tag_id FROM tags WHERE tag_name = '計算機網路' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 240, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 240, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 240, tag_id FROM tags WHERE tag_name = '林智維' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 241, tag_id FROM tags WHERE tag_name = '111-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 241, tag_id FROM tags WHERE tag_name = '人工智慧' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 241, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 241, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 241, tag_id FROM tags WHERE tag_name = '林智維' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 242, tag_id FROM tags WHERE tag_name = '110-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 242, tag_id FROM tags WHERE tag_name = '計算機網路' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 242, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 242, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 242, tag_id FROM tags WHERE tag_name = '王大明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 243, tag_id FROM tags WHERE tag_name = '110-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 243, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 243, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 243, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 244, tag_id FROM tags WHERE tag_name = '115-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 244, tag_id FROM tags WHERE tag_name = '作業系統' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 244, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 244, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 244, tag_id FROM tags WHERE tag_name = '陳德生' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 245, tag_id FROM tags WHERE tag_name = '110-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 245, tag_id FROM tags WHERE tag_name = '軟體工程' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 245, tag_id FROM tags WHERE tag_name = '企業管理學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 245, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 246, tag_id FROM tags WHERE tag_name = '109-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 246, tag_id FROM tags WHERE tag_name = '資料結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 246, tag_id FROM tags WHERE tag_name = '通識教育中心' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 246, tag_id FROM tags WHERE tag_name = '通識' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 246, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 247, tag_id FROM tags WHERE tag_name = '108-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 247, tag_id FROM tags WHERE tag_name = '機器學習' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 247, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 247, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 247, tag_id FROM tags WHERE tag_name = '陳德生' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 248, tag_id FROM tags WHERE tag_name = '110-2' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 248, tag_id FROM tags WHERE tag_name = '演算法' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 248, tag_id FROM tags WHERE tag_name = '資訊工程學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 248, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 248, tag_id FROM tags WHERE tag_name = '李明哲' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 249, tag_id FROM tags WHERE tag_name = '110-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 249, tag_id FROM tags WHERE tag_name = '資料結構' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 249, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 249, tag_id FROM tags WHERE tag_name = '必修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 249, tag_id FROM tags WHERE tag_name = '黃健明' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 250, tag_id FROM tags WHERE tag_name = '110-1' AND tag_type = 'SEMESTER' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 250, tag_id FROM tags WHERE tag_name = '軟體工程' AND tag_type = 'SUBJECT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 250, tag_id FROM tags WHERE tag_name = '應用數學系' AND tag_type = 'DEPARTMENT' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 250, tag_id FROM tags WHERE tag_name = '選修' AND tag_type = 'COURSE_TYPE' ON CONFLICT DO NOTHING;
+INSERT INTO note_tags (note_id, tag_id) SELECT 250, tag_id FROM tags WHERE tag_name = '薛念林' AND tag_type = 'TEACHER' ON CONFLICT DO NOTHING;
