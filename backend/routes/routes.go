@@ -9,7 +9,7 @@ import (
 
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
-	r.MaxMultipartMemory = 32 << 20 // 32 MB
+	r.MaxMultipartMemory = 40 << 20 // 40 MB
 	r.Static("/media/images", "./assets/images")
 
 	api := r.Group("/api")
