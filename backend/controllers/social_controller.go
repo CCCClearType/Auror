@@ -46,6 +46,9 @@ func getReviewAuthorByID(userID uint) reviewAuthorDTO {
 }
 
 func parseRoleFromContent(content string) (role string, cleanContent string) {
+	if strings.HasPrefix(content, "[ROLE:USERS]") {
+		return "USERS", strings.TrimPrefix(content, "[ROLE:USERS]")
+	}
 	if strings.HasPrefix(content, "[ROLE:ADMIN]") {
 		return "ADMIN", strings.TrimPrefix(content, "[ROLE:ADMIN]")
 	}
@@ -59,7 +62,7 @@ func parseRoleFromContent(content string) (role string, cleanContent string) {
 }
 
 func buildRoleContent(content string, role string) string {
-	if role == "ADMIN" || role == "CSR" || role == "AUTHOR" {
+	if role == "ADMIN" || role == "CSR" || role == "AUTHOR" || role == "USERS" {
 		return "[ROLE:" + role + "]" + content
 	}
 	return content
