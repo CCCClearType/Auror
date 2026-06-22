@@ -199,21 +199,12 @@ function renderNotes(notes) {
 
         let tagsHtml = '';
         const order = ['SUBJECT', 'SEMESTER', 'DEPARTMENT', 'COURSE_TYPE', 'TEACHER', 'GENERAL'];
-        const colorMap = {
-            SUBJECT: 'is-success',
-            SEMESTER: 'is-link',
-            DEPARTMENT: 'is-warning',
-            COURSE_TYPE: 'is-danger',
-            TEACHER: 'is-primary is-light',
-            GENERAL: 'is-light'
-        };
-
         order.forEach(type => {
             if (groupedTags[type].length > 0) {
                 tagsHtml += `<div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px;">`;
                 groupedTags[type].forEach(t => {
                     const tagName = typeof t === 'string' ? t : (t.tag_name || t.name || t);
-                    tagsHtml += `<span class="tag is-rounded ${colorMap[type]}">${escapeHtml(String(tagName))}</span>`;
+                    tagsHtml += `<span class="tag is-rounded type-${type}" style="border: none;">${escapeHtml(String(tagName))}</span>`;
                 });
                 tagsHtml += `</div>`;
             }
