@@ -65,6 +65,8 @@
                                         <option value="SEMESTER">學期</option>
                                         <option value="SUBJECT">科目</option>
                                         <option value="TEACHER">老師</option>
+                                        <option value="DEPARTMENT">系所</option>
+                                        <option value="COURSE_TYPE">課程屬性</option>
                                     </select>
                                 </div>
                             </div>
@@ -200,6 +202,8 @@
                 if(tag.tag_type === 'SEMESTER') typeLabel = ' [學期]';
                 if(tag.tag_type === 'SUBJECT') typeLabel = ' [科目]';
                 if(tag.tag_type === 'TEACHER') typeLabel = ' [老師]';
+                if(tag.tag_type === 'DEPARTMENT') typeLabel = ' [系所]';
+                if(tag.tag_type === 'COURSE_TYPE') typeLabel = ' [課程屬性]';
                 option.textContent = tag.tag_name + typeLabel;
                 select.appendChild(option);
             });
@@ -217,6 +221,8 @@
                 if (tag.tag_type === 'SEMESTER') colorClass = 'is-link';
                 else if (tag.tag_type === 'SUBJECT') colorClass = 'is-success';
                 else if (tag.tag_type === 'TEACHER') colorClass = 'is-primary is-light';
+                else if (tag.tag_type === 'DEPARTMENT') colorClass = 'is-warning';
+                else if (tag.tag_type === 'COURSE_TYPE') colorClass = 'is-danger';
                 
                 return `
                 <span class="tag ${colorClass} is-medium">

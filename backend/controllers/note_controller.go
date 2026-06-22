@@ -41,6 +41,8 @@ func GetNotes(c *gin.Context) {
 	semester := c.Query("semester")
 	subject := c.Query("subject")
 	teacher := c.Query("teacher")
+	department := c.Query("department")
+	courseType := c.Query("course_type")
 	seller := c.Query("seller")
 	sort := c.DefaultQuery("sort", "price_asc")
 
@@ -76,6 +78,18 @@ func GetNotes(c *gin.Context) {
 			Joins("JOIN note_tags filter_tea_tags ON filter_tea_tags.note_id = notes.note_id").
 			Joins("JOIN tags filter_tea ON filter_tea.tag_id = filter_tea_tags.tag_id").
 			Where("filter_tea.tag_name ILIKE ? AND filter_tea.tag_type = 'TEACHER'", teacher)
+	}
+	if department != "" {
+		query = query.
+			Joins("JOIN note_tags filter_dep_tags ON filter_dep_tags.note_id = notes.note_id").
+			Joins("JOIN tags filter_dep ON filter_dep.tag_id = filter_dep_tags.tag_id").
+			Where("filter_dep.tag_name ILIKE ? AND filter_dep.tag_type = 'DEPARTMENT'", department)
+	}
+	if courseType != "" {
+		query = query.
+			Joins("JOIN note_tags filter_ct_tags ON filter_ct_tags.note_id = notes.note_id").
+			Joins("JOIN tags filter_ct ON filter_ct.tag_id = filter_ct_tags.tag_id").
+			Where("filter_ct.tag_name ILIKE ? AND filter_ct.tag_type = 'COURSE_TYPE'", courseType)
 	}
 	if seller != "" {
 		query = query.

@@ -187,6 +187,8 @@ function renderNotes(notes) {
                 if (t.tag_type === 'SEMESTER') colorClass = 'is-link';
                 else if (t.tag_type === 'SUBJECT') colorClass = 'is-success';
                 else if (t.tag_type === 'TEACHER') colorClass = 'is-primary is-light';
+                else if (t.tag_type === 'DEPARTMENT') colorClass = 'is-warning';
+                else if (t.tag_type === 'COURSE_TYPE') colorClass = 'is-danger';
             }
             return `<span class="tag is-rounded ${colorClass}">${escapeHtml(String(tagName))}</span>`;
         }).join('');
