@@ -16,20 +16,22 @@ INSERT INTO users (username, email, password_hash, last_visit_ip, role, status, 
 -- ==========================================
 -- 2. 寫入 notes 資料 (4筆)
 -- ==========================================
-INSERT INTO notes (seller_id, title, semester, description, price, overall_rating, status) VALUES
-(1, '資料結構期末考精華筆記', '113-1', '涵蓋樹、圖、排序等核心資料結構概念與考題精選。', 1200.00, 4.5, 'ACTIVE'),
-(1, '演算法章節重點總整理', '113-1', '分析動態規劃、貪婪演算法與分治法等必考重點。', 150.00, 4.8, 'ACTIVE'),
-(2, '材料與生活通識課必讀筆記', '112-2', '整理材料性質與日常生活應用，輕鬆取得高分。', 850.50, 3.9, 'ACTIVE'),
-(2, '微積分甲高分全攻略', '112-1', '包含極限、導數、積分及多元微積分推導與習題詳解。', 300.00, 4.2, 'ACTIVE');
+INSERT INTO notes (seller_id, title, description, price, overall_rating, status) VALUES
+(1, '資料結構期末考精華筆記', '涵蓋樹、圖、排序等核心資料結構概念與考題精選。', 1200.00, 4.5, 'ACTIVE'),
+(1, '演算法章節重點總整理', '分析動態規劃、貪婪演算法與分治法等必考重點。', 150.00, 4.8, 'ACTIVE'),
+(2, '材料與生活通識課必讀筆記', '整理材料性質與日常生活應用，輕鬆取得高分。', 850.50, 3.9, 'ACTIVE'),
+(2, '微積分甲高分全攻略', '包含極限、導數、積分及多元微積分推導與習題詳解。', 300.00, 4.2, 'ACTIVE');
 
 -- ==========================================
 -- 3. 寫入 tags 與 note_tags 資料
 -- ==========================================
-INSERT INTO tags (tag_name) VALUES
-('資料結構'), ('演算法'), ('材料與生活'), ('微積分');
+INSERT INTO tags (tag_name, tag_type) VALUES
+('資料結構', 'SUBJECT'), ('演算法', 'SUBJECT'), ('材料與生活', 'SUBJECT'), ('微積分', 'SUBJECT'),
+('113-1', 'SEMESTER'), ('112-2', 'SEMESTER'), ('112-1', 'SEMESTER');
 
 INSERT INTO note_tags (note_id, tag_id) VALUES
-(1, 1), (1, 2), (2, 1), (3, 3), (4, 4);
+(1, 1), (1, 2), (2, 1), (3, 3), (4, 4), -- Subject tags
+(1, 5), (2, 5), (3, 6), (4, 7);         -- Semester tags
 
 -- ==========================================
 -- 4. 寫入 note_media 資料
