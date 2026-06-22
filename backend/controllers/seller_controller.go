@@ -41,6 +41,17 @@ func GetSellerNotes(c *gin.Context) {
 		return
 	}
 
+	for i := range notes {
+		for j := range notes[i].Media {
+			physicalPath := getPhysicalPath(notes[i].Media[j].FileURL)
+			if physicalPath != "" {
+				if info, err := os.Stat(physicalPath); err == nil {
+					notes[i].Media[j].FileSize = info.Size()
+				}
+			}
+		}
+	}
+
 	c.JSON(http.StatusOK, gin.H{"data": notes})
 }
 
@@ -229,6 +240,17 @@ func UploadMedia(c *gin.Context) {
 		return
 	}
 
+	totalSize, err := getNoteMediaTotalSize(noteID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to calculate total media size"})
+		return
+	}
+
+	if totalSize+fileHeader.Size > 50*1024*1024 {
+		c.JSON(http.StatusRequestEntityTooLarge, gin.H{"error": "單一筆記上傳素材大小總額不能超過 50MB"})
+		return
+	}
+
 	mediaType := c.DefaultPostForm("media_type", "media")
 
 	// Open and read file bytes
@@ -328,17 +350,7 @@ func DeleteMedia(c *gin.Context) {
 	}
 
 	// Resolve the physical file path from the stored URL
-	physicalPath := ""
-	switch {
-	case strings.HasPrefix(media.FileURL, "/media/images/"):
-		// /media/images/{note_id}/{file} → assets/images/{note_id}/{file}
-		rel := strings.TrimPrefix(media.FileURL, "/media/images/")
-		physicalPath = filepath.Join("assets", "images", rel)
-	case strings.HasPrefix(media.FileURL, "/downloads/"):
-		// /downloads/{note_id}/{file} → assets/note-files/{note_id}/{file}
-		rel := strings.TrimPrefix(media.FileURL, "/downloads/")
-		physicalPath = filepath.Join("assets", "note-files", rel)
-	}
+	physicalPath := getPhysicalPath(media.FileURL)
 
 	// Delete DB record
 	if err := database.DB.Delete(&media).Error; err != nil {
@@ -495,4 +507,41 @@ func RemoveTagFromNote(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Tag removed from note"})
+}
+
+func getNoteMediaTotalSize(noteID string) (int64, error) {
+	var totalSize int64
+	dirs := []string{
+		filepath.Join("assets", "images", noteID),
+		filepath.Join("assets", "note-files", noteID),
+	}
+
+	for _, dir := range dirs {
+		err := filepath.Walk(dir, func(_ string, info os.FileInfo, err error) error {
+			if err != nil {
+				if os.IsNotExist(err) {
+					return nil // Ignore if directory doesn't exist
+				}
+				return err
+			}
+			if !info.IsDir() {
+				totalSize += info.Size()
+			}
+			return nil
+		})
+		if err != nil {
+			return 0, err
+		}
+	}
+	return totalSize, nil
+}
+
+func getPhysicalPath(fileURL string) string {
+	if strings.HasPrefix(fileURL, "/media/images/") {
+		return filepath.Join("assets", "images", strings.TrimPrefix(fileURL, "/media/images/"))
+	}
+	if strings.HasPrefix(fileURL, "/downloads/") {
+		return filepath.Join("assets", "note-files", strings.TrimPrefix(fileURL, "/downloads/"))
+	}
+	return ""
 }
