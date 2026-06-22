@@ -58,10 +58,20 @@
                                 </div>
                             </div>
                             <div class="control"><button class="button is-light" type="button" id="add-existing-tag-btn">加入</button></div>
-                            <div class="control is-expanded" style="min-width:220px;"><input class="input" type="text" id="new-tag-input" placeholder="新增 tag 名稱"></div>
+                            <div class="control">
+                                <div class="select">
+                                    <select id="new-tag-type">
+                                        <option value="GENERAL">一般</option>
+                                        <option value="SEMESTER">學期</option>
+                                        <option value="SUBJECT">科目</option>
+                                        <option value="TEACHER">老師</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control is-expanded" style="min-width:150px;"><input class="input" type="text" id="new-tag-input" placeholder="新增 tag 名稱"></div>
                             <div class="control"><button class="button is-primary" type="button" id="create-tag-btn">建立並加入</button></div>
                         </div>
-                        <p class="help">Tags 會用於首頁瀏覽與搜尋篩選。</p>
+                        <p class="help">Tags 會用於首頁瀏覽與搜尋篩選。發佈前必須至少包含一個「學期」與「科目」標籤。</p>
                     </div>
 
                     <div id="edit-error" class="notification is-danger is-light" style="display:none;"></div>
@@ -186,7 +196,11 @@
             allTags.forEach(tag => {
                 const option = document.createElement('option');
                 option.value = tag.tag_id;
-                option.textContent = tag.tag_name;
+                let typeLabel = '';
+                if(tag.tag_type === 'SEMESTER') typeLabel = ' [學期]';
+                if(tag.tag_type === 'SUBJECT') typeLabel = ' [科目]';
+                if(tag.tag_type === 'TEACHER') typeLabel = ' [老師]';
+                option.textContent = tag.tag_name + typeLabel;
                 select.appendChild(option);
             });
         }
@@ -198,12 +212,18 @@
                 container.innerHTML = '<span class="tag">尚未設定 tag</span>';
                 return;
             }
-            container.innerHTML = tags.map(tag => `
-                <span class="tag is-info is-light is-medium">
+            container.innerHTML = tags.map(tag => {
+                let colorClass = 'is-light';
+                if (tag.tag_type === 'SEMESTER') colorClass = 'is-link';
+                else if (tag.tag_type === 'SUBJECT') colorClass = 'is-success';
+                else if (tag.tag_type === 'TEACHER') colorClass = 'is-primary is-light';
+                
+                return `
+                <span class="tag ${colorClass} is-medium">
                     ${escapeHtml(tag.tag_name || tag.name || '')}
                     <button class="delete is-small" type="button" aria-label="remove" onclick="removeNoteTag(${Number(tag.tag_id)})"></button>
                 </span>
-            `).join('');
+            `}).join('');
         }
 
         async function addExistingTag() {
@@ -220,10 +240,12 @@
 
         async function createAndAddTag() {
             const input = document.getElementById('new-tag-input');
+            const typeInput = document.getElementById('new-tag-type');
             const tagName = input.value.trim();
+            const tagType = typeInput ? typeInput.value : 'GENERAL';
             if (!tagName) return;
             try {
-                const created = await apiCreateTag(tagName);
+                const created = await apiCreateTag(tagName, tagType);
                 const tag = created.data || created.tag || created;
                 await loadTagsForEdit();
                 await apiAddTagToNote(currentNoteId, tag.tag_id);
