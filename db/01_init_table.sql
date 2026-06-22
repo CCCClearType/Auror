@@ -16,7 +16,7 @@ CREATE TABLE notes (
     note_id SERIAL PRIMARY KEY,
     seller_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
-    semester VARCHAR(20) NOT NULL,
+    semester VARCHAR(20) DEFAULT '113-1',
     description TEXT DEFAULT '',
     price DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (price >= 0),
     overall_rating DECIMAL(3, 2) DEFAULT 0.00,
