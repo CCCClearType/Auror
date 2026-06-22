@@ -242,46 +242,122 @@ function renderNotes(notes) {
         return card;
     };
 
-    if (groupBy === 'semester') {
+    // ── Group-by configuration ──────────────────────────────────
+    const GROUP_META = {
+        SEMESTER:    { label: '學期',  icon: 'fas fa-calendar-alt', color: '#66c0f4' },
+        SUBJECT:     { label: '科目',  icon: 'fas fa-book',         color: '#a3e073' },
+        DEPARTMENT:  { label: '系所',  icon: 'fas fa-university',   color: '#ffdd57' },
+        COURSE_TYPE: { label: '屬性',  icon: 'fas fa-tags',         color: '#f14668' },
+        TEACHER:     { label: '老師',  icon: 'fas fa-chalkboard-teacher', color: '#00d1b2' },
+    };
+
+    if (groupBy && GROUP_META[groupBy]) {
+        const meta = GROUP_META[groupBy];
         const groups = {};
         const others = [];
+
         notes.forEach(note => {
-            const semesterTag = (note.tags || []).find(t => (t.tag_type || 'GENERAL') === 'SEMESTER');
-            if (semesterTag) {
-                const sName = typeof semesterTag === 'string' ? semesterTag : (semesterTag.tag_name || semesterTag.name || '');
-                if (!groups[sName]) groups[sName] = [];
-                groups[sName].push(note);
+            const matchTag = (note.tags || []).find(t => (t.tag_type || 'GENERAL') === groupBy);
+            if (matchTag) {
+                const name = typeof matchTag === 'string' ? matchTag : (matchTag.tag_name || matchTag.name || '');
+                if (!groups[name]) groups[name] = [];
+                groups[name].push(note);
             } else {
                 others.push(note);
             }
         });
 
-        const sortedSemesters = Object.keys(groups).sort((a, b) => b.localeCompare(a));
-        sortedSemesters.forEach(sem => {
-            const semHeader = document.createElement('h2');
-            semHeader.className = 'title is-5 mt-5 mb-3';
-            semHeader.style.gridColumn = '1 / -1';
-            semHeader.style.color = '#66c0f4';
-            semHeader.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
-            semHeader.style.paddingBottom = '0.5rem';
-            semHeader.innerHTML = `<span class="icon"><i class="fas fa-calendar-alt"></i></span> 學期：${escapeHtml(sem)} <span class="tag is-rounded is-light ml-2" style="background:rgba(255,255,255,0.1);color:#fff;border:none;">${groups[sem].length} 篇</span>`;
-            container.appendChild(semHeader);
-            
-            groups[sem].forEach(note => {
+        // Sort group keys: semesters descending (e.g. 115-2 first), others ascending
+        const sortedKeys = Object.keys(groups).sort((a, b) => {
+            if (groupBy === 'SEMESTER') return b.localeCompare(a);
+            return a.localeCompare(b);
+        });
+
+        sortedKeys.forEach(key => {
+            const header = document.createElement('div');
+            header.className = 'group-header';
+            header.style.cssText = `
+                grid-column: 1 / -1;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 12px 0 8px;
+                margin-top: 16px;
+                border-bottom: 2px solid ${meta.color}33;
+            `;
+            header.innerHTML = `
+                <span style="
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 8px;
+                    background: ${meta.color}22;
+                    color: ${meta.color};
+                    font-size: 14px;
+                "><i class="${meta.icon}"></i></span>
+                <span style="
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: ${meta.color};
+                    letter-spacing: 0.5px;
+                ">${meta.label}：${escapeHtml(key)}</span>
+                <span class="tag is-rounded" style="
+                    background: ${meta.color}22;
+                    color: ${meta.color};
+                    border: 1px solid ${meta.color}44;
+                    font-size: 11px;
+                    font-weight: 600;
+                ">${groups[key].length} 篇</span>
+            `;
+            container.appendChild(header);
+
+            groups[key].forEach(note => {
                 container.appendChild(createNoteCard(note));
             });
         });
 
         if (others.length > 0) {
-            const semHeader = document.createElement('h2');
-            semHeader.className = 'title is-5 mt-5 mb-3';
-            semHeader.style.gridColumn = '1 / -1';
-            semHeader.style.color = '#a0a0a0';
-            semHeader.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
-            semHeader.style.paddingBottom = '0.5rem';
-            semHeader.innerHTML = `<span class="icon"><i class="fas fa-box"></i></span> 未分類 <span class="tag is-rounded is-light ml-2" style="background:rgba(255,255,255,0.1);color:#fff;border:none;">${others.length} 篇</span>`;
-            container.appendChild(semHeader);
-            
+            const header = document.createElement('div');
+            header.className = 'group-header';
+            header.style.cssText = `
+                grid-column: 1 / -1;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 12px 0 8px;
+                margin-top: 16px;
+                border-bottom: 2px solid rgba(255,255,255,0.08);
+            `;
+            header.innerHTML = `
+                <span style="
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 8px;
+                    background: rgba(255,255,255,0.06);
+                    color: #888;
+                    font-size: 14px;
+                "><i class="fas fa-box-open"></i></span>
+                <span style="
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #888;
+                    letter-spacing: 0.5px;
+                ">未標記${meta.label}</span>
+                <span class="tag is-rounded" style="
+                    background: rgba(255,255,255,0.06);
+                    color: #888;
+                    border: 1px solid rgba(255,255,255,0.1);
+                    font-size: 11px;
+                    font-weight: 600;
+                ">${others.length} 篇</span>
+            `;
+            container.appendChild(header);
+
             others.forEach(note => {
                 container.appendChild(createNoteCard(note));
             });

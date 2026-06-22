@@ -69,6 +69,16 @@
                                 <option value="price_desc">價格由高到低</option>
                             </select>
                         </div>
+                        <div class="select is-rounded">
+                            <select id="filter-group" class="store-select">
+                                <option value="">不分群</option>
+                                <option value="SEMESTER">依學期</option>
+                                <option value="SUBJECT">依科目</option>
+                                <option value="DEPARTMENT">依系所</option>
+                                <option value="COURSE_TYPE">依屬性</option>
+                                <option value="TEACHER">依老師</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="note-list-container" id="note-list">
@@ -96,6 +106,7 @@
             });
 
             sortSelect.addEventListener('change', () => loadHomeNotes());
+            document.getElementById('filter-group').addEventListener('change', () => loadHomeNotes());
 
             loadHomeTags();
             renderNotes(null);
