@@ -163,10 +163,10 @@ async function apiGetSellerNotes() {
     return parseResponse(res);
 }
 
-async function apiCreateNote(title, semester, price, desc) {
+async function apiCreateNote(title, price, desc) {
     const res = await authFetch('/api/seller/notes', {
         method: 'POST',
-        body: JSON.stringify({ title, semester, price, desc })
+        body: JSON.stringify({ title, price, desc })
     });
     return parseResponse(res);
 }
@@ -179,10 +179,10 @@ async function apiUpdateNote(id, price, desc) {
     return parseResponse(res);
 }
 
-async function apiCreateTag(tagName) {
+async function apiCreateTag(tagName, tagType = 'GENERAL') {
     const res = await authFetch('/api/seller/tags', {
         method: 'POST',
-        body: JSON.stringify({ tag_name: tagName })
+        body: JSON.stringify({ tag_name: tagName, tag_type: tagType })
     });
     return parseResponse(res);
 }

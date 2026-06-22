@@ -3,6 +3,7 @@ package models
 type Tag struct {
 	TagID   uint   `gorm:"primaryKey;column:tag_id" json:"tag_id"`
 	TagName string `gorm:"unique;not null;column:tag_name" json:"tag_name"`
+	TagType string `gorm:"column:tag_type;default:'GENERAL'" json:"tag_type"`
 }
 
 type NoteTag struct {

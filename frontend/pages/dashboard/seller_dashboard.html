@@ -33,19 +33,6 @@
                                 required></div>
                     </div>
                     <div class="field form-group">
-                        <label class="label" for="new-note-semester">學期</label>
-                        <div class="control">
-                            <select class="input" id="new-note-semester" required>
-                                <option value="">請選擇學期</option>
-                                <option value="114-1">114-1</option>
-                                <option value="113-2">113-2</option>
-                                <option value="113-1">113-1</option>
-                                <option value="112-2">112-2</option>
-                                <option value="112-1">112-1</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="field form-group">
                         <label class="label" for="new-note-price">定價 (NT$)</label>
                         <div class="control"><input class="input" type="number" id="new-note-price" min="0" step="0.01"
                                 placeholder="0 表示免費" required></div>
@@ -56,7 +43,7 @@
                                 required style="min-height: 120px;"></textarea></div>
                     </div>
                     <button type="submit" class="button is-primary is-fullwidth" id="publish-btn">
-                        立即上架
+                        建立草稿並繼續編輯
                     </button>
                 </form>
             </div>
@@ -181,17 +168,17 @@
         document.getElementById('upload-note-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const title = document.getElementById('new-note-title').value.trim();
-            const semester = document.getElementById('new-note-semester').value;
             const price = parseFloat(document.getElementById('new-note-price').value) || 0;
             const desc = document.getElementById('new-note-desc').value.trim();
             const btn = document.getElementById('publish-btn');
 
             btn.disabled = true;
-            btn.textContent = '上架中...';
+            btn.textContent = '建立中...';
             try {
-                await apiCreateNote(title, semester, price, desc);
-                alert(`《${title}》上架成功！`);
+                const result = await apiCreateNote(title, price, desc);
+                alert(`《${title}》草稿建立成功！請繼續編輯標籤與內容`);
                 document.getElementById('upload-note-form').reset();
+                window.location.href = '/pages/dashboard/edit_note.html?id=' + (result.note.note_id || result.note.id);
                 await loadDashboard();
             } catch (err) {
                 alert(`上架失敗：${err.message}`);

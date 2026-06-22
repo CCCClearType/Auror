@@ -27,7 +27,7 @@ CREATE TABLE notes (
 CREATE TABLE tags (
     tag_id SERIAL PRIMARY KEY,
     tag_name VARCHAR(50) UNIQUE NOT NULL,
-    tag_type VARCHAR(20) DEFAULT 'GENERAL' CHECK (tag_type IN ('GENERAL', 'SEMESTER', 'SUBJECT', 'TEACHER'))
+    tag_type VARCHAR(20) NOT NULL DEFAULT 'GENERAL' CHECK (tag_type IN ('GENERAL', 'SEMESTER', 'SUBJECT', 'TEACHER', 'DEPARTMENT', 'COURSE_TYPE'))
 );
 
 -- 4. 建立 note_tags 中介資料表
