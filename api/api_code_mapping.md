@@ -95,3 +95,13 @@
 | **DELETE** | `/api/social/blacklist/{user_id}` | `social.DELETE("/blacklist/:user_id", ...)`| [social_controller.go:586](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/social_controller.go#L586) | 將買家移除黑名單 |
 | **POST** | `/api/social/messages` | `social.POST("/messages", ...)` | [social_controller.go:365](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/social_controller.go#L365) | 傳輸文字通訊給對方 |
 | **GET** | `/api/social/messages/{user_id}` | `social.GET("/messages/:user_id", ...)` | [social_controller.go:394](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/social_controller.go#L394) | 顯示與某使用者的對話紀錄 |
+
+---
+
+## 6. 系統狀態與監測 (System Status & iLearn Monitoring)
+
+| HTTP 方法 | API 網址路徑 | 路由註冊 (Router) | 對應的控制器函式 (Controller) | 備註功能 |
+|---|---|---|---|---|
+| **GET** | `/api/ilearn-status` | `api.GET("/ilearn-status", ...)` | [status_controller.go:13](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/status_controller.go#L13) | 即時戳 iLearn 確認目前狀態與延遲 |
+| **POST** | `/api/ilearn-reports` | `api.POST("/ilearn-reports", ...)` | [status_controller.go:40](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/status_controller.go#L40) | 使用者回報 iLearn 異常 |
+| **GET** | `/api/ilearn-history` | `api.GET("/ilearn-history", ...)` | [status_controller.go:65](file:///c:/Users/HP/Downloads/dbms-git/dbms/backend/controllers/status_controller.go#L65) | 取得過去一段時間的連線紀錄與統計 |

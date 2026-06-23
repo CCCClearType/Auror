@@ -1,30 +1,30 @@
 erDiagram
-    USERS ||--o{ GAMES : develops
+    USERS ||--o{ NOTES : develops
 
-    GAMES ||--o{ GAME_MEDIA : has
-    GAMES ||--o{ GAME_TAGS : tagged_as
-    TAGS ||--o{ GAME_TAGS : used_by
+    NOTES ||--o{ NOTE_MEDIA : has
+    NOTES ||--o{ NOTE_TAGS : tagged_as
+    TAGS ||--o{ NOTE_TAGS : used_by
 
     USERS ||--o{ TRANSACTIONS : makes
     TRANSACTIONS ||--|{ TRANSACTION_ITEMS : contains
-    GAMES ||--o{ TRANSACTION_ITEMS : purchased_as
+    NOTES ||--o{ TRANSACTION_ITEMS : purchased_as
 
     USERS ||--o{ SHOPPING_CARTS : adds
-    GAMES ||--o{ SHOPPING_CARTS : added_to_cart
+    NOTES ||--o{ SHOPPING_CARTS : added_to_cart
 
-    USERS ||--o{ GAME_LICENSES : owns
-    GAMES ||--o{ GAME_LICENSES : licensed_as
-    TRANSACTION_ITEMS ||--|| GAME_LICENSES : generates
+    USERS ||--o{ NOTE_LICENSES : owns
+    NOTES ||--o{ NOTE_LICENSES : licensed_as
+    TRANSACTION_ITEMS ||--|| NOTE_LICENSES : generates
 
     USERS ||--o{ WISH_LISTS : collects
-    GAMES ||--o{ WISH_LISTS : appears_in
+    NOTES ||--o{ WISH_LISTS : appears_in
 
     USERS ||--o{ REFUND_REQUESTS : submits
     USERS |o--o{ REFUND_REQUESTS : handles
     TRANSACTION_ITEMS ||--|o REFUND_REQUESTS : refund_for
 
     USERS ||--o{ REVIEWS : writes
-    GAMES ||--o{ REVIEWS : receives
+    NOTES ||--o{ REVIEWS : receives
     REVIEWS ||--o{ REVIEW_REPLYS : has
     USERS ||--o{ REVIEW_REPLYS : writes
     REVIEW_REPLYS |o--o{ REVIEW_REPLYS : parent_of

@@ -6,14 +6,14 @@ erDiagram
         VARCHAR password_hash
         DATETIME registration_date
         VARCHAR last_visit_ip
-        VARCHAR role "NULL | USERS | CSR | ADMIN | DEVELOPER"
+        VARCHAR role "NULL | USERS | CSR | ADMIN | SELLER"
         VARCHAR status "ONLINE | OFFLINE"
         VARCHAR permission "ACTIVE | DEACTIVE | DELETED"
     }
 
-    GAMES {
-        INT game_id PK
-        INT developer_id FK
+    NOTES {
+        INT note_id PK
+        INT seller_id FK
         VARCHAR title
         TEXT description
         DECIMAL price
@@ -24,18 +24,19 @@ erDiagram
     TAGS {
         INT tag_id PK
         VARCHAR tag_name
+        VARCHAR tag_type "SEMESTER|SUBJECT|TEACHER|DEPARTMENT"
     }
 
-    GAME_TAGS {
-        INT game_id PK, FK
+    NOTE_TAGS {
+        INT note_id PK, FK
         INT tag_id PK, FK
     }
 
-    GAME_MEDIA {
+    NOTE_MEDIA {
         INT media_id PK
-        INT game_id FK
+        INT note_id FK
         VARCHAR file_url
-        VARCHAR media_type "media | game_file"
+        VARCHAR media_type "media | note_file"
     }
 
     TRANSACTIONS {
@@ -49,20 +50,20 @@ erDiagram
     TRANSACTION_ITEMS {
         INT item_id PK
         INT transaction_id FK
-        INT game_id FK
+        INT note_id FK
         DECIMAL purchase_price
     }
 
     SHOPPING_CARTS {
         INT cart_id PK
         INT user_id FK
-        INT game_id FK
+        INT note_id FK
         DATETIME added_at
     }
 
-    GAME_LICENSES {
+    NOTE_LICENSES {
         INT license_id PK
-        INT game_id FK
+        INT note_id FK
         INT user_id FK
         INT transaction_item_id FK
         DATETIME acquired_date
@@ -72,7 +73,7 @@ erDiagram
     WISH_LISTS {
         INT wishlist_id PK
         INT user_id FK
-        INT game_id FK
+        INT note_id FK
         DATETIME added_at
     }
 
@@ -90,7 +91,7 @@ erDiagram
 
     REVIEWS {
         INT review_id PK
-        INT game_id FK
+        INT note_id FK
         INT user_id FK
         TEXT content
         DATETIME created_at
@@ -145,32 +146,32 @@ erDiagram
     }
 
 erDiagram
-    USERS ||--o{ GAMES : develops
+    USERS ||--o{ NOTES : develops
 
-    GAMES ||--o{ GAME_MEDIA : has
-    GAMES ||--o{ GAME_TAGS : tagged_as
-    TAGS ||--o{ GAME_TAGS : used_by
+    NOTES ||--o{ NOTE_MEDIA : has
+    NOTES ||--o{ NOTE_TAGS : tagged_as
+    TAGS ||--o{ NOTE_TAGS : used_by
 
     USERS ||--o{ TRANSACTIONS : makes
     TRANSACTIONS ||--|{ TRANSACTION_ITEMS : contains
-    GAMES ||--o{ TRANSACTION_ITEMS : purchased_as
+    NOTES ||--o{ TRANSACTION_ITEMS : purchased_as
 
     USERS ||--o{ SHOPPING_CARTS : adds
-    GAMES ||--o{ SHOPPING_CARTS : added_to_cart
+    NOTES ||--o{ SHOPPING_CARTS : added_to_cart
 
-    USERS ||--o{ GAME_LICENSES : owns
-    GAMES ||--o{ GAME_LICENSES : licensed_as
-    TRANSACTION_ITEMS ||--|| GAME_LICENSES : generates
+    USERS ||--o{ NOTE_LICENSES : owns
+    NOTES ||--o{ NOTE_LICENSES : licensed_as
+    TRANSACTION_ITEMS ||--|| NOTE_LICENSES : generates
 
     USERS ||--o{ WISH_LISTS : collects
-    GAMES ||--o{ WISH_LISTS : appears_in
+    NOTES ||--o{ WISH_LISTS : appears_in
 
     USERS ||--o{ REFUND_REQUESTS : submits
     USERS |o--o{ REFUND_REQUESTS : handles
     TRANSACTION_ITEMS ||--|o REFUND_REQUESTS : refund_for
 
     USERS ||--o{ REVIEWS : writes
-    GAMES ||--o{ REVIEWS : receives
+    NOTES ||--o{ REVIEWS : receives
     REVIEWS ||--o{ REVIEW_REPLYS : has
     USERS ||--o{ REVIEW_REPLYS : writes
     REVIEW_REPLYS |o--o{ REVIEW_REPLYS : parent_of

@@ -6,13 +6,13 @@ erDiagram
         VARCHAR password_hash
         DATETIME registration_date
         VARCHAR last_visit_ip
-        VARCHAR role "NULL | USERS | CSR | ADMIN | DEVELOPER"
+        VARCHAR role "NULL | USERS | CSR | ADMIN | SELLER"
         VARCHAR status "ONLINE | OFFLINE"
         VARCHAR permission "ACTIVE | DEACTIVE | DELETED"
     }
-    GAMES {
-        INT game_id PK
-        INT developer_id FK
+    NOTES {
+        INT note_id PK
+        INT seller_id FK
         VARCHAR title
         TEXT description
         DECIMAL price
@@ -20,5 +20,5 @@ erDiagram
         VARCHAR status "DRAFT | ACTIVE | TAKEN_DOWN"
     }
 
-    USERS ||--o{ GAMES : develops}
+    USERS ||--o{ NOTES : develops}
     

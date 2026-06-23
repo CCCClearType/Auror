@@ -1,0 +1,29 @@
+erDiagram
+    NOTES {
+        INT note_id PK
+        INT seller_id FK
+        VARCHAR title
+        TEXT description
+        DECIMAL price
+        DECIMAL overall_rating
+        VARCHAR status "DRAFT | ACTIVE | TAKEN_DOWN"
+    }
+    TAGS {
+        INT tag_id PK
+        VARCHAR tag_name
+        VARCHAR tag_type "SEMESTER|SUBJECT|TEACHER|DEPARTMENT"
+    }
+    NOTE_TAGS {
+        INT note_id PK, FK
+        INT tag_id PK, FK
+    }
+    NOTE_MEDIA {
+        INT media_id PK
+        INT note_id FK
+        VARCHAR file_url
+        VARCHAR media_type "media | note_file"
+    }
+
+    NOTES ||--o{ NOTE_MEDIA : has
+    NOTES ||--o{ NOTE_TAGS : tagged_as
+    TAGS ||--o{ NOTE_TAGS : used_by

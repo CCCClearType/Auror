@@ -150,7 +150,11 @@
 - **Headers**: 無
 - **Query Params** (可選): 
   - `?q=elden` (關鍵字搜尋：比對標題、介紹、科目與賣家名稱)
-  - `?tag=Action` (科目精準篩選)
+  - `?tag=Action` (通用科目篩選)
+  - `?semester=115-2` (學期篩選)
+  - `?subject=微積分` (科目篩選)
+  - `?teacher=王小明` (授課老師篩選)
+  - `?department=資工系` (開課系所篩選)
   - `?seller=StudioAurora` (賣家名稱篩選)
   - `?min_price=100&max_price=500` (價格區間篩選)
   - `?sort=price_asc` (排序方式：`price_asc` 便宜到貴, `price_desc` 貴到便宜)
@@ -159,6 +163,7 @@
   - `200 OK`:
     ```json
     {
+      "total_notes": 120,
       "data": [
         {
           "note_id": 1,
@@ -211,10 +216,10 @@
 - **Go 對應模組**: `seller_controller.go` (函式: `PublishNote`)
 - **Headers**: `Authorization: Bearer <seller_token>`
 - **說明**: 將草稿筆記轉換為 `ACTIVE` 狀態。
-- **後端驗證約束**: 必須檢查該筆記是否**至少有 1 個科目 (tag)**。若未達條件則拒絕上架。
+- **後端驗證約束**: 必須檢查該筆記是否**至少有 1 個學期 (SEMESTER)** 標籤。若未達條件則拒絕上架。
 - **Responses**:
   - `200 OK`: `{"message": "Note published successfully"}`
-  - `400 Bad Request`: `{"error": "Note must have at least 1 tag to be published"}`
+  - `400 Bad Request`: `{"error": "Note must have at least 1 semester tag"}`
   - `403 Forbidden`: `{"error": "Forbidden: You can only publish your own notes"}`
   - `404 Not Found`: `{"error": "Note not found"}`
 
@@ -295,7 +300,7 @@
 - **Go 對應模組**: `seller_controller.go` (函式: `GetTags`)
 - **Headers**: 無
 - **Responses**:
-  - `200 OK`: `{"data": [ {"tag_id": 1, "tag_name": "RPG"} ]}`
+  - `200 OK`: `{"data": [ {"tag_id": 1, "tag_name": "115-2", "tag_type": "SEMESTER", "note_count": 11} ]}`
 
 ### `[POST] /api/seller/tags` (建立新科目)
 - **Go 對應模組**: `seller_controller.go` (函式: `CreateTag`)

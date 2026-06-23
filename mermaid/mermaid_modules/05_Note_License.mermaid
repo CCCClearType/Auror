@@ -6,13 +6,13 @@ erDiagram
         VARCHAR password_hash
         DATETIME registration_date
         VARCHAR last_visit_ip
-        VARCHAR role "NULL | USERS | CSR | ADMIN | DEVELOPER"
+        VARCHAR role "NULL | USERS | CSR | ADMIN | SELLER"
         VARCHAR status "ONLINE | OFFLINE"
         VARCHAR permission "ACTIVE | DEACTIVE | DELETED"
     }
-    GAMES {
-        INT game_id PK
-        INT developer_id FK
+    NOTES {
+        INT note_id PK
+        INT seller_id FK
         VARCHAR title
         TEXT description
         DECIMAL price
@@ -22,18 +22,18 @@ erDiagram
     TRANSACTION_ITEMS {
         INT item_id PK
         INT transaction_id FK
-        INT game_id FK
+        INT note_id FK
         DECIMAL purchase_price
     }
-    GAME_LICENSES {
+    NOTE_LICENSES {
         INT license_id PK
-        INT game_id FK
+        INT note_id FK
         INT user_id FK
         INT transaction_item_id FK
         DATETIME acquired_date
         VARCHAR status "ACTIVE | REVOKED | FROZEN"
     }
 
-    USERS ||--o{ GAME_LICENSES : owns
-    GAMES ||--o{ GAME_LICENSES : licensed_as
-    TRANSACTION_ITEMS ||--|| GAME_LICENSES : generates
+    USERS ||--o{ NOTE_LICENSES : owns
+    NOTES ||--o{ NOTE_LICENSES : licensed_as
+    TRANSACTION_ITEMS ||--|| NOTE_LICENSES : generates

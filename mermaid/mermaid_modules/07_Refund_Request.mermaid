@@ -6,14 +6,14 @@ erDiagram
         VARCHAR password_hash
         DATETIME registration_date
         VARCHAR last_visit_ip
-        VARCHAR role "NULL | USERS | CSR | ADMIN | DEVELOPER"
+        VARCHAR role "NULL | USERS | CSR | ADMIN | SELLER"
         VARCHAR status "ONLINE | OFFLINE"
         VARCHAR permission "ACTIVE | DEACTIVE | DELETED"
     }
     TRANSACTION_ITEMS {
         INT item_id PK
         INT transaction_id FK
-        INT game_id FK
+        INT note_id FK
         DECIMAL purchase_price
     }
     REFUND_REQUESTS {
