@@ -503,10 +503,10 @@
                     if (role === 'ADMIN') replyRoleOptions += `<option value="ADMIN" ${!isOwned ? 'selected' : ''}>ADMIN</option>`;
                     if (role === 'CSR') replyRoleOptions += `<option value="CSR" ${!isOwned ? 'selected' : ''}>CSR</option>`;
                     const user = getCurrentUser();
-                    if (role === 'SELLER' && user && (user.id || user.user_id) == devId) replyRoleOptions += `<option value="AUTHOR" ${!isOwned ? 'selected' : ''}>AUTHOR</option>`;
+                    if (role === 'SELLER' && user && (user.id || user.user_id) == sellerId) replyRoleOptions += `<option value="AUTHOR" ${!isOwned ? 'selected' : ''}>AUTHOR</option>`;
                     
                     let replySelectHtml = '';
-                    if (role === 'ADMIN' || role === 'CSR' || (role === 'SELLER' && user && (user.id || user.user_id) == devId)) {
+                    if (role === 'ADMIN' || role === 'CSR' || (role === 'SELLER' && user && (user.id || user.user_id) == sellerId)) {
                         replySelectHtml = `
                             <select id="reply-role-${reviewId}" class="input" style="height:32px; width:90px; font-size:12px; padding:0 8px; margin-right:8px; border:none; background:rgba(255,255,255,0.1); color:white;">
                                 ${replyRoleOptions}
