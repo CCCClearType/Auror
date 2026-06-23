@@ -10,6 +10,7 @@ document.documentElement.setAttribute('data-theme', 'dark');
 
 document.addEventListener("DOMContentLoaded", () => {
     renderHeader();
+    renderFooter();
 
     // 搜尋框事件（首頁）
     const searchForm = document.getElementById('search-form');
@@ -449,4 +450,74 @@ function showToast(message, type = 'info') {
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 400); // Wait for transition
     }, 3000);
+}
+
+// ============================================================
+// 渲染共用頁尾 (Footer)
+// ============================================================
+function renderFooter() {
+    const path = window.location.pathname;
+    if (path.includes('login.html') || path.includes('register.html')) {
+        return; // 不在登入與註冊頁顯示 Footer
+    }
+
+    const currentRole = localStorage.getItem('userRole') || 'GUEST';
+    let dashboardLinks = '';
+    if (currentRole === 'SELLER') {
+        dashboardLinks = `<li><a href="/pages/dashboard/seller_dashboard.html">賣家中心</a></li>`;
+    } else if (currentRole === 'CSR') {
+        dashboardLinks = `<li><a href="/pages/dashboard/csr_dashboard.html">客服中心</a></li>`;
+    } else if (currentRole === 'ADMIN') {
+        dashboardLinks = `
+            <li><a href="/pages/dashboard/csr_dashboard.html">客服中心</a></li>
+            <li><a href="/pages/dashboard/admin_dashboard.html">管理後台</a></li>
+        `;
+    }
+
+    const footerHtml = `
+        <footer class="site-footer">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="logo" style="font-family: 'Chakra Petch', sans-serif; font-size: 1.5rem; display: inline-block; margin-bottom: 1rem; color: var(--text-primary); font-weight: bold;">AurorNote</a>
+                    <p style="color: var(--text-muted); line-height: 1.6;">由學生，為學生而建。</p>
+                </div>
+                <div class="footer-links">
+                    <h4>功能頁籤</h4>
+                    <ul>
+                        <li><a href="/">商店首頁</a></li>
+                        <li><a href="/pages/store/search.html">探索筆記</a></li>
+                        <li><a href="/pages/user/library.html">我的筆記庫</a></li>
+                        <li><a href="/pages/user/social.html">學生交流板</a></li>
+                        ${dashboardLinks}
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>系統狀態</h4>
+                    <ul>
+                        <li><a href="/pages/is_ilearn_down.html">iLearn Status</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>聯絡資訊</h4>
+                    <ul style="color: var(--text-muted); line-height: 1.6;">
+                        <li style="margin-bottom: 0.5rem;"><i class="fas fa-map-marker-alt" style="width: 20px;"></i> 407 台中市西屯區文華路100號</li>
+                        <li><i class="fas fa-phone" style="width: 20px;"></i> (04) 2451-7250</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-colleges">
+                <h4>逢甲大學 學院總攬</h4>
+                <p>
+                    工程與科學學院 <span class="dot">•</span> 商學院 <span class="dot">•</span> 人文社會學院 <span class="dot">•</span> 資訊電機學院 <span class="dot">•</span> 建設學院 <span class="dot">•</span> 金融學院 <span class="dot">•</span> 國際科技與管理學院 <span class="dot">•</span> 建築專業學院 <span class="dot">•</span> 創能學院 <span class="dot">•</span> 通識教育中心
+                </p>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; ${new Date().getFullYear()} AurorNote | 逢甲大學 最強筆記交易平台</p>
+            </div>
+        </footer>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', footerHtml);
 }
