@@ -100,7 +100,7 @@
                         </div>
                         <article class="message is-warning mt-4">
                             <div class="message-body py-2 px-3" style="font-size: 0.9rem;">
-                                <strong>⚠️ 必填標籤提醒：</strong> 為了讓買家能快速找到您的筆記，<strong>【學期】</strong>、<strong>【系所】</strong>與<strong>【科目】</strong>標籤是<strong>必選的</strong>！缺少這三個標籤將無法正式發佈上架。
+                                <strong>⚠️ 必填標籤提醒：</strong> 為了讓買家能快速找到您的筆記，<strong>【學期】</strong>標籤是<strong>必選的</strong>！缺少學期標籤將無法正式發佈上架。
                             </div>
                         </article>
                     </div>
@@ -259,11 +259,11 @@
                     if (!val) return;
                     const type = e.target.getAttribute('data-type');
                     
-                    if (type === 'SEMESTER' || type === 'DEPARTMENT') {
+                    if (type === 'SEMESTER') {
                         const existingTags = currentNote.tags || currentNote.Tags || [];
                         const existingOfType = existingTags.find(t => (t.tag_type || 'GENERAL') === type);
                         if (existingOfType) {
-                            showError(`這份筆記已經有【${type === 'SEMESTER' ? '學期' : '系所'}】標籤了。每個筆記最多只能有一個該類標籤，請先刪除原有的再加入新標籤。`);
+                            showError(`這份筆記已經有【學期】標籤了。學期標籤最多只能有一個，請先刪除原有的再加入新標籤。`);
                             e.target.value = ''; // clear
                             return;
                         }
@@ -389,19 +389,9 @@
             // Tag validation
             const tags = currentNote.tags || currentNote.Tags || [];
             const hasSemester = tags.some(t => (t.tag_type || 'GENERAL') === 'SEMESTER');
-            const hasDepartment = tags.some(t => (t.tag_type || 'GENERAL') === 'DEPARTMENT');
-            const hasSubject = tags.some(t => (t.tag_type || 'GENERAL') === 'SUBJECT');
 
             if (!hasSemester) {
                 showError('請至少選擇一個【學期】標籤，這是必填項目。');
-                return;
-            }
-            if (!hasDepartment) {
-                showError('請至少選擇一個【系所】標籤，這是必填項目。');
-                return;
-            }
-            if (!hasSubject) {
-                showError('請至少選擇一個【科目】標籤，這是必填項目。');
                 return;
             }
 
