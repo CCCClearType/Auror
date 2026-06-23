@@ -538,7 +538,10 @@ label,
 
 .note-list-info,
 .lib-note-info {
-    padding: 1rem;
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .note-list-title,
@@ -657,6 +660,14 @@ label,
     text-align: center;
     color: var(--text-muted);
     margin: 0.35rem 0 1.5rem;
+}
+
+.note-list-meta,
+.lib-note-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: auto;
+    padding-top: 1rem;
 }
 
 .form-divider {
