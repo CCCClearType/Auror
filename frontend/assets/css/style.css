@@ -1692,17 +1692,33 @@ option.type-GENERAL { color: #d291bc !important; font-weight: bold; }
 .footer-colleges h4 {
     color: var(--text-primary);
     font-size: 1.1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     font-weight: 600;
 }
-.footer-colleges p {
-    color: var(--text-muted);
-    line-height: 1.8;
-    font-size: 0.95rem;
+.colleges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 2rem;
+    align-items: start;
 }
-.footer-colleges span.dot {
-    margin: 0 0.6rem;
-    color: rgba(255, 255, 255, 0.2);
+.college-group h5 {
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.college-group ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+}
+.college-group li {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+    line-height: 1.4;
 }
 
 .footer-bottom {

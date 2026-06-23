@@ -507,10 +507,103 @@ function renderFooter() {
             </div>
 
             <div class="footer-colleges">
-                <h4>逢甲大學 學院總攬</h4>
-                <p>
-                    工程與科學學院 <span class="dot">•</span> 商學院 <span class="dot">•</span> 人文社會學院 <span class="dot">•</span> 資訊電機學院 <span class="dot">•</span> 建設學院 <span class="dot">•</span> 金融學院 <span class="dot">•</span> 國際科技與管理學院 <span class="dot">•</span> 建築專業學院 <span class="dot">•</span> 創能學院 <span class="dot">•</span> 通識教育中心
-                </p>
+                <h4>逢甲大學 院系總覽</h4>
+                <div class="colleges-grid">
+                    <div class="college-group">
+                        <h5>工程與科學學院</h5>
+                        <ul>
+                            <li>纖維與複合材料學系</li>
+                            <li>機械與電腦輔助工程學系</li>
+                            <li>工業工程與系統管理學系</li>
+                            <li>化學工程學系</li>
+                            <li>航太與系統工程學系</li>
+                            <li>精密系統設計學士學位學程</li>
+                            <li>應用數學系</li>
+                            <li>環境工程與科學學系</li>
+                            <li>材料科學與工程學系</li>
+                            <li>光電科學與工程學系</li>
+                            <li>淨零智慧永續學士班</li>
+                        </ul>
+                    </div>
+                    <div class="college-group">
+                        <h5>商學院</h5>
+                        <ul>
+                            <li>會計學系</li>
+                            <li>國際經營與貿易學系</li>
+                            <li>財稅學系</li>
+                            <li>合作經濟暨社會事業經營學系</li>
+                            <li>統計學系</li>
+                            <li>經濟學系</li>
+                            <li>企業管理學系</li>
+                            <li>行銷學系</li>
+                        </ul>
+                    </div>
+                    <div class="college-group">
+                        <h5>人文社會學院</h5>
+                        <ul>
+                            <li>中國文學系</li>
+                            <li>外國語文學系</li>
+                        </ul>
+                        <h5>創能學院</h5>
+                        <ul>
+                            <li>人工智慧技術與應用學程</li>
+                        </ul>
+                        <h5>通識教育中心</h5>
+                        <ul>
+                            <li>全校國際生大一不分系學士班</li>
+                        </ul>
+                    </div>
+                    <div class="college-group">
+                        <h5>資訊電機學院</h5>
+                        <ul>
+                            <li>資訊工程學系</li>
+                            <li>電機工程學系</li>
+                            <li>電子工程學系</li>
+                            <li>自動控制工程學系</li>
+                            <li>資訊電機學院學士班</li>
+                            <li>通訊工程學系</li>
+                            <li>資訊工程學士後專班</li>
+                        </ul>
+                    </div>
+                    <div class="college-group">
+                        <h5>建設學院</h5>
+                        <ul>
+                            <li>土木工程學系</li>
+                            <li>水利工程與資源保育學系</li>
+                            <li>都市計畫與空間資訊學系</li>
+                            <li>土地管理學系</li>
+                        </ul>
+                        <h5>金融學院</h5>
+                        <ul>
+                            <li>風險管理與保險學系</li>
+                            <li>財務金融學系</li>
+                            <li>財務工程與精算學士學位學程</li>
+                            <li>金融學院學士班</li>
+                        </ul>
+                    </div>
+                    <div class="college-group">
+                        <h5>國際科技與管理學院</h5>
+                        <ul>
+                            <li>墨爾本皇家理工大學雙學位學程</li>
+                            <li>加州聖荷西州立大學雙學位學程</li>
+                            <li>加州舊金山州立大學雙學位學程</li>
+                            <li>昆士蘭大學商學雙學位學程</li>
+                            <li>蒙納許大學資訊工程雙學位學程</li>
+                            <li>昆士蘭大學電機工程雙學位學程</li>
+                            <li>新南威爾斯大學設計雙學位學程</li>
+                        </ul>
+                    </div>
+                    <div class="college-group">
+                        <h5>建築專業學院</h5>
+                        <ul>
+                            <li>建築專業學院學士班</li>
+                            <li>建築學士學位學程</li>
+                            <li>室內設計學士學位學程</li>
+                            <li>創新設計學士學位學程</li>
+                            <li>室內設計進修學士班</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
             <div class="footer-bottom">
