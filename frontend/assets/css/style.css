@@ -670,6 +670,18 @@ label,
     padding-top: 1rem;
 }
 
+.lib-note-actions {
+    padding: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    gap: 0.5rem;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.lib-note-actions .button {
+    flex: 1;
+}
+
 .form-divider {
     display: flex;
     align-items: center;
