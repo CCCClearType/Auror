@@ -51,46 +51,56 @@
                     <div class="field form-group">
                         <label class="label">筆記 Tags</label>
                         <div class="tags" id="current-tags"><span class="tag">載入中...</span></div>
-                        <div class="columns is-variable is-2 mt-2">
-                            <div class="column is-5">
-                                <label class="label is-small has-text-grey-light">從現有標籤中選擇</label>
-                                <div class="field has-addons">
-                                    <div class="control is-expanded">
-                                        <div class="select is-fullwidth">
-                                            <select id="tag-select"><option value="">選擇既有 tag</option></select>
-                                        </div>
-                                    </div>
-                                    <div class="control">
-                                        <button class="button is-light" type="button" id="add-existing-tag-btn">加入</button>
-                                    </div>
+                        <label class="label is-small has-text-grey-light mt-3">從現有標籤中搜尋與選擇 (直接輸入並點選即可加入)</label>
+                        <div class="columns is-multiline is-variable is-2 mb-2">
+                            <div class="column is-4 pb-0">
+                                <input class="input is-small tag-search-input" type="text" data-type="SEMESTER" list="seller-list-semester" placeholder="搜尋學期" autocomplete="off">
+                                <datalist id="seller-list-semester"></datalist>
+                            </div>
+                            <div class="column is-4 pb-0">
+                                <input class="input is-small tag-search-input" type="text" data-type="DEPARTMENT" list="seller-list-department" placeholder="搜尋系所" autocomplete="off">
+                                <datalist id="seller-list-department"></datalist>
+                            </div>
+                            <div class="column is-4 pb-0">
+                                <input class="input is-small tag-search-input" type="text" data-type="COURSE_TYPE" list="seller-list-course-type" placeholder="搜尋課程屬性" autocomplete="off">
+                                <datalist id="seller-list-course-type"></datalist>
+                            </div>
+                            <div class="column is-4 pb-0">
+                                <input class="input is-small tag-search-input" type="text" data-type="SUBJECT" list="seller-list-subject" placeholder="搜尋科目" autocomplete="off">
+                                <datalist id="seller-list-subject"></datalist>
+                            </div>
+                            <div class="column is-4 pb-0">
+                                <input class="input is-small tag-search-input" type="text" data-type="TEACHER" list="seller-list-teacher" placeholder="搜尋老師" autocomplete="off">
+                                <datalist id="seller-list-teacher"></datalist>
+                            </div>
+                            <div class="column is-4 pb-0">
+                                <input class="input is-small tag-search-input" type="text" data-type="GENERAL" list="seller-list-general" placeholder="搜尋一般標籤" autocomplete="off">
+                                <datalist id="seller-list-general"></datalist>
+                            </div>
+                        </div>
+
+                        <label class="label is-small has-text-grey-light mt-3">找不到標籤？建立全新標籤</label>
+                        <div class="field has-addons">
+                            <div class="control">
+                                <div class="select is-small">
+                                    <select id="new-tag-type">
+                                        <option value="GENERAL">一般</option>
+                                        <option value="SUBJECT">科目</option>
+                                        <option value="TEACHER">老師</option>
+                                        <option value="COURSE_TYPE">課程屬性</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="column is-7">
-                                <label class="label is-small has-text-grey-light">建立全新標籤</label>
-                                <div class="field has-addons">
-                                    <div class="control">
-                                        <div class="select">
-                                            <select id="new-tag-type">
-                                                <option value="GENERAL">一般</option>
-                                                <option value="SUBJECT">科目</option>
-                                                <option value="TEACHER">老師</option>
-                                                <option value="DEPARTMENT">系所</option>
-                                                <option value="COURSE_TYPE">課程屬性</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="control is-expanded">
-                                        <input class="input" type="text" id="new-tag-input" placeholder="新增 tag 名稱">
-                                    </div>
-                                    <div class="control">
-                                        <button class="button is-primary" type="button" id="create-tag-btn">建立並加入</button>
-                                    </div>
-                                </div>
+                            <div class="control is-expanded">
+                                <input class="input is-small" type="text" id="new-tag-input" placeholder="新增 tag 名稱">
+                            </div>
+                            <div class="control">
+                                <button class="button is-primary is-small" type="button" id="create-tag-btn">建立並加入</button>
                             </div>
                         </div>
                         <article class="message is-warning mt-4">
                             <div class="message-body py-2 px-3" style="font-size: 0.9rem;">
-                                <strong>⚠️ 必填標籤提醒：</strong> 為了讓買家能快速找到您的筆記，<strong>【學期】</strong>與<strong>【科目】</strong>標籤是<strong>必選的</strong>！缺少這兩個標籤將無法正式發佈上架。
+                                <strong>⚠️ 必填標籤提醒：</strong> 為了讓買家能快速找到您的筆記，<strong>【學期】</strong>、<strong>【系所】</strong>與<strong>【科目】</strong>標籤是<strong>必選的</strong>！缺少這三個標籤將無法正式發佈上架。
                             </div>
                         </article>
                     </div>
@@ -209,25 +219,70 @@
             }
         }
 
+        let tagsMap = {};
+
         async function loadTagsForEdit() {
             const result = await apiGetTags();
             allTags = Array.isArray(result) ? result : (result.data || []);
-            const select = document.getElementById('tag-select');
-            select.innerHTML = '<option value="">選擇既有 tag</option>';
+            
+            const lists = {
+                SEMESTER: document.getElementById('seller-list-semester'),
+                DEPARTMENT: document.getElementById('seller-list-department'),
+                COURSE_TYPE: document.getElementById('seller-list-course-type'),
+                SUBJECT: document.getElementById('seller-list-subject'),
+                TEACHER: document.getElementById('seller-list-teacher'),
+                GENERAL: document.getElementById('seller-list-general')
+            };
+
+            Object.values(lists).forEach(list => { if(list) list.innerHTML = ''; });
+            tagsMap = {};
+
             allTags.forEach(tag => {
-                const option = document.createElement('option');
-                option.value = tag.tag_id;
-                let typeLabel = '';
                 const type = tag.tag_type || 'GENERAL';
-                option.className = `type-${type}`;
-                if(type === 'SEMESTER') typeLabel = ' [學期]';
-                if(type === 'SUBJECT') typeLabel = ' [科目]';
-                if(type === 'TEACHER') typeLabel = ' [老師]';
-                if(type === 'DEPARTMENT') typeLabel = ' [系所]';
-                if(type === 'COURSE_TYPE') typeLabel = ' [課程屬性]';
-                if(type === 'GENERAL') typeLabel = ' [一般]';
-                option.textContent = tag.tag_name + typeLabel;
-                select.appendChild(option);
+                const name = tag.tag_name || tag.name;
+                tagsMap[`${type}_${name}`] = tag.tag_id;
+
+                const option = document.createElement('option');
+                option.value = name;
+                if (lists[type]) {
+                    lists[type].appendChild(option);
+                }
+            });
+
+            // Initialize event listeners for the search inputs
+            document.querySelectorAll('.tag-search-input').forEach(input => {
+                // Remove old listeners to prevent duplicates on refresh
+                const newInp = input.cloneNode(true);
+                input.parentNode.replaceChild(newInp, input);
+                newInp.addEventListener('change', async (e) => {
+                    const val = e.target.value.trim();
+                    if (!val) return;
+                    const type = e.target.getAttribute('data-type');
+                    
+                    if (type === 'SEMESTER' || type === 'DEPARTMENT') {
+                        const existingTags = currentNote.tags || currentNote.Tags || [];
+                        const existingOfType = existingTags.find(t => (t.tag_type || 'GENERAL') === type);
+                        if (existingOfType) {
+                            showError(`這份筆記已經有【${type === 'SEMESTER' ? '學期' : '系所'}】標籤了。每個筆記最多只能有一個該類標籤，請先刪除原有的再加入新標籤。`);
+                            e.target.value = ''; // clear
+                            return;
+                        }
+                    }
+
+                    const tagId = tagsMap[`${type}_${val}`];
+                    if (tagId) {
+                        try {
+                            await apiAddTagToNote(currentNoteId, tagId);
+                            await refreshNoteForEdit();
+                            renderCurrentTags();
+                        } catch (err) {
+                            showError(`加入 tag 失敗：${err.message}`);
+                        }
+                    } else {
+                        showError(`標籤 "${val}" 不存在，請在下方「建立全新標籤」。`);
+                    }
+                    e.target.value = ''; // clear after action
+                });
             });
         }
 
@@ -286,18 +341,6 @@
             });
         }
 
-        async function addExistingTag() {
-            const tagId = Number(document.getElementById('tag-select').value);
-            if (!tagId) return;
-            try {
-                await apiAddTagToNote(currentNoteId, tagId);
-                await refreshNoteForEdit();
-                renderCurrentTags();
-            } catch (err) {
-                showError(`加入 tag 失敗：${err.message}`);
-            }
-        }
-
         async function createAndAddTag() {
             const input = document.getElementById('new-tag-input');
             const typeInput = document.getElementById('new-tag-type');
@@ -342,6 +385,26 @@
 
             errorEl.style.display = 'none';
             successEl.style.display = 'none';
+
+            // Tag validation
+            const tags = currentNote.tags || currentNote.Tags || [];
+            const hasSemester = tags.some(t => (t.tag_type || 'GENERAL') === 'SEMESTER');
+            const hasDepartment = tags.some(t => (t.tag_type || 'GENERAL') === 'DEPARTMENT');
+            const hasSubject = tags.some(t => (t.tag_type || 'GENERAL') === 'SUBJECT');
+
+            if (!hasSemester) {
+                showError('請至少選擇一個【學期】標籤，這是必填項目。');
+                return;
+            }
+            if (!hasDepartment) {
+                showError('請至少選擇一個【系所】標籤，這是必填項目。');
+                return;
+            }
+            if (!hasSubject) {
+                showError('請至少選擇一個【科目】標籤，這是必填項目。');
+                return;
+            }
+
             btn.disabled = true;
             btn.textContent = '保存中...';
 
