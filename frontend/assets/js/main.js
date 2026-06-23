@@ -65,7 +65,7 @@ function renderHeader() {
     if (currentRole !== 'GUEST') {
         navItems += `
             <a class="navbar-item" href="/pages/user/library">筆記庫</a>
-            <a class="navbar-item" href="/pages/user/social">社群聊天</a>
+            <a class="navbar-item" href="/pages/user/social">社群</a>
         `;
         if (currentRole === 'SELLER') {
             navItems += `<a class="navbar-item has-text-warning" href="/pages/dashboard/seller_dashboard">賣家中心</a>`;
@@ -487,7 +487,7 @@ function renderFooter() {
                         <li><a href="/">商店首頁</a></li>
                         <li><a href="/pages/store/search.html">探索筆記</a></li>
                         <li><a href="/pages/user/library.html">我的筆記庫</a></li>
-                        <li><a href="/pages/user/social.html">社群聊天</a></li>
+                        <li><a href="/pages/user/social.html">社群</a></li>
                         ${dashboardLinks}
                     </ul>
                 </div>
