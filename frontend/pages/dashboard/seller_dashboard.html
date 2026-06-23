@@ -22,38 +22,46 @@
             <p style="color:var(--text-muted);">載入中...</p>
         </div>
 
-        <div class="dashboard-grid">
+        <div class="tabs is-boxed" style="margin-bottom: 1rem;">
+            <ul>
+                <li id="tab-manage" class="is-active"><a onclick="switchTab('manage')">管理我的筆記</a></li>
+                <li id="tab-publish"><a onclick="switchTab('publish')">發行新筆記</a></li>
+            </ul>
+        </div>
+
+        <div id="panel-manage" class="dashboard-grid" style="grid-template-columns: 1fr;">
+            <!-- 管理筆記面板 -->
+            <div class="box dashboard-panel">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                    <h2 class="title is-4" style="margin-bottom:0;">管理我的筆記</h2>
+                </div>
+                <div class="library-list" id="my-published-notes">
+                    <p style="color:var(--text-muted);">載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="panel-publish" class="dashboard-grid" style="grid-template-columns: 1fr; display: none;">
             <!-- 上架新筆記面板 -->
             <div class="box dashboard-panel">
                 <h2 class="title is-4">發行新筆記</h2>
                 <form id="upload-note-form" class="dev-form">
                     <div class="field form-group">
                         <label class="label" for="new-note-title">筆記名稱</label>
-                        <div class="control"><input class="input" type="text" id="new-note-title" placeholder="輸入炫酷的標題"
-                                required></div>
+                        <div class="control"><input class="input" type="text" id="new-note-title" placeholder="輸入炫酷的標題" required></div>
                     </div>
                     <div class="field form-group">
                         <label class="label" for="new-note-price">定價 (NT$)</label>
-                        <div class="control"><input class="input" type="number" id="new-note-price" min="0" step="0.01"
-                                placeholder="0 表示免費" required></div>
+                        <div class="control"><input class="input" type="number" id="new-note-price" min="0" step="0.01" placeholder="0 表示免費" required></div>
                     </div>
                     <div class="field form-group">
                         <label class="label" for="new-note-desc">筆記介紹</label>
-                        <div class="control"><textarea class="textarea" id="new-note-desc" placeholder="簡短描述你的筆記亮點..."
-                                required style="min-height: 120px;"></textarea></div>
+                        <div class="control"><textarea class="textarea" id="new-note-desc" placeholder="簡短描述你的筆記亮點..." required style="min-height: 120px;"></textarea></div>
                     </div>
                     <button type="submit" class="button is-primary is-fullwidth" id="publish-btn">
                         建立草稿並繼續編輯
                     </button>
                 </form>
-            </div>
-
-            <!-- 管理筆記面板 -->
-            <div class="box dashboard-panel">
-                <h2 class="title is-4">管理我的筆記</h2>
-                <div class="library-list" id="my-published-notes">
-                    <p style="color:var(--text-muted);">載入中...</p>
-                </div>
             </div>
         </div>
 
@@ -72,6 +80,18 @@
             }
             await loadDashboard();
         });
+
+        // ── Tab switching logic ───────────────────────────
+        window.switchTab = function(tabName) {
+            document.getElementById('tab-manage').classList.remove('is-active');
+            document.getElementById('tab-publish').classList.remove('is-active');
+            document.getElementById('panel-manage').style.display = 'none';
+            document.getElementById('panel-publish').style.display = 'none';
+
+            document.getElementById('tab-' + tabName).classList.add('is-active');
+            // Dashboard panels use grid-template-columns in our CSS, so use grid
+            document.getElementById('panel-' + tabName).style.display = 'grid';
+        };
 
         // ── Load dashboard ─────────────────────────────────
         async function loadDashboard() {
