@@ -34,6 +34,13 @@
             <div class="box dashboard-panel">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
                     <h2 class="title is-4" style="margin-bottom:0;">管理我的筆記</h2>
+                    <div class="select is-small">
+                        <select id="sort-select" onchange="sortMyNotes()" style="background-color: var(--bg-card); color: var(--text-secondary); border-color: rgba(255,255,255,0.1);">
+                            <option value="default">預設排序</option>
+                            <option value="sales-desc">銷量 (高到低)</option>
+                            <option value="revenue-desc">營收 (高到低)</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="library-list" id="my-published-notes">
                     <p style="color:var(--text-muted);">載入中...</p>
@@ -71,7 +78,10 @@
     <script src="/assets/js/main.js"></script>
     <script>
         // ── Init ──────────────────────────────────────────
-        document.addEventListener("DOMContentLoaded", async () => {
+        let cachedMyNotes = [];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!requireLogin()) return;
             const role = getCurrentRole();
             if (role !== 'SELLER' && role !== 'ADMIN') {
                 alert("存取被拒：您沒有賣家權限");
@@ -80,6 +90,25 @@
             }
             await loadDashboard();
         });
+
+        window.sortMyNotes = function() {
+            const sortType = document.getElementById('sort-select').value;
+            let sorted = [...cachedMyNotes];
+            if (sortType === 'sales-desc') {
+                sorted.sort((a, b) => {
+                    const aSales = Number((a._stats && (a._stats.total_sales || a._stats.sales)) || 0);
+                    const bSales = Number((b._stats && (b._stats.total_sales || b._stats.sales)) || 0);
+                    return bSales - aSales;
+                });
+            } else if (sortType === 'revenue-desc') {
+                sorted.sort((a, b) => {
+                    const aRev = Number((a._stats && (a._stats.total_revenue || a._stats.revenue)) || 0);
+                    const bRev = Number((b._stats && (b._stats.total_revenue || b._stats.revenue)) || 0);
+                    return bRev - aRev;
+                });
+            }
+            renderMyNotes(sorted);
+        };
 
         // ── Tab switching logic ───────────────────────────
         window.switchTab = function(tabName) {
@@ -103,6 +132,7 @@
                 await Promise.all(myNotes.map(async g => {
                     try {
                         const s = await apiGetNoteStats(g.note_id || g.id);
+                        g._stats = s;
                         totalRevenue += Number(s.total_revenue || s.revenue || 0);
                         totalSales += Number(s.total_sales || s.sales || 0);
                     } catch (_) { }
@@ -125,7 +155,8 @@
                     </div>
                 `;
 
-                renderMyNotes(myNotes);
+                cachedMyNotes = myNotes;
+                sortMyNotes();
             } catch (err) {
                 document.getElementById('sales-stats').innerHTML =
                     `<p style="color:var(--accent-red);">載入失敗：${err.message}</p>`;
@@ -142,46 +173,81 @@
                 return;
             }
 
-            notes.forEach(note => {
-                const noteId = note.note_id || note.id;
-                let statusBadge = '';
-                let actionBtns = '';
+            const publishedNotes = notes.filter(n => n.status !== 'DRAFT');
+            const draftNotes = notes.filter(n => n.status === 'DRAFT');
 
-                if (note.status === 'ACTIVE') {
-                    statusBadge = `<span class="tag status-badge status-active">上架中</span>`;
-                    actionBtns = `
-                        <button class="button is-primary is-small" onclick="window.location.href='/pages/dashboard/edit_note?id=${noteId}'">編輯</button>
-                        <button class="button is-danger is-light is-small" onclick="takeDownNote(${noteId})">下架</button>
-                    `;
-                } else if (note.status === 'DRAFT') {
-                    statusBadge = `<span class="tag status-badge" style="background:var(--accent-purple); color:white;">草稿</span>`;
-                    actionBtns = `
-                        <button class="button is-primary is-small" onclick="window.location.href='/pages/dashboard/edit_note?id=${noteId}'">編輯素材與科目</button>
-                        <button class="button is-success is-small" onclick="publishNote(${noteId})">發佈</button>
-                    `;
-                } else {
-                    statusBadge = `<span class="tag status-badge status-taken-down">已下架</span>`;
-                    actionBtns = `<span style="color:var(--text-muted);font-size:13px;">已停止販售</span>`;
-                }
+            const renderGroup = (groupNotes, title) => {
+                if (groupNotes.length === 0) return;
+                
+                const header = document.createElement('div');
+                header.innerHTML = `<span style="display:block; margin-top:24px; margin-bottom:12px; font-size:13px; font-weight:bold; color:#66c0f4; text-transform:uppercase; letter-spacing:1px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px; padding-left: 4px;">${title}</span>`;
+                listEl.appendChild(header);
 
-                const item = document.createElement('div');
-                item.className = 'library-item';
-                item.innerHTML = `
-                    <div class="library-item-header">
-                        <div class="library-item-info">
-                            <h3 style="color:var(--accent-cyan);">${escapeHtml(note.title)}</h3>
-                            <p style="color:var(--text-secondary); margin-top:5px;">
-                                定價：NT$ ${Number(note.price).toLocaleString()}
-                                &nbsp;|&nbsp; ${statusBadge}
-                            </p>
+                groupNotes.forEach(note => {
+                    const noteId = note.note_id || note.id;
+                    let statusBadge = '';
+                    let actionBtns = '';
+
+                    if (note.status === 'ACTIVE') {
+                        statusBadge = `<span class="tag status-badge status-active">上架中</span>`;
+                        actionBtns = `
+                            <button class="button is-primary is-small" onclick="window.location.href='/pages/dashboard/edit_note?id=${noteId}'">編輯</button>
+                            <button class="button is-danger is-light is-small" onclick="takeDownNote(${noteId})">下架</button>
+                        `;
+                    } else if (note.status === 'DRAFT') {
+                        statusBadge = `<span class="tag status-badge" style="background:var(--accent-purple); color:white;">草稿</span>`;
+                        actionBtns = `
+                            <button class="button is-primary is-small" onclick="window.location.href='/pages/dashboard/edit_note?id=${noteId}'">編輯素材與科目</button>
+                            <button class="button is-success is-small" onclick="publishNote(${noteId})">發佈</button>
+                        `;
+                    } else {
+                        statusBadge = `<span class="tag status-badge status-taken-down">已下架</span>`;
+                        actionBtns = `<span style="color:var(--text-muted);font-size:13px;">已停止販售</span>`;
+                    }
+
+                    const noteStats = note._stats || { total_sales: 0, total_revenue: 0 };
+                    const sales = Number(noteStats.total_sales || noteStats.sales || 0);
+                    const revenue = Number(noteStats.total_revenue || noteStats.revenue || 0);
+
+                    let statsHtml = ``;
+                    if (note.status === 'ACTIVE' || sales > 0) {
+                        statsHtml = `
+                            <div style="display: flex; gap: 15px; font-size: 0.9rem; justify-content: flex-start; align-items: center;">
+                                <span style="background: rgba(88, 166, 255, 0.1); color: #58a6ff; padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(88, 166, 255, 0.2);">
+                                    銷量：${sales.toLocaleString()} 套
+                                </span>
+                                <span style="background: rgba(46, 160, 67, 0.1); color: #2ea043; padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(46, 160, 67, 0.2);">
+                                    營收：$${revenue.toLocaleString()}
+                                </span>
+                            </div>
+                        `;
+                    }
+
+                    const item = document.createElement('div');
+                    item.className = 'library-item';
+                    item.innerHTML = `
+                        <div class="library-item-header">
+                            <div class="library-item-info" style="flex: 1; min-width: 0;">
+                                <h3 style="color:var(--accent-cyan); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(note.title)}</h3>
+                                <p style="color:var(--text-secondary); margin-top:5px;">
+                                    定價：NT$ ${Number(note.price).toLocaleString()}
+                                    &nbsp;|&nbsp; ${statusBadge}
+                                </p>
+                            </div>
+                            <div class="library-item-stats" style="flex: 1; display: flex; justify-content: flex-start; align-items: center; padding-left: 20px;">
+                                ${statsHtml}
+                            </div>
+                            <div class="library-item-actions" style="flex: 1; justify-content: flex-end;">
+                                ${actionBtns}
+                            </div>
                         </div>
-                        <div class="library-item-actions">
-                            ${actionBtns}
-                        </div>
-                    </div>
-                `;
-                listEl.appendChild(item);
-            });
+                    `;
+                    listEl.appendChild(item);
+                });
+            };
+
+            renderGroup(publishedNotes, '已發佈筆記');
+            renderGroup(draftNotes, '草稿');
         }
 
         // ── Publish form ───────────────────────────────────
