@@ -461,6 +461,10 @@ function renderFooter() {
         return; // 不在登入與註冊頁顯示 Footer
     }
 
+    if (document.querySelector('.site-footer')) {
+        return; // 如果已經有 footer 就不再重複渲染
+    }
+
     const currentRole = localStorage.getItem('userRole') || 'GUEST';
     let dashboardLinks = '';
     if (currentRole === 'SELLER') {
@@ -479,7 +483,7 @@ function renderFooter() {
             <div class="footer-grid">
                 <div class="footer-brand">
                     <a href="/" class="logo" style="font-family: 'Chakra Petch', sans-serif; font-size: 1.5rem; display: inline-block; margin-bottom: 1rem; color: var(--text-primary); font-weight: bold;">AurorNote</a>
-                    <p style="color: var(--text-muted); line-height: 1.6;">由學生，為學生而建。</p>
+                    <p style="color: var(--text-muted); line-height: 1.6;">要被當了，救救我</p>
                 </div>
                 <div class="footer-links">
                     <h4>功能頁籤</h4>
