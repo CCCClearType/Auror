@@ -17,7 +17,7 @@
                 <div class="featured-content">
                     <p class="tag is-rounded is-info is-light">AurorNote Storefront</p>
                     <h1 class="title">探索你的下一款最愛筆記</h1>
-                    <p class="subtitle">超過千款筆記，總有一款等著你</p>
+                    <p class="subtitle" id="hero-subtitle">超過千款筆記，總有一款等著你</p>
                     <form class="search-bar field has-addons" id="search-form">
                         <div class="control is-expanded">
                             <input class="input is-medium" type="text" id="search-input" placeholder="搜尋筆記名稱、類型、賣家...">
@@ -120,8 +120,16 @@
                 if (hideOwnedToggle && hideOwnedToggle.classList.contains('is-active')) {
                     query.hide_owned = 'true';
                 }
-                const notes = await apiGetNotes(query);
-                renderNotes(Array.isArray(notes) ? notes : (notes.data || notes.notes || []));
+                const response = await apiGetNotes(query);
+                renderNotes(Array.isArray(response) ? response : (response.data || response.notes || []));
+                
+                // Update subtitle with dynamic total count
+                if (response && response.total_notes !== undefined) {
+                    const subtitle = document.getElementById('hero-subtitle');
+                    if (subtitle) {
+                        subtitle.textContent = `目前收錄 ${response.total_notes} 款筆記，總有一款等著你`;
+                    }
+                }
             } catch (err) {
                 document.getElementById('note-list').innerHTML =
                     `<p style="color:var(--accent-red);text-align:center;padding:40px;">無法載入筆記列表：${err.message}</p>`;

@@ -162,7 +162,10 @@ func GetNotes(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": notes})
+	var totalNotes int64
+	database.DB.Model(&models.Note{}).Where("status = ?", "ACTIVE").Count(&totalNotes)
+
+	c.JSON(http.StatusOK, gin.H{"data": notes, "total_notes": totalNotes})
 }
 
 // GetNoteByID handles GET /api/notes/:id (UC-03)
