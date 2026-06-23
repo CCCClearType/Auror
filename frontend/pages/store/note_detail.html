@@ -29,7 +29,7 @@
                     <span id="detail-rating-text" style="color: #66c0f4;">--</span>
 
                     <span style="color: #556772;">賣家：</span>
-                    <a id="detail-dev-name" style="color: #66c0f4; text-decoration: none;" href="#">--</a>
+                    <a id="detail-seller-name" style="color: #66c0f4; text-decoration: none;" href="#">--</a>
                 </div>
 
                 <div style="margin-bottom: auto;">
@@ -82,7 +82,11 @@
                 const note = response.data || response;
 
                 document.title = `${note.note.title || note.title} — AurorNote`;
-                document.getElementById('detail-title').textContent = note.note.title || note.title;
+                let titleHtml = escapeHtml(note.note.title || note.title);
+                if (note.note.is_classic || note.is_classic) {
+                    titleHtml += ` <span style="background:linear-gradient(45deg, #ffd700, #ff8c00); color:#000; font-size:14px; padding:2px 8px; border-radius:12px; vertical-align:middle; margin-left:8px; box-shadow:0 0 10px rgba(255,215,0,0.5);" title="經過時間與銷量考驗的神級筆記"><i class="fas fa-crown"></i> 傳世經典</span>`;
+                }
+                document.getElementById('detail-title').innerHTML = titleHtml;
                 document.getElementById('detail-desc').innerHTML = renderMarkdown(note.note.description || note.note.desc || note.desc || '');
                 
                 const rawDesc = note.note.description || note.note.desc || note.desc || '';
@@ -90,9 +94,9 @@
                 const shortDescEl = document.getElementById('detail-short-desc');
                 if (shortDescEl) shortDescEl.textContent = plainDesc + (plainDesc.length >= 150 ? '...' : '');
 
-                const devName = note.seller_name || note.note.seller_name || note.note.seller || note.seller || '未知';
-                const devEl = document.getElementById('detail-dev-name');
-                if (devEl) devEl.textContent = devName;
+                const sellerName = note.seller_name || note.note.seller_name || note.note.seller || note.seller || '未知';
+                const sellerEl = document.getElementById('detail-seller-name');
+                if (sellerEl) sellerEl.textContent = sellerName;
                 
 
                 updateDetailRating(note.note || note);
@@ -184,7 +188,7 @@
                 let isOwned = false;
                 let isWishlisted = false;
                 let isCarted = false;
-                window._noteDevId = note.note ? note.note.seller_id : note.seller_id;
+                window._noteSellerId = note.note ? note.note.seller_id : note.seller_id;
                 if (role !== 'GUEST') {
                     try {
                         const lib = await apiGetLibrary();
@@ -306,12 +310,12 @@
 
             let canReview = false;
             let reasonMsg = '';
-            const devId = window._noteDevId;
+            const sellerId = window._noteSellerId;
 
             if (role === 'GUEST') {
                 reasonMsg = `<p style="color:var(--text-muted);font-size:14px;">請 <a href="/pages/auth/login.html">登入</a> 後才能發表評論。</p>`;
             } else {
-                canReview = isOwned || role === 'ADMIN' || role === 'CSR' || (role === 'SELLER' && (user.id || user.user_id) == devId);
+                canReview = isOwned || role === 'ADMIN' || role === 'CSR' || (role === 'SELLER' && (user.id || user.user_id) == sellerId);
                 if (!canReview) reasonMsg = `<p style="color:var(--text-muted);font-size:14px;">購買此筆記後即可發表評論。</p>`;
             }
 
@@ -328,10 +332,10 @@
             }
             if (role === 'ADMIN') roleOptions += `<option value="ADMIN" ${!isOwned ? 'selected' : ''}>管理員 (Admin)</option>`;
             if (role === 'CSR') roleOptions += `<option value="CSR" ${!isOwned ? 'selected' : ''}>客服人員 (CSR)</option>`;
-            if (role === 'SELLER' && user && (user.id || user.user_id) == devId) roleOptions += `<option value="AUTHOR" ${!isOwned ? 'selected' : ''}>賣家 (Author)</option>`;
+            if (role === 'SELLER' && user && (user.id || user.user_id) == sellerId) roleOptions += `<option value="AUTHOR" ${!isOwned ? 'selected' : ''}>賣家 (SELLER)</option>`;
             
             let roleSelectHtml = '';
-            if (role === 'ADMIN' || role === 'CSR' || (role === 'SELLER' && user && (user.id || user.user_id) == devId)) {
+            if (role === 'ADMIN' || role === 'CSR' || (role === 'SELLER' && user && (user.id || user.user_id) == sellerId)) {
                 roleSelectHtml = `
                     <div class="form-group" style="margin-bottom:12px;">
                         <label style="font-size:12px;color:var(--text-muted);">發布身分：</label>
@@ -490,7 +494,7 @@
                 if (role !== 'GUEST') {
                     let replyRoleOptions = '';
                     const isOwned = window._noteIsOwned || false;
-                    const devId = window._noteDevId || 0;
+                    const sellerId = window._noteSellerId || 0;
                     if (isOwned) {
                         replyRoleOptions += `<option value="USERS">買家</option>`;
                     } else {

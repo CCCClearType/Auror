@@ -11,6 +11,7 @@ type Note struct {
 	RatingCount   int64       `gorm:"-" json:"rating_count"`
 	Media         []NoteMedia `gorm:"foreignKey:NoteID" json:"media,omitempty"`
 	Tags          []Tag       `gorm:"many2many:note_tags;foreignKey:NoteID;joinForeignKey:NoteID;References:TagID;joinReferences:TagID" json:"tags,omitempty"`
-	SellerName string      `gorm:"-" json:"seller_name"`
+	SellerName    string      `gorm:"-" json:"seller_name"`
 	Status        string      `gorm:"default:DRAFT" json:"status"`
+	IsClassic     bool        `gorm:"-" json:"is_classic"`
 }

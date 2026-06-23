@@ -16,14 +16,42 @@
             <span class="tag role-badge admin">ADMIN</span>
         </div>
 
-        <div class="dashboard-grid">
+        <div class="tabs is-boxed" style="margin-bottom: 1rem;">
+            <ul>
+                <li id="tab-users" class="is-active"><a onclick="switchTab('users')">全站帳號與權限管理</a></li>
+                <li id="tab-notes"><a onclick="switchTab('notes')">商店筆記管理（強制下架）</a></li>
+            </ul>
+        </div>
+
+        <div id="role-filters" style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+            <span style="font-weight: bold; margin-right: 0.5rem; color: var(--text-color);">身分過濾：</span>
+            <button class="button is-small is-info" id="filter-ALL" onclick="toggleRoleFilter('ALL')">ALL</button>
+            <button class="button is-small is-light" id="filter-USERS" onclick="toggleRoleFilter('USERS')">USER</button>
+            <button class="button is-small is-light" id="filter-SELLER" onclick="toggleRoleFilter('SELLER')">SELLER</button>
+            <button class="button is-small is-light" id="filter-CSR" onclick="toggleRoleFilter('CSR')">CSR</button>
+            <button class="button is-small is-light" id="filter-ADMIN" onclick="toggleRoleFilter('ADMIN')">ADMIN</button>
+        </div>
+
+        <div id="panel-users" class="dashboard-grid" style="grid-template-columns: 1fr;">
             <div class="box dashboard-panel">
-                <h2 class="title is-4">全站帳號與權限管理</h2>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                    <h2 class="title is-4" style="margin-bottom:0;">全站帳號與權限管理</h2>
+                    <div class="select">
+                        <select id="user-sort" onchange="applyUserSort()">
+                            <option value="id_asc">註冊時間 (舊到新)</option>
+                            <option value="id_desc">註冊時間 (新到舊)</option>
+                            <option value="name_asc">帳號名稱 (A-Z)</option>
+                            <option value="name_desc">帳號名稱 (Z-A)</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="library-list" id="users-list">
                     <p style="color:var(--text-muted);">載入中...</p>
                 </div>
             </div>
+        </div>
 
+        <div id="panel-notes" class="dashboard-grid" style="grid-template-columns: 1fr; display: none;">
             <div class="box dashboard-panel">
                 <h2 class="title is-4">商店筆記管理（強制下架）</h2>
                 <div class="library-list" id="admin-notes-list">
@@ -45,17 +73,93 @@
             await Promise.all([loadUsers(), loadNotes()]);
         });
 
+        let allUsers = [];
+        let activeRoles = ['ALL'];
+
+        function toggleRoleFilter(role) {
+            if (role === 'ALL') {
+                activeRoles = ['ALL'];
+            } else {
+                // If ALL was selected, clear it
+                if (activeRoles.includes('ALL')) {
+                    activeRoles = [];
+                }
+                
+                // Toggle the clicked role
+                if (activeRoles.includes(role)) {
+                    activeRoles = activeRoles.filter(r => r !== role);
+                } else {
+                    activeRoles.push(role);
+                }
+                
+                // If nothing is selected, fallback to ALL
+                if (activeRoles.length === 0) {
+                    activeRoles = ['ALL'];
+                }
+            }
+            
+            // Update button styles
+            ['ALL', 'USERS', 'SELLER', 'CSR', 'ADMIN'].forEach(r => {
+                const btn = document.getElementById(`filter-${r}`);
+                if (!btn) return;
+                if (activeRoles.includes(r)) {
+                    btn.classList.remove('is-light');
+                    btn.classList.add('is-info');
+                } else {
+                    btn.classList.remove('is-info');
+                    btn.classList.add('is-light');
+                }
+            });
+            
+            applyUserSort();
+        }
+
+        function switchTab(tabId) {
+            document.getElementById('tab-users').classList.remove('is-active');
+            document.getElementById('tab-notes').classList.remove('is-active');
+            
+            document.getElementById('panel-users').style.display = 'none';
+            document.getElementById('panel-notes').style.display = 'none';
+            
+            document.getElementById('tab-' + tabId).classList.add('is-active');
+            document.getElementById('panel-' + tabId).style.display = 'grid';
+        }
+
         // ─── 帳號列表 ──────────────────────────────────────────
         async function loadUsers() {
             try {
                 // GET /api/admin/users
                 const result = await apiGetUsers();
-                const users  = Array.isArray(result) ? result : (result.data || result.users || []);
-                renderUsers(users);
+                allUsers  = Array.isArray(result) ? result : (result.data || result.users || []);
+                applyUserSort();
             } catch (err) {
                 document.getElementById('users-list').innerHTML =
                     `<p style="color:var(--accent-red);">載入失敗：${err.message}</p>`;
             }
+        }
+
+        function applyUserSort() {
+            const sortVal = document.getElementById('user-sort').value;
+            
+            // Filter by active roles
+            let filtered = allUsers.filter(u => {
+                if (activeRoles.includes('ALL')) return true;
+                const r = u.role || 'USERS'; // default role
+                return activeRoles.includes(r);
+            });
+            
+            // Sort
+            if (sortVal === 'id_desc') {
+                filtered.sort((a, b) => b.id - a.id);
+            } else if (sortVal === 'id_asc') {
+                filtered.sort((a, b) => a.id - b.id);
+            } else if (sortVal === 'name_asc') {
+                filtered.sort((a, b) => (a.username || '').localeCompare(b.username || ''));
+            } else if (sortVal === 'name_desc') {
+                filtered.sort((a, b) => (b.username || '').localeCompare(a.username || ''));
+            }
+            
+            renderUsers(filtered);
         }
 
         function renderUsers(users) {
@@ -63,13 +167,45 @@
             list.innerHTML = '';
 
             if (users.length === 0) {
-                list.innerHTML = `<div class="empty-state"><p>暫無使用者資料</p></div>`;
+                list.innerHTML = `<div class="empty-state"><p>暫無符合條件的使用者資料</p></div>`;
                 return;
             }
-
+            
+            // Group by role
+            const groups = {
+                'ADMIN': [],
+                'CSR': [],
+                'SELLER': [],
+                'USERS': [],
+                'OTHER': []
+            };
+            
             users.forEach(user => {
-                const item = document.createElement('div');
-                item.className = 'library-item';
+                const r = user.role || 'USERS';
+                if (groups[r]) groups[r].push(user);
+                else groups['OTHER'].push(user);
+            });
+            
+            // Render groups
+            for (const [roleName, groupUsers] of Object.entries(groups)) {
+                if (groupUsers.length === 0) continue;
+                
+                // Group Header
+                const header = document.createElement('h3');
+                header.className = 'title is-5';
+                header.style.marginTop = '1.5rem';
+                header.style.marginBottom = '0.75rem';
+                header.style.padding = '0.5rem';
+                header.style.background = 'var(--bg-card)';
+                header.style.borderLeft = '4px solid var(--accent-blue)';
+                header.style.color = 'var(--text-color)';
+                header.innerHTML = `角色：${roleName} <span class="tag is-dark" style="margin-left: 0.5rem;">${groupUsers.length} 人</span>`;
+                list.appendChild(header);
+                
+                // Group Items
+                groupUsers.forEach(user => {
+                    const item = document.createElement('div');
+                    item.className = 'library-item';
 
                 const isDeleted    = user.permission === 'DELETED';
                 const isBanned     = user.permission === 'DEACTIVE';
@@ -88,21 +224,21 @@
 
                 let actionHtml = '';
                 if (isDeleted) {
-                    actionHtml = `<button class="button is-light" disabled style="opacity: 0.5;">已永久刪除</button>`;
+                    actionHtml = `<button class="button is-light" disabled style="opacity: 0.5; width: 330px;">已永久刪除</button>`;
                 } else {
                     actionHtml = `
-                        <div class="select">
-                            <select class="role-select" onchange="changeRole(${user.id}, this.value)">
+                        <div class="select" style="width: 150px;">
+                            <select class="role-select" style="width: 100%;" onchange="changeRole(${user.id}, this.value)">
                                 <option value="USERS"     ${user.role==='USERS'     ? 'selected':''}>買家 (User)</option>
-                                <option value="SELLER" ${user.role==='SELLER' ? 'selected':''}>賣家 (Dev)</option>
+                                <option value="SELLER" ${user.role==='SELLER' ? 'selected':''}>賣家 (SELLER)</option>
                                 <option value="CSR"       ${user.role==='CSR'       ? 'selected':''}>客服 (CSR)</option>
                                 <option value="ADMIN"     ${user.role==='ADMIN'     ? 'selected':''}>管理員 (Admin)</option>
                             </select>
                         </div>
                         <button class="button is-light"
-                                style="background-color:${banColor};color:#fff;border-color:${banColor};"
+                                style="background-color:${banColor};color:#fff;border-color:${banColor}; width: 100px;"
                                 onclick="toggleSuspend(${user.id}, ${isBanned})">${banText}</button>
-                        <button class="button is-danger is-light" onclick="deleteUser(${user.id})">永久刪除</button>
+                        <button class="button is-danger is-light" style="width: 100px;" onclick="deleteUser(${user.id})">永久刪除</button>
                     `;
                 }
 
@@ -116,7 +252,8 @@
                     </div>
                 `;
                 list.appendChild(item);
-            });
+                });
+            }
         }
 
         async function changeRole(userId, newRole) {

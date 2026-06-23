@@ -24,6 +24,27 @@ func attachRatingSummary(note *models.Note) {
 	note.RatingCount = result.Count
 }
 
+func attachClassicStatus(note *models.Note) {
+	isOldEnough := false
+	for _, tag := range note.Tags {
+		if tag.TagType == "SEMESTER" {
+			if tag.TagName <= "111-2" {
+				isOldEnough = true
+			}
+			break
+		}
+	}
+
+	if !isOldEnough {
+		note.IsClassic = false
+		return
+	}
+
+	var salesCount int64
+	database.DB.Table("transaction_items").Where("note_id = ?", note.NoteID).Count(&salesCount)
+	note.IsClassic = salesCount >= 15
+}
+
 func refreshStoredNoteRating(noteID uint) {
 	var note models.Note
 	if err := database.DB.First(&note, noteID).Error; err != nil {
@@ -132,9 +153,10 @@ func GetNotes(c *gin.Context) {
 	}
 	for i := range notes {
 		attachRatingSummary(&notes[i])
-		var dev models.User
-		if err := database.DB.Select("username").First(&dev, notes[i].SellerID).Error; err == nil {
-			notes[i].SellerName = dev.Username
+		attachClassicStatus(&notes[i])
+		var seller models.User
+		if err := database.DB.Select("username").First(&seller, notes[i].SellerID).Error; err == nil {
+			notes[i].SellerName = seller.Username
 		} else {
 			notes[i].SellerName = "未知"
 		}
@@ -153,6 +175,7 @@ func GetNoteByID(c *gin.Context) {
 		return
 	}
 	attachRatingSummary(&note)
+	attachClassicStatus(&note)
 
 	var media []models.NoteMedia
 	database.DB.Where("note_id = ?", noteID).Find(&media)
@@ -172,10 +195,10 @@ func GetNoteByID(c *gin.Context) {
 		fullReviews = append(fullReviews, ReviewWithReplies{Review: r, Replies: replies})
 	}
 
-	var dev models.User
+	var seller models.User
 	sellerName := "未知"
-	if err := database.DB.First(&dev, note.SellerID).Error; err == nil {
-		sellerName = dev.Username
+	if err := database.DB.First(&seller, note.SellerID).Error; err == nil {
+		sellerName = seller.Username
 	}
 
 	c.JSON(http.StatusOK, gin.H{

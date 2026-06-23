@@ -225,8 +225,16 @@ function renderNotes(notes) {
             }
         }
 
+        let classicBadgeHtml = '';
+        if (note.is_classic) {
+            classicBadgeHtml = `<div style="position:absolute; top:8px; right:8px; background:linear-gradient(45deg, #ffd700, #ff8c00); color:#000; font-weight:bold; padding:4px 8px; border-radius:12px; font-size:12px; box-shadow:0 0 10px rgba(255,215,0,0.5); z-index:10;"><i class="fas fa-crown"></i> 傳世經典</div>`;
+        }
+
         card.innerHTML = `
-            <div class="card-image note-thumbnail">${coverHtml}</div>
+            <div class="card-image note-thumbnail" style="position:relative;">
+                ${classicBadgeHtml}
+                ${coverHtml}
+            </div>
             <div class="card-content note-list-info">
                 <p class="title is-5 note-list-title">${escapeHtml(note.title)}</p>
                 <p class="content note-list-desc">${escapeHtml(note.desc || '')}</p>
