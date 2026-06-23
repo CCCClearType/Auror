@@ -110,18 +110,8 @@ func PublishNote(c *gin.Context) {
 	}
 
 	hasSemester := false
-	hasSubject := false
-	for _, t := range note.Tags {
-		if t.TagType == "SEMESTER" {
-			hasSemester = true
-		}
-		if t.TagType == "SUBJECT" {
-			hasSubject = true
-		}
-	}
-
-	if !hasSemester || !hasSubject {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Note must have at least 1 semester tag and 1 subject tag"})
+	if !hasSemester {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Note must have at least 1 semester tag"})
 		return
 	}
 

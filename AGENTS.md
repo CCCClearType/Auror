@@ -27,4 +27,4 @@
 ## Source Of Truth
 - Trust executable routes in `backend/routes/routes.go` over API prose if paths or response details disagree.
 - Use `api/api_spec.md` and `api/api_list.txt` for endpoint intent, but confirm implementations in controllers before changing behavior.
-- Architecture docs under `architecture/` are useful orientation, but contain stale details such as a non-existent CORS middleware and old file names.
+- Architecture docs under `architecture/` provide a good overview of the system design and workflows.

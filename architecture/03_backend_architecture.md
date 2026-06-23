@@ -38,7 +38,9 @@ backend/
 │   ├── user_controller.go      # 使用者個人資料管理
 │   ├── social_controller.go    # 好友、黑名單、訊息、退款申請與評論管理
 │   ├── library_controller.go   # 筆記庫閱讀授權與願望清單
-│   └── transaction_controller.go # 結帳交易處理 (包含嚴謹的 Database Transaction) 與歷史交易紀錄查詢
+│   ├── transaction_controller.go # 結帳交易處理 (包含嚴謹的 Database Transaction) 與歷史交易紀錄查詢
+│   ├── status_controller.go    # 系統監測與儀表板狀態回報
+│   └── seller_controller_test.go # 賣家專屬控制器的單元測試
 ├── middleware/                 # [中介軟體防護層]
 │   ├── auth_middleware.go      # [第一道防線] 攔截請求，解密 JWT Token，並將 User ID 寫入 Context
 │   └── role_middleware.go      # [第二道防線] 檢查 Context 內的使用者 Role 是否具備特定操作權限

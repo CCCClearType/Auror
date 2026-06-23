@@ -105,8 +105,9 @@ browser (Frontend 進入首頁或輸入搜尋條件，JS 送出 HTTP GET ?q=Cybe
     -> go.GORM (因 hide_owned=true，額外加入條件過濾「已在 note_licenses 獲得授權的筆記」與「當前登入者自己開發的筆記」)
     -> go.Driver (去 PostgreSQL 進行複合條件搜尋撈出 raw data)
     -> go.GORM (把 raw data 轉譯成 []Note Object 陣列)
-    -> go.Gin (打包成 json 陣列送回去)
-browser (Frontend 接收 json 資料，透過 JS 動態生成 HTML DOM 顯示筆記卡片)
+    -> go.GORM (額外執行 COUNT(*) 撈取系統 ACTIVE 狀態的總筆記數量，作為首頁彩蛋)
+    -> go.Gin (將筆記陣列與總數量打包成 json 送回去)
+browser (Frontend 接收 json 資料，動態更新首頁副標題數量，並產生筆記卡片)
 ```
 
 ### 3.3 加入購物車流程 (Add to Cart Flow)
