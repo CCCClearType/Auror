@@ -25,11 +25,13 @@
 
         <div id="role-filters" style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
             <span style="font-weight: bold; margin-right: 0.5rem; color: var(--text-color);">身分過濾：</span>
-            <button class="button is-small is-info" id="filter-ALL" onclick="toggleRoleFilter('ALL')">ALL</button>
-            <button class="button is-small is-light" id="filter-USERS" onclick="toggleRoleFilter('USERS')">USER</button>
-            <button class="button is-small is-light" id="filter-SELLER" onclick="toggleRoleFilter('SELLER')">SELLER</button>
-            <button class="button is-small is-light" id="filter-CSR" onclick="toggleRoleFilter('CSR')">CSR</button>
-            <button class="button is-small is-light" id="filter-ADMIN" onclick="toggleRoleFilter('ADMIN')">ADMIN</button>
+            <button class="button is-info" id="filter-ALL" onclick="toggleRoleFilter('ALL')">ALL</button>
+            <button class="button is-light" id="filter-USERS" onclick="toggleRoleFilter('USERS')">USER</button>
+            <button class="button is-light" id="filter-SELLER" onclick="toggleRoleFilter('SELLER')">SELLER</button>
+            <button class="button is-light" id="filter-CSR" onclick="toggleRoleFilter('CSR')">CSR</button>
+            <button class="button is-light" id="filter-ADMIN" onclick="toggleRoleFilter('ADMIN')">ADMIN</button>
+            
+            <input type="text" id="user-search-input" class="input" style="width: 250px; margin-left: 1rem;" placeholder="搜尋使用者名稱或信箱..." oninput="applyUserSort()">
         </div>
 
         <div id="panel-users" class="dashboard-grid" style="grid-template-columns: 1fr;">
@@ -140,12 +142,25 @@
 
         function applyUserSort() {
             const sortVal = document.getElementById('user-sort').value;
+            const searchInput = document.getElementById('user-search-input');
+            const searchKeyword = searchInput ? searchInput.value.toLowerCase().trim() : '';
             
-            // Filter by active roles
+            // Filter by active roles and search keyword
             let filtered = allUsers.filter(u => {
-                if (activeRoles.includes('ALL')) return true;
-                const r = u.role || 'USERS'; // default role
-                return activeRoles.includes(r);
+                let matchRole = activeRoles.includes('ALL');
+                if (!matchRole) {
+                    const r = u.role || 'USERS'; // default role
+                    matchRole = activeRoles.includes(r);
+                }
+                
+                let matchSearch = true;
+                if (searchKeyword) {
+                    const name = (u.username || '').toLowerCase();
+                    const email = (u.email || '').toLowerCase();
+                    matchSearch = name.includes(searchKeyword) || email.includes(searchKeyword);
+                }
+                
+                return matchRole && matchSearch;
             });
             
             // Sort
@@ -171,41 +186,9 @@
                 return;
             }
             
-            // Group by role
-            const groups = {
-                'ADMIN': [],
-                'CSR': [],
-                'SELLER': [],
-                'USERS': [],
-                'OTHER': []
-            };
-            
-            users.forEach(user => {
-                const r = user.role || 'USERS';
-                if (groups[r]) groups[r].push(user);
-                else groups['OTHER'].push(user);
-            });
-            
-            // Render groups
-            for (const [roleName, groupUsers] of Object.entries(groups)) {
-                if (groupUsers.length === 0) continue;
-                
-                // Group Header
-                const header = document.createElement('h3');
-                header.className = 'title is-5';
-                header.style.marginTop = '1.5rem';
-                header.style.marginBottom = '0.75rem';
-                header.style.padding = '0.5rem';
-                header.style.background = 'var(--bg-card)';
-                header.style.borderLeft = '4px solid var(--accent-blue)';
-                header.style.color = 'var(--text-color)';
-                header.innerHTML = `角色：${roleName} <span class="tag is-dark" style="margin-left: 0.5rem;">${groupUsers.length} 人</span>`;
-                list.appendChild(header);
-                
-                // Group Items
-                groupUsers.forEach(user => {
-                    const item = document.createElement('div');
-                    item.className = 'library-item';
+            const renderItem = (user) => {
+                const item = document.createElement('div');
+                item.className = 'library-item';
 
                 const isDeleted    = user.permission === 'DELETED';
                 const isBanned     = user.permission === 'DEACTIVE';
@@ -244,14 +227,59 @@
 
                 item.innerHTML = `
                     <div class="library-item-info">
-                        <h3>ID: ${user.id} — ${escapeHtml(user.username)}</h3>
-                        <p>信箱：${escapeHtml(user.email || '')} &nbsp;|&nbsp; 狀態：${statusBadge}</p>
+                        <strong>ID: ${user.id} — ${escapeHtml(user.username)}</strong>
+                        <div style="font-size:14px;color:var(--text-muted);margin-top:4px;">
+                            信箱：${escapeHtml(user.email || '')} | 狀態：${statusBadge}
+                        </div>
                     </div>
-                    <div class="library-item-actions">
+                    <div class="library-item-actions" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 10px;">
                         ${actionHtml}
                     </div>
                 `;
-                list.appendChild(item);
+                return item;
+            };
+
+            if (activeRoles.includes('ALL')) {
+                users.forEach(user => {
+                    list.appendChild(renderItem(user));
+                });
+                return;
+            }
+            
+            // Group by role
+            const groups = {
+                'ADMIN': [],
+                'CSR': [],
+                'SELLER': [],
+                'USERS': [],
+                'OTHER': []
+            };
+            
+            users.forEach(user => {
+                const r = user.role || 'USERS';
+                if (groups[r]) groups[r].push(user);
+                else groups['OTHER'].push(user);
+            });
+            
+            // Render groups
+            for (const [roleName, groupUsers] of Object.entries(groups)) {
+                if (groupUsers.length === 0) continue;
+                
+                // Group Header
+                const header = document.createElement('h3');
+                header.className = 'title is-5';
+                header.style.marginTop = '1.5rem';
+                header.style.marginBottom = '0.75rem';
+                header.style.padding = '0.5rem';
+                header.style.background = 'var(--bg-card)';
+                header.style.borderLeft = '4px solid var(--accent-blue)';
+                header.style.color = 'var(--text-color)';
+                header.innerHTML = `角色：${roleName} <span class="tag is-dark" style="margin-left: 0.5rem;">${groupUsers.length} 人</span>`;
+                list.appendChild(header);
+                
+                // Group Items
+                groupUsers.forEach(user => {
+                    list.appendChild(renderItem(user));
                 });
             }
         }

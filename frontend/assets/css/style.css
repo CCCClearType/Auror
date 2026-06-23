@@ -96,9 +96,9 @@ body::after {
 }
 
 main {
-    width: min(1280px, calc(100% - 32px));
+    width: min(1140px, calc(100% - 64px));
     margin: 0 auto;
-    padding: 32px 0 80px;
+    padding: 40px 0 80px;
 }
 
 a {
@@ -407,9 +407,10 @@ label,
 }
 
 .store-layout {
-    display: grid;
-    grid-template-columns: 250px minmax(0, 1fr);
-    gap: 1.25rem;
+    display: grid !important;
+    grid-template-columns: minmax(200px, 0.4fr) minmax(0, 1.6fr);
+    gap: 2rem;
+    align-items: flex-start;
 }
 
 .store-sidebar {
@@ -864,8 +865,9 @@ label,
 
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.25rem;
+    grid-template-columns: minmax(220px, 0.5fr) minmax(0, 1.5fr);
+    gap: 2rem;
+    align-items: flex-start;
 }
 
 .dashboard-stats {
@@ -934,7 +936,8 @@ label,
     border: 1px solid rgba(255, 255, 255, 0.09) !important;
     overflow: hidden;
     background: #000 !important;
-    min-height: 320px;
+    width: 100%;
+    max-width: 100%;
     aspect-ratio: 16 / 9;
     position: relative;
 }
