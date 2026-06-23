@@ -4,15 +4,15 @@
 
 ---
 
-### 1. 透過特定科目搜尋筆記 (多對多關聯)
-- **說明**：買家點擊某個科目 (例如 RPG) 來找筆記時，由於這是一個多對多關係，必須先從 `notes` 表 JOIN 中介表 `note_tags`，再 JOIN 科目主檔 `tags` 來做名稱比對。
-- **對應 API**：`GET /api/notes?tag={name}`
+### 1. 透過特定分類標籤搜尋筆記 (多對多關聯)
+- **說明**：買家點擊某個學期 (例如 115-2) 來找筆記時，由於這是一個多對多關係，必須先從 `notes` 表 JOIN 中介表 `note_tags`，再 JOIN 科目主檔 `tags` 來做名稱與類型的比對。
+- **對應 API**：`GET /api/notes?semester=115-2`
 - **Go 實作 (GORM)**：
   ```go
   query = query.
-      Joins("JOIN note_tags filter_note_tags ON filter_note_tags.note_id = notes.note_id").
-      Joins("JOIN tags filter_tags ON filter_tags.tag_id = filter_note_tags.tag_id").
-      Where("filter_tags.tag_name ILIKE ?", tag)
+      Joins("JOIN note_tags filter_sem_tags ON filter_sem_tags.note_id = notes.note_id").
+      Joins("JOIN tags filter_sem ON filter_sem.tag_id = filter_sem_tags.tag_id").
+      Where("filter_sem.tag_name ILIKE ? AND filter_sem.tag_type = 'SEMESTER'", semester)
   ```
 - **原生 SQL 語法 (連續 INNER JOIN)**：
   ```sql
@@ -21,7 +21,8 @@
   JOIN note_tags ON note_tags.note_id = notes.note_id
   JOIN tags ON tags.tag_id = note_tags.tag_id
   WHERE notes.status = 'ACTIVE' 
-    AND tags.tag_name ILIKE 'RPG';
+    AND tags.tag_name ILIKE '115-2'
+    AND tags.tag_type = 'SEMESTER';
   ```
 
 ### 2. 查詢買家的筆記庫並包含筆記封面圖

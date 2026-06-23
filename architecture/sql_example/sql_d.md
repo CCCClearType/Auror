@@ -29,19 +29,23 @@
 - **Go 實作 (GORM)**：
   ```go
   keyword := "%" + q + "%"
-  query = query.Where("notes.title ILIKE ? OR notes.description ILIKE ? OR filter_tags.tag_name ILIKE ? OR filter_sellers.username ILIKE ?", keyword, keyword, keyword, keyword)
+  query = query.
+      Joins("LEFT JOIN note_tags q_note_tags ON q_note_tags.note_id = notes.note_id").
+      Joins("LEFT JOIN tags q_tags ON q_tags.tag_id = q_note_tags.tag_id").
+      Joins("LEFT JOIN users q_sellers ON q_sellers.user_id = notes.seller_id").
+      Where("notes.title ILIKE ? OR notes.description ILIKE ? OR q_tags.tag_name ILIKE ? OR q_sellers.username ILIKE ?", keyword, keyword, keyword, keyword)
   ```
 - **原生 SQL 語法**：
   ```sql
   SELECT notes.* FROM notes
-  LEFT JOIN note_tags ON note_tags.note_id = notes.note_id
-  LEFT JOIN tags ON tags.tag_id = note_tags.tag_id
-  LEFT JOIN users ON users.user_id = notes.seller_id
+  LEFT JOIN note_tags q_note_tags ON q_note_tags.note_id = notes.note_id
+  LEFT JOIN tags q_tags ON q_tags.tag_id = q_note_tags.tag_id
+  LEFT JOIN users q_sellers ON q_sellers.user_id = notes.seller_id
   WHERE notes.status = 'ACTIVE' AND (
     notes.title ILIKE '%戰神%' OR 
     notes.description ILIKE '%戰神%' OR 
-    tags.tag_name ILIKE '%戰神%' OR 
-    users.username ILIKE '%戰神%'
+    q_tags.tag_name ILIKE '%戰神%' OR 
+    q_sellers.username ILIKE '%戰神%'
   );
   ```
 

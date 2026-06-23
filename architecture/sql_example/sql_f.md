@@ -387,7 +387,10 @@
   ```
 - **原生 SQL 語法**：
   ```sql
-  INSERT INTO tags (tag_name) VALUES ('MOBA');
+  -- 新增科目/標籤 (需指定 tag_type，如 SEMESTER, SUBJECT 等)
+  INSERT INTO tags (tag_name, tag_type) VALUES ('資料庫系統', 'SUBJECT');
+  
+  -- 解除綁定
   DELETE FROM note_tags WHERE note_id = 42 AND tag_id = 3;
   ```
 

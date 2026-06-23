@@ -110,6 +110,13 @@ func PublishNote(c *gin.Context) {
 	}
 
 	hasSemester := false
+	for _, t := range note.Tags {
+		if t.TagType == "SEMESTER" {
+			hasSemester = true
+			break
+		}
+	}
+
 	if !hasSemester {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Note must have at least 1 semester tag"})
 		return

@@ -9,12 +9,22 @@
 - **對應 API**：`GET /api/tags`
 - **Go 實作 (GORM)**：
   ```go
-  var tags []models.Tag
-  database.DB.Find(&tags)
+  var tags []TagWithCount
+  database.DB.Raw(`
+      SELECT t.tag_id, t.tag_name, t.tag_type, COUNT(nt.note_id) AS note_count
+      FROM tags t
+      LEFT JOIN note_tags nt ON t.tag_id = nt.tag_id
+      GROUP BY t.tag_id, t.tag_name, t.tag_type
+      ORDER BY t.tag_name DESC
+  `).Scan(&tags)
   ```
 - **原生 SQL 語法**：
   ```sql
-  SELECT * FROM tags;
+  SELECT t.tag_id, t.tag_name, t.tag_type, COUNT(nt.note_id) AS note_count
+  FROM tags t
+  LEFT JOIN note_tags nt ON t.tag_id = nt.tag_id
+  GROUP BY t.tag_id, t.tag_name, t.tag_type
+  ORDER BY t.tag_name DESC;
   ```
 
 ### 2. 使用者登入檢查 (依 Email 查詢)
