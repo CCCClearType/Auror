@@ -399,8 +399,20 @@ func GetNoteStats(c *gin.Context) {
 
 // GetTags handles GET /api/tags (Public)
 func GetTags(c *gin.Context) {
-	var tags []models.Tag
-	if err := database.DB.Order("tag_name DESC").Find(&tags).Error; err != nil {
+	type TagWithCount struct {
+		TagID     uint   `json:"tag_id"`
+		TagName   string `json:"tag_name"`
+		TagType   string `json:"tag_type"`
+		NoteCount int    `json:"note_count"`
+	}
+	var tags []TagWithCount
+	if err := database.DB.Raw(`
+		SELECT t.tag_id, t.tag_name, t.tag_type, COUNT(nt.note_id) AS note_count
+		FROM tags t
+		LEFT JOIN note_tags nt ON t.tag_id = nt.tag_id
+		GROUP BY t.tag_id, t.tag_name, t.tag_type
+		ORDER BY t.tag_name DESC
+	`).Scan(&tags).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch tags"})
 		return
 	}

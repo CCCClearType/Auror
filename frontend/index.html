@@ -170,9 +170,11 @@
 
                         group.tags.forEach(tag => {
                             const name = tag.tag_name || tag.name;
+                            const count = tag.note_count != null ? tag.note_count : '';
+                            const countBadge = count !== '' ? ` <span style="opacity:0.5; font-size:0.85em;">(${count})</span>` : '';
                             const item = document.createElement('li');
                             const param = queryParamMap[type];
-                            item.innerHTML = `<a href="/pages/store/search.html?${param}=${encodeURIComponent(name)}" class="sidebar-tag type-${type}" style="padding-left: 8px;">${escapeHtml(name)}</a>`;
+                            item.innerHTML = `<a href="/pages/store/search.html?${param}=${encodeURIComponent(name)}" class="sidebar-tag type-${type}" style="padding-left: 8px;">${escapeHtml(name)}${countBadge}</a>`;
                             list.appendChild(item);
                         });
                     }
